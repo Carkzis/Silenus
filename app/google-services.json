@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "321254134046",
+    "project_id": "silenus-dbdd3",
+    "storage_bucket": "silenus-dbdd3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:321254134046:android:faca408b6ca396cc06b90f",
+        "android_client_info": {
+          "package_name": "com.carkzis.android.silenus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "321254134046-a4bl5ckbenr2o2fnrvp591fcp6e7o3no.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.carkzis.android.silenus",
+            "certificate_hash": "09a57db32ef8dd5d78973714de74ff0b02f1eeb3"
+          }
+        },
+        {
+          "client_id": "321254134046-61e7349op6ucddu1c6pfdbr1b3snf9u5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAb5Tk32EEYUH88FlDeht5Aq7LCjWhh8P8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "321254134046-61e7349op6ucddu1c6pfdbr1b3snf9u5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

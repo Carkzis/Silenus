@@ -1,4 +1,4 @@
-package com.example.android.silenus
+package com.carkzis.android.silenus
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
