@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.carkzis.android.silenus.databinding.FragmentLoginBinding
 import com.carkzis.android.silenus.databinding.FragmentWelcomeBinding
+import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
@@ -75,9 +76,16 @@ class LoginFragment : Fragment() {
     }
 
     private fun signIn() {
+        val customLayout = AuthMethodPickerLayout
+            .Builder(R.layout.firebase_auth)
+            .setGoogleButtonId(R.id.google_signin)
+            .setEmailButtonId(R.id.email_signin)
+            .build();
         val intent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setLogo(R.mipmap.ic_launcher_round)
+            .setTheme(R.style.Theme_Silenus)
+            .setAuthMethodPickerLayout(customLayout)
             .setAvailableProviders(listOf(
                 AuthUI.IdpConfig.EmailBuilder().build(),
                 AuthUI.IdpConfig.GoogleBuilder().build(),
