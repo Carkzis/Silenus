@@ -18,7 +18,7 @@
 
 
     <LinearLayout
-      android:id="@+id/linearLayout"
+      android:id="@+id/logout_linearLayout"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="8dp"
@@ -39,7 +39,7 @@
         android:text="@string/log_out" />
 
       <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/login_fab"
+        android:id="@+id/logout_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -53,10 +53,10 @@
       android:layout_height="wrap_content"
       android:text="@string/welcome_user"
       android:textSize="24sp"
-      app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-      app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+      app:layout_constraintBottom_toBottomOf="@+id/logout_linearLayout"
+      app:layout_constraintEnd_toStartOf="@+id/logout_linearLayout"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/linearLayout" />
+      app:layout_constraintTop_toTopOf="@+id/logout_linearLayout" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 

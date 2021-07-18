@@ -61,9 +61,7 @@ class LoginFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        if (Firebase.auth.currentUser == null) {
-            requestAuthorisation()
-        } else {
+        if (Firebase.auth.currentUser != null) {
             findNavController().navigate(
                 LoginFragmentDirections.actionLoginFragmentToWelcomeFragment()
             )
@@ -77,10 +75,6 @@ class LoginFragment : Fragment() {
     }
 
     private fun signIn() {
-        requestAuthorisation()
-    }
-
-    private fun requestAuthorisation() {
         val intent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setLogo(R.mipmap.ic_launcher_round)
