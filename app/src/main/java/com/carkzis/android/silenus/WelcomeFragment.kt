@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.carkzis.android.silenus.databinding.FragmentWelcomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,7 +40,7 @@ class WelcomeFragment : Fragment() {
 
     private fun setUpLogoutFab() {
         viewDataBinding.loginFab.setOnClickListener {
-
+            findNavController().navigate(WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment())
         }
     }
 

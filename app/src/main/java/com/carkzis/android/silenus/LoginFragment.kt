@@ -1,14 +1,17 @@
 package com.carkzis.android.silenus
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.carkzis.android.silenus.databinding.FragmentLoginBinding
 import com.carkzis.android.silenus.databinding.FragmentWelcomeBinding
 import com.firebase.ui.auth.AuthUI
@@ -24,16 +27,14 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
 
-    companion object {
-        const val SIGN_IN_RESULT_CODE = 1001
-    }
-
     private val viewModel by viewModels<LoginViewModel>()
 
     private lateinit var viewDataBinding: FragmentLoginBinding
 
     private lateinit var authorisation: FirebaseAuth
 
+    val signIn = registerForActivityResult(
+        FirebaseAuthUIActivityResultContract(), this::onSignInResult)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,7 +55,19 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setUpLoginButton()
+        setUpToast()
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (Firebase.auth.currentUser == null) {
+            requestAuthorisation()
+        } else {
+            findNavController().navigate(
+                LoginFragmentDirections.actionLoginFragmentToWelcomeFragment()
+            )
+        }
     }
 
     private fun setUpLoginButton() {
@@ -64,18 +77,40 @@ class LoginFragment : Fragment() {
     }
 
     private fun signIn() {
+        requestAuthorisation()
+    }
 
-        val providers = arrayListOf(
-            AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.GoogleBuilder().build())
+    private fun requestAuthorisation() {
+        val intent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setLogo(R.mipmap.ic_launcher_round)
+            .setAvailableProviders(listOf(
+                AuthUI.IdpConfig.EmailBuilder().build(),
+                AuthUI.IdpConfig.GoogleBuilder().build(),
+            ))
+            .build()
+        signIn.launch(intent)
+    }
 
-        registerForActivityResult(
-            FirebaseAuthUIActivityResultContract()) {
-                    result: FirebaseAuthUIAuthenticationResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
+    private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
+        if (result.resultCode == RESULT_OK) {
+            viewModel.signedInToast(requireContext().getString(R.string.welcome) +
+                    "${FirebaseAuth.getInstance().currentUser?.displayName}!")
+            findNavController().navigate(
+                LoginFragmentDirections.actionLoginFragmentToWelcomeFragment()
+            )
 
-            }
+        } else {
+            viewModel.signedInToast(requireContext().getString(R.string.sign_in_failed))
         }
+    }
+
+    private fun setUpToast() {
+        viewModel.toastText.observe(viewLifecycleOwner, {
+            it.getContextIfNotHandled()?.let { message ->
+                context?.showToast(message)
+            }
+        })
     }
 
 }

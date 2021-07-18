@@ -6,4 +6,6 @@
   <string name="welcome_user">Welcome!</string>
   <string name="silenus">Silenus</string>
   <string name="log_out">Log out?</string>
+  <string name="welcome">Welcome, </string>
+  <string name="sign_in_failed">Sign in failed...</string>
 </resources>
