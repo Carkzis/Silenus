@@ -5,4 +5,5 @@
   <string name="log_in">Log in!</string>
   <string name="welcome_user">Welcome!</string>
   <string name="silenus">Silenus</string>
+  <string name="log_out">Log out?</string>
 </resources>

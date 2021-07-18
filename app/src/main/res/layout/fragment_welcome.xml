@@ -5,11 +5,8 @@
   tools:context=".WelcomeFragment">
 
   <data>
-
     <import type="android.view.View" />
-
     <import type="androidx.core.content.ContextCompat" />
-
     <variable
       name="welcomeViewModel"
       type="com.carkzis.android.silenus.WelcomeViewModel" />
@@ -34,18 +31,19 @@
       app:layout_constraintTop_toTopOf="parent">
 
       <TextView
+        android:id="@+id/log_out"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="16dp"
-        android:text="@string/log_in" />
+        android:text="@string/log_out" />
 
       <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/login_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:src="@drawable/common_full_open_on_phone" />
+        android:src="@android:drawable/ic_menu_set_as" />
 
     </LinearLayout>
 
