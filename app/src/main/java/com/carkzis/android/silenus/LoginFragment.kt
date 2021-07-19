@@ -50,6 +50,7 @@ class LoginFragment : Fragment() {
 
         setUpLoginButton()
         setUpToast()
+        setUpLoginIntentListener()
 
     }
 
@@ -64,27 +65,16 @@ class LoginFragment : Fragment() {
 
     private fun setUpLoginButton() {
         viewDataBinding.loginButton.setOnClickListener {
-            signIn()
+            viewModel.signIn()
         }
     }
 
-    private fun signIn() {
-        val customLayout = AuthMethodPickerLayout
-            .Builder(R.layout.firebase_auth)
-            .setGoogleButtonId(R.id.google_signin)
-            .setEmailButtonId(R.id.email_signin)
-            .build();
-        val intent = AuthUI.getInstance()
-            .createSignInIntentBuilder()
-            .setLogo(R.mipmap.ic_launcher_round)
-            .setTheme(R.style.Theme_Silenus)
-            .setAuthMethodPickerLayout(customLayout)
-            .setAvailableProviders(listOf(
-                AuthUI.IdpConfig.EmailBuilder().build(),
-                AuthUI.IdpConfig.GoogleBuilder().build(),
-            ))
-            .build()
-        signIn.launch(intent)
+    private fun setUpLoginIntentListener() {
+        viewModel.loginIntent.observe(viewLifecycleOwner, {
+            it.getContextIfNotHandled()?.let { intent ->
+                signIn.launch(intent)
+            }
+        })
     }
 
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
