@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.carkzis.android.silenus.databinding.FragmentLoginBinding
@@ -22,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     private val viewModel by viewModels<LoginViewModel>()
+    private val sharedViewModel by activityViewModels<UserViewModel>()
 
     private lateinit var viewDataBinding: FragmentLoginBinding
 
@@ -82,6 +84,8 @@ class LoginFragment : Fragment() {
             result.idpResponse
             viewModel.signedInToast(requireContext().getString(R.string.welcome) +
                     "${FirebaseAuth.getInstance().currentUser?.displayName}!")
+            // Need to create a user document in firestore.
+            sharedViewModel.addUser()
             findNavController().navigate(
                 LoginFragmentDirections.actionLoginFragmentToWelcomeFragment()
             )

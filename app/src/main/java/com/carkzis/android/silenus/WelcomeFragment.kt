@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.carkzis.android.silenus.databinding.FragmentWelcomeBinding
@@ -18,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class WelcomeFragment : Fragment() {
 
     private val viewModel by viewModels<WelcomeViewModel>()
+    private val sharedViewModel by activityViewModels<UserViewModel>()
 
     private lateinit var viewDataBinding : FragmentWelcomeBinding
 
