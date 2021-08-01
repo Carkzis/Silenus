@@ -19,18 +19,16 @@ class UserViewModel @Inject constructor(
         // Note: may not be a new user.
         val newUser = userProfile?.let {
             User(
-                userId = userProfile.uid,
                 name = userProfile.displayName,
                 email = userProfile.email,
                 isAdmin = false
             )
         }
-        repository.addUser(newUser!!)
+        repository.addUser(newUser!!, userProfile.uid)
     }
 }
 
 data class User(
-    val userId: String,
     val name: String?,
     val email: String?,
     @field:JvmField

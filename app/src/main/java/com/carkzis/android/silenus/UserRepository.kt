@@ -8,13 +8,12 @@ class UserRepository : Repository {
 
     lateinit var firestore: FirebaseFirestore
 
-    override fun addUser(addedUser: User) {
-
+    // TODO: Needs error handling, as do not want member logged in if they are not added to db.
+    override fun addUser(addedUser: User, userId: String) {
         firestore = FirebaseFirestore.getInstance()
-        val users = firestore.collection("users").document(addedUser.userId)
+        val users = firestore.collection("users").document(userId)
         users.set(addedUser)
-            .addOnSuccessListener { Timber.d("Member added with id ${addedUser.userId}") }
+            .addOnSuccessListener { Timber.d("Member added with id ${userId}") }
             .addOnFailureListener { Timber.d("Failure to add user document...")}
     }
-
 }
