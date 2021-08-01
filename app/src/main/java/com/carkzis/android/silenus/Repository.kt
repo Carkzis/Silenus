@@ -1,3 +1,5 @@
 package com.carkzis.android.silenus
 
-interface Repository
+interface Repository {
+    fun addUser(addedUser: User)
+}

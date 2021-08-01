@@ -13,26 +13,23 @@ class UserViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
 
-    lateinit var firestore: FirebaseFirestore
-
     fun addUser() {
-        firestore = FirebaseFirestore.getInstance()
-        val users = firestore.collection("users")
+
         val userProfile = Firebase.auth.currentUser
         // Note: may not be a new user.
         val newUser = userProfile?.let {
-            user(
+            User(
                 userId = userProfile.uid,
                 name = userProfile.displayName,
                 email = userProfile.email,
                 isAdmin = false
             )
         }
-        users.add(newUser!!)
+        repository.addUser(newUser!!)
     }
 }
 
-data class user(
+data class User(
     val userId: String,
     val name: String?,
     val email: String?,
