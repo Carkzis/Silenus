@@ -40,6 +40,8 @@ class WelcomeFragment : Fragment() {
         if (authorisation.currentUser == null) {
             findNavController().navigate(
                 WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment())
+        } else {
+            viewModel.setUsername()
         }
 
         return viewDataBinding.root

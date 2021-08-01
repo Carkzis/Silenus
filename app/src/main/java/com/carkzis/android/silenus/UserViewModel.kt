@@ -1,5 +1,7 @@
 package com.carkzis.android.silenus
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -14,7 +16,6 @@ class UserViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun addUser() {
-
         val userProfile = Firebase.auth.currentUser
         // Note: may not be a new user.
         val newUser = userProfile?.let {
@@ -24,7 +25,7 @@ class UserViewModel @Inject constructor(
                 isAdmin = false
             )
         }
-        repository.addUser(newUser!!, userProfile.uid)
+        repository.addUser(newUser!!, userProfile!!.uid)
     }
 }
 
