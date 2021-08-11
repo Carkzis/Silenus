@@ -15,6 +15,7 @@
     <item name="android:actionMenuTextColor">?attr/colorOnPrimary</item>
     <!-- Customize your theme here. -->
     <item name="toolbarStyle">@style/ToolbarStyle</item>
+    <item name="android:fontFamily">@font/signika_negative_light</item>
   </style>
 
   <style name="ToolbarStyle" parent="@style/Widget.AppCompat.Toolbar">

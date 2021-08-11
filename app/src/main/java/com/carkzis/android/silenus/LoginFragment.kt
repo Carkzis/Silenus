@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -30,7 +31,9 @@ class LoginFragment : Fragment() {
     private lateinit var authorisation: FirebaseAuth
 
     val signIn = registerForActivityResult(
-        FirebaseAuthUIActivityResultContract(), this::onSignInResult)
+        FirebaseAuthUIActivityResultContract()) { res ->
+            this.onSignInResult(res)
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,6 +85,7 @@ class LoginFragment : Fragment() {
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
         if (result.resultCode == RESULT_OK) {
             result.idpResponse
+
             viewModel.signedInToast(requireContext().getString(R.string.welcome) +
                     "${FirebaseAuth.getInstance().currentUser?.displayName}!")
             // Need to create a user document in firestore.
