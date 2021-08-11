@@ -44,6 +44,9 @@ class WelcomeFragment : Fragment() {
             viewModel.setUsername()
         }
 
+        // Try adding member to the users database, it won't add anything if they already exist.
+        sharedViewModel.addUser()
+
         return viewDataBinding.root
 
     }

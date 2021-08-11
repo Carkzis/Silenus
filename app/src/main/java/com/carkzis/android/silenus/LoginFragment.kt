@@ -30,7 +30,7 @@ class LoginFragment : Fragment() {
 
     private lateinit var authorisation: FirebaseAuth
 
-    val signIn = registerForActivityResult(
+    val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()) { res ->
             this.onSignInResult(res)
         }
@@ -77,7 +77,7 @@ class LoginFragment : Fragment() {
     private fun setUpLoginIntentListener() {
         viewModel.loginIntent.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let { intent ->
-                signIn.launch(intent)
+                signInLauncher.launch(intent)
             }
         })
     }
@@ -85,11 +85,8 @@ class LoginFragment : Fragment() {
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
         if (result.resultCode == RESULT_OK) {
             result.idpResponse
-
             viewModel.signedInToast(requireContext().getString(R.string.welcome) +
                     "${FirebaseAuth.getInstance().currentUser?.displayName}!")
-            // Need to create a user document in firestore.
-            sharedViewModel.addUser()
             findNavController().navigate(
                 LoginFragmentDirections.actionLoginFragmentToWelcomeFragment()
             )
