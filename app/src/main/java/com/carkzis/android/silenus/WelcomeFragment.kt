@@ -37,10 +37,11 @@ class WelcomeFragment : Fragment() {
 
         authorisation = Firebase.auth
 
-        // TODO: Need to deal with this null user!!
         if (authorisation.currentUser == null) {
             findNavController().navigate(
                 WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment())
+        } else if (Firebase.auth.currentUser?.displayName == null) {
+            logout()
         } else {
             viewModel.setUsername()
             sharedViewModel.addUser()
@@ -59,12 +60,16 @@ class WelcomeFragment : Fragment() {
 
     private fun setUpLogoutFab() {
         viewDataBinding.logoutFab.setOnClickListener {
-            AuthUI.getInstance().signOut(requireContext())
-                .addOnCompleteListener {
-                    viewModel.toastMe(getString(R.string.logged_out))
-                    findNavController().navigate(
-                        WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment())
-                }
+            logout()
         }
+    }
+
+    private fun logout() {
+        AuthUI.getInstance().signOut(requireContext())
+            .addOnCompleteListener {
+                viewModel.toastMe(getString(R.string.logged_out))
+                findNavController().navigate(
+                    WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment())
+            }
     }
 }

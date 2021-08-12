@@ -87,8 +87,6 @@ class LoginFragment : Fragment() {
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
         if (result.resultCode == RESULT_OK) {
             result.idpResponse
-            viewModel.signedInToast(requireContext().getString(R.string.welcome) +
-                    "${FirebaseAuth.getInstance().currentUser?.displayName}!")
             findNavController().navigate(
                 LoginFragmentDirections.actionLoginFragmentToWelcomeFragment()
             )
