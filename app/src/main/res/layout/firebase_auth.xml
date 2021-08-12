@@ -7,8 +7,8 @@
 
   <ImageView
     android:id="@+id/google_signin"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
     app:layout_constraintBottom_toTopOf="@+id/email_signin"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.5"
@@ -18,8 +18,8 @@
 
   <ImageView
     android:id="@+id/email_signin"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.5"

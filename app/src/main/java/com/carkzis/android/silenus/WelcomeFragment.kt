@@ -40,7 +40,8 @@ class WelcomeFragment : Fragment() {
         if (authorisation.currentUser == null) {
             findNavController().navigate(
                 WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment())
-        } else if (Firebase.auth.currentUser?.displayName == null) {
+        } else if (Firebase.auth.currentUser?.displayName == null ||
+                Firebase.auth.currentUser?.displayName == "") {
             logout()
         } else {
             viewModel.setUsername()

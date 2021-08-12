@@ -86,7 +86,6 @@ class LoginFragment : Fragment() {
     // and email, so no welcome message for them.
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
         if (result.resultCode == RESULT_OK) {
-            result.idpResponse
             findNavController().navigate(
                 LoginFragmentDirections.actionLoginFragmentToWelcomeFragment()
             )
