@@ -25,7 +25,7 @@ class WelcomeViewModel @Inject constructor() : ViewModel(){
         _username.value = Firebase.auth.currentUser?.displayName
     }
 
-    fun signedOutToast(message: String) {
+    fun toastMe(message: String) {
         showToastMessage(message)
     }
 

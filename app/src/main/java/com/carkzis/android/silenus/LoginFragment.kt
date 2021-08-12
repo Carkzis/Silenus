@@ -82,6 +82,8 @@ class LoginFragment : Fragment() {
         })
     }
 
+    // Note: for some reason, this is not called when the member registers/signs in using password
+    // and email, so no welcome message for them.
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
         if (result.resultCode == RESULT_OK) {
             result.idpResponse

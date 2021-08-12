@@ -37,15 +37,14 @@ class WelcomeFragment : Fragment() {
 
         authorisation = Firebase.auth
 
+        // TODO: Need to deal with this null user!!
         if (authorisation.currentUser == null) {
             findNavController().navigate(
                 WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment())
         } else {
             viewModel.setUsername()
+            sharedViewModel.addUser()
         }
-
-        // Try adding member to the users database, it won't add anything if they already exist.
-        sharedViewModel.addUser()
 
         return viewDataBinding.root
 
@@ -62,7 +61,7 @@ class WelcomeFragment : Fragment() {
         viewDataBinding.logoutFab.setOnClickListener {
             AuthUI.getInstance().signOut(requireContext())
                 .addOnCompleteListener {
-                    viewModel.signedOutToast(getString(R.string.logged_out))
+                    viewModel.toastMe(getString(R.string.logged_out))
                     findNavController().navigate(
                         WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment())
                 }
