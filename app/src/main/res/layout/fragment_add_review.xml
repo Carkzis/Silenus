@@ -34,8 +34,6 @@
       android:id="@+id/tableLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:stretchColumns="1"
-      android:shrinkColumns="0"
       android:layout_marginStart="16dp"
       android:layout_marginTop="16dp"
       android:layout_marginEnd="16dp"
@@ -61,6 +59,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:singleLine="true"
+          android:textAlignment="center"
           android:autofillHints="name_bar"
           android:text="@={addReviewViewModel.barName}"/>
 
@@ -113,10 +112,11 @@
 
         <EditText
           android:id="@+id/location_bar_edittext"
-          android:layout_width="match_parent"
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:clickable="false"
-          android:singleLine="true"
+          android:layout_weight="1"
+          android:textAlignment="center"
           android:cursorVisible="false"
           android:focusable="false"
           android:focusableInTouchMode="false"

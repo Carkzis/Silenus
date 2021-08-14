@@ -49,6 +49,7 @@ class AddReviewFragment : Fragment() {
         setUpSubmitButton()
         setUpLocationButton()
         setUpLocationChosen()
+        viewModel.location.value = ""
 
     }
 

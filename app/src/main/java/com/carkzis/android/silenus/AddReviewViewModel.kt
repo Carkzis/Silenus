@@ -7,6 +7,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
+import java.lang.Exception
 import java.sql.Time
 import javax.inject.Inject
 
@@ -31,11 +32,15 @@ class AddReviewViewModel @Inject constructor() : ViewModel() {
 
     fun setUpLocationInfo(geoPoint: GeoPoint, geoCoder: Geocoder) {
         geopoint.value = geoPoint
-        val address = geoCoder
-            .getFromLocation(geoPoint.latitude, geoPoint.longitude, 1)
-            .get(0)
-            .getAddressLine(0)
-        location.value = address
-        Timber.e(address.toString())
+        var address: String = ""
+        try {
+            address = geoCoder
+                .getFromLocation(geoPoint.latitude, geoPoint.longitude, 1)[0]
+                .getAddressLine(0)
+            location.value = address
+        } catch (e: Exception) {
+            location.value = "Nowhere Land"
+        }
+        Timber.e(address)
     }
 }
