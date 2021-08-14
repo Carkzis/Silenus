@@ -47,18 +47,20 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private fun setUpLocationRequest(map: GoogleMap) {
         map.setOnMapLongClickListener { latitudeLongitude ->
+            // Add a marker to the map.
             val marker = map.addMarker(MarkerOptions().position(latitudeLongitude))
+            // Set up the dialog box to allow the user to confirm their selection.
             val builder = AlertDialog.Builder(view?.context)
-            builder.setTitle("You Have Selected a Location")
-            builder.setMessage("Is this the place?")
-            builder.setPositiveButton("Yes!") {_, _ ->
+            builder.setTitle(R.string.location_selected)
+            builder.setMessage(R.string.this_place_query)
+            builder.setPositiveButton(R.string.yes) {_, _ ->
                 sharedViewModel.chosenGeopoint.value = GeoPoint(
                     latitudeLongitude.latitude, latitudeLongitude.longitude)
                 findNavController().navigate(
                     MapsFragmentDirections.actionMapsFragmentToAddReviewFragment())
                 marker?.remove()
             }
-            builder.setNegativeButton("No.") {_, _ ->
+            builder.setNegativeButton(R.string.no) {_, _ ->
                 marker?.remove()
             }
             builder.show()
