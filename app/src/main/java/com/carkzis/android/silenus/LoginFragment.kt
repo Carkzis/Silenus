@@ -100,6 +100,11 @@ class LoginFragment : Fragment() {
                 context?.showToast(message)
             }
         })
+        sharedViewModel.toastText.observe(viewLifecycleOwner, {
+            it.getContextIfNotHandled()?.let { message ->
+                context?.showToast(message)
+            }
+        })
     }
 
 }

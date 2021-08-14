@@ -8,5 +8,8 @@
   <string name="log_out">Log out?</string>
   <string name="welcome">Welcome,&#160;</string>
   <string name="sign_in_failed">Sign in failed…</string>
-  <string name="logged_out">You have been logged out!"</string>
+  <string name="logged_out">You have been logged out!</string>
+  <string name="null_user_error">Error, please try logging in again.</string>
+  <string name="silenus_hub">Your Silenus Hub</string>
+  <string name="your_reviews">Your Reviews</string>
 </resources>

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.carkzis.android.silenus.databinding.FragmentWelcomeBinding
+import com.carkzis.android.silenus.databinding.FragmentAddReviewBinding
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -16,12 +16,12 @@ import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WelcomeFragment : Fragment() {
+class AddReviewFragment : Fragment() {
 
-    private val viewModel by viewModels<WelcomeViewModel>()
+    private val viewModel by viewModels<AddReviewViewModel>()
     private val sharedViewModel by activityViewModels<UserViewModel>()
 
-    private lateinit var viewDataBinding : FragmentWelcomeBinding
+    private lateinit var viewDataBinding : FragmentAddReviewBinding
 
     private lateinit var authorisation: FirebaseAuth
 
@@ -30,15 +30,15 @@ class WelcomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        viewDataBinding = FragmentWelcomeBinding.inflate(inflater, container, false).apply {
-            welcomeViewModel = viewModel
+        viewDataBinding = FragmentAddReviewBinding.inflate(inflater, container, false).apply {
+            addReviewViewModel = viewModel
             lifecycleOwner = viewLifecycleOwner
         }
 
         authorisation = Firebase.auth
 
+        // Inflate the layout for this fragment
         return viewDataBinding.root
-
     }
 
     override fun onStart() {
@@ -46,37 +46,10 @@ class WelcomeFragment : Fragment() {
 
         if (authorisation.currentUser == null) {
             findNavController().navigate(
-                WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment())
+                AddReviewFragmentDirections.actionAddReviewFragmentToLoginFragment())
         } else if (Firebase.auth.currentUser?.displayName == null ||
             Firebase.auth.currentUser?.displayName == "") {
             logout(R.string.null_user_error)
-        } else {
-            viewModel.setUsername()
-            sharedViewModel.addUser()
-        }
-
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setUpLogoutFab()
-        setUpReviewsFab()
-
-    }
-
-    private fun setUpLogoutFab() {
-        viewDataBinding.logoutFab.setOnClickListener {
-            logout(R.string.logged_out)
-        }
-    }
-
-    private fun setUpReviewsFab() {
-        viewDataBinding.reviewsFab.setOnClickListener {
-            findNavController().navigate(
-                // TODO: This is subject to change to the fragment with the list of reviews.
-                WelcomeFragmentDirections.actionWelcomeFragmentToAddReviewFragment()
-            )
         }
     }
 
@@ -88,6 +61,5 @@ class WelcomeFragment : Fragment() {
                     WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment())
             }
     }
-
 
 }

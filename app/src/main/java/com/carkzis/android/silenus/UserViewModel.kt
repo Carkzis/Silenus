@@ -27,6 +27,19 @@ class UserViewModel @Inject constructor(
         }
         repository.addUser(newUser!!, userProfile!!.uid)
     }
+
+    private var _toastText = MutableLiveData<Event<String>>()
+    val toastText: LiveData<Event<String>>
+        get() = _toastText
+
+    fun toastMe(message: String) {
+        showToastMessage(message)
+    }
+
+    private fun showToastMessage(message: String) {
+        _toastText.value = Event(message)
+    }
+
 }
 
 data class User(
