@@ -40,6 +40,14 @@
       app:destination="@id/loginFragment"
       app:popUpTo="@id/loginFragment"
       app:popUpToInclusive="true" />
+    <action
+      android:id="@+id/action_addReviewFragment_to_mapsFragment"
+      app:destination="@id/mapsFragment" />
   </fragment>
+  <fragment
+    android:id="@+id/mapsFragment"
+    android:name="com.carkzis.android.silenus.MapsFragment"
+    android:label="fragment_maps"
+    tools:layout="@layout/fragment_maps" />
 
 </navigation>

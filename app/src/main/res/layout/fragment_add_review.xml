@@ -56,9 +56,10 @@
         <EditText
           android:id="@+id/name_bar_edittext"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
+          android:layout_height="wrap_content"
           android:layout_weight="3.0"
-          android:autofillHints="name_bar" />
+          android:autofillHints="name_bar"
+          android:text="@={addReviewViewModel.barName}"/>
 
       </TableRow>
 
@@ -88,6 +89,7 @@
             android:layout_marginTop="16dp"
             android:gravity="center"
             android:numStars="5"
+            android:rating="@={addReviewViewModel.rating}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -111,8 +113,13 @@
         <EditText
           android:id="@+id/location_bar_edittext"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
+          android:layout_height="wrap_content"
           android:layout_weight="3.0"
+          android:clickable="false"
+          android:cursorVisible="false"
+          android:focusable="false"
+          android:focusableInTouchMode="false"
+          android:text="@={addReviewViewModel.location}"
           android:autofillHints="name_bar" />
 
       </TableRow>
@@ -124,10 +131,12 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="16dp"
+      android:layout_marginBottom="16dp"
       android:layout_weight="1.0"
       android:text="@string/description_bar_text"
       android:textAlignment="center"
       android:textSize="24sp"
+      app:layout_constraintBottom_toTopOf="@+id/description_bar_edittext"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
@@ -139,14 +148,26 @@
       android:layout_marginStart="16dp"
       android:layout_marginEnd="16dp"
       android:layout_marginBottom="16dp"
-      android:ems="10"
       android:background="@drawable/description_border"
+      android:ems="10"
       android:gravity="start|top"
       android:inputType="textMultiLine"
-      app:layout_constraintBottom_toBottomOf="parent"
+      android:maxLength="255"
+      android:text="@={addReviewViewModel.description}"
+      app:layout_constraintBottom_toTopOf="@+id/submit_bar_button"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/description_bar_text" />
+
+    <Button
+      android:id="@+id/submit_bar_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="16dp"
+      android:text="@string/submit_bar"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent" />
 
 
   </androidx.constraintlayout.widget.ConstraintLayout>

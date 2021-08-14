@@ -3,6 +3,7 @@ package com.carkzis.android.silenus
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,10 +23,12 @@ class UserViewModel @Inject constructor(
             User(
                 name = userProfile.displayName,
                 email = userProfile.email,
-                isAdmin = false
+                isAdmin = false,
+                ratings = 0,
+                joinDate = Timestamp.now()
             )
         }
-        repository.addUser(newUser!!, userProfile!!.uid)
+        repository.addUser(newUser!!, userProfile.uid)
     }
 
     private var _toastText = MutableLiveData<Event<String>>()
@@ -47,4 +50,6 @@ data class User(
     val email: String?,
     @field:JvmField
     val isAdmin: Boolean,
+    val ratings: Int,
+    val joinDate: Timestamp
 )

@@ -41,6 +41,15 @@ class AddReviewFragment : Fragment() {
         return viewDataBinding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setUpSubmitButton()
+        setUpLocationButton()
+
+    }
+
+
     override fun onStart() {
         super.onStart()
 
@@ -53,12 +62,26 @@ class AddReviewFragment : Fragment() {
         }
     }
 
+    private fun setUpSubmitButton() {
+        viewDataBinding.submitBarButton.setOnClickListener {
+            viewModel.barSubmission()
+        }
+    }
+
+    private fun setUpLocationButton() {
+        viewDataBinding.locationBarEdittext.setOnClickListener {
+            findNavController().navigate(
+                AddReviewFragmentDirections.actionAddReviewFragmentToMapsFragment()
+            )
+        }
+    }
+
     private fun logout(reason: Int) {
         AuthUI.getInstance().signOut(requireContext())
             .addOnCompleteListener {
                 sharedViewModel.toastMe(getString(reason))
                 findNavController().navigate(
-                    WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment())
+                    AddReviewFragmentDirections.actionAddReviewFragmentToLoginFragment())
             }
     }
 
