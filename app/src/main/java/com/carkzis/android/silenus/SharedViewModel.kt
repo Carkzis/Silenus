@@ -7,14 +7,18 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class UserViewModel @Inject constructor(
+class SharedViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
+
+    // This relates to the choices when
+    var chosenGeopoint = MutableLiveData<GeoPoint>()
 
     fun addUser() {
         val userProfile = Firebase.auth.currentUser

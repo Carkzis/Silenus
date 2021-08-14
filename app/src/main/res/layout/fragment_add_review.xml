@@ -47,17 +47,18 @@
 
         <TextView
           android:id="@+id/name_bar_text"
-          android:layout_width="wrap_content"
+          android:layout_width="0dp"
           android:layout_weight="1.0"
           android:text="@string/name_bar_text"
           android:textAlignment="center"
-          android:textSize="24sp" />
+          android:textSize="20sp" />
 
         <EditText
           android:id="@+id/name_bar_edittext"
-          android:layout_width="match_parent"
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="3.0"
+          android:singleLine="true"
           android:autofillHints="name_bar"
           android:text="@={addReviewViewModel.barName}"/>
 
@@ -70,15 +71,15 @@
 
         <TextView
           android:id="@+id/rating_bar_text"
-          android:layout_width="wrap_content"
+          android:layout_width="0dp"
           android:layout_gravity="center"
           android:layout_weight="1.0"
           android:text="@string/rating_bar_text"
           android:textAlignment="center"
-          android:textSize="24sp" />
+          android:textSize="20sp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-          android:layout_width="wrap_content"
+          android:layout_width="0dp"
           android:layout_weight="3.0"
           android:orientation="horizontal">
 
@@ -104,18 +105,19 @@
 
         <TextView
           android:id="@+id/location_bar_text"
-          android:layout_width="wrap_content"
+          android:layout_width="0dp"
           android:layout_weight="1.0"
           android:text="@string/location_bar_text"
           android:textAlignment="center"
-          android:textSize="24sp" />
+          android:textSize="20sp" />
 
         <EditText
           android:id="@+id/location_bar_edittext"
-          android:layout_width="match_parent"
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="3.0"
           android:clickable="false"
+          android:singleLine="true"
           android:cursorVisible="false"
           android:focusable="false"
           android:focusableInTouchMode="false"

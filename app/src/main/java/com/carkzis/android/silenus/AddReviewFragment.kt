@@ -1,5 +1,6 @@
 package com.carkzis.android.silenus
 
+import android.location.Geocoder
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,12 +15,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class AddReviewFragment : Fragment() {
 
     private val viewModel by viewModels<AddReviewViewModel>()
-    private val sharedViewModel by activityViewModels<UserViewModel>()
+    private val sharedViewModel by activityViewModels<SharedViewModel>()
 
     private lateinit var viewDataBinding : FragmentAddReviewBinding
 
@@ -46,6 +48,7 @@ class AddReviewFragment : Fragment() {
 
         setUpSubmitButton()
         setUpLocationButton()
+        setUpLocationChosen()
 
     }
 
@@ -74,6 +77,13 @@ class AddReviewFragment : Fragment() {
                 AddReviewFragmentDirections.actionAddReviewFragmentToMapsFragment()
             )
         }
+    }
+
+    private fun setUpLocationChosen() {
+        sharedViewModel.chosenGeopoint.observe(viewLifecycleOwner, {
+            val geocoder = Geocoder(context, Locale.getDefault())
+            viewModel.setUpLocationInfo(it, geocoder)
+        })
     }
 
     private fun logout(reason: Int) {

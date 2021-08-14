@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class WelcomeFragment : Fragment() {
 
     private val viewModel by viewModels<WelcomeViewModel>()
-    private val sharedViewModel by activityViewModels<UserViewModel>()
+    private val sharedViewModel by activityViewModels<SharedViewModel>()
 
     private lateinit var viewDataBinding : FragmentWelcomeBinding
 
