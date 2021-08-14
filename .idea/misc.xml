@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/marcj/AndroidStudioProjects/Silenus/app/src/main/res/drawable/description_border.xml" value="0.1" />
         <entry key="..\:/Users/marcj/AndroidStudioProjects/Silenus/app/src/main/res/layout/firebase_auth.xml" value="0.22554347826086957" />
         <entry key="..\:/Users/marcj/AndroidStudioProjects/Silenus/app/src/main/res/layout/fragment_add_review.xml" value="0.22554347826086957" />
         <entry key="..\:/Users/marcj/AndroidStudioProjects/Silenus/app/src/main/res/layout/fragment_welcome.xml" value="0.264" />

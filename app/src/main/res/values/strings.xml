@@ -12,4 +12,9 @@
   <string name="null_user_error">Error, please try logging in again.</string>
   <string name="silenus_hub">Your Silenus Hub</string>
   <string name="your_reviews">Your Reviews</string>
+  <string name="rate_an_establishment">Rate an Establishment</string>
+  <string name="name_bar_text">Name:</string>
+  <string name="rating_bar_text">Rating:</string>
+  <string name="location_bar_text">Location:</string>
+  <string name="description_bar_text">Description</string>
 </resources>
