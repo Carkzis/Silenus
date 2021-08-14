@@ -43,6 +43,11 @@
     <action
       android:id="@+id/action_addReviewFragment_to_mapsFragment"
       app:destination="@id/mapsFragment" />
+    <action
+      android:id="@+id/action_addReviewFragment_to_welcomeFragment"
+      app:destination="@id/welcomeFragment"
+      app:popUpTo="@id/welcomeFragment"
+      app:popUpToInclusive="true" />
   </fragment>
   <fragment
     android:id="@+id/mapsFragment"

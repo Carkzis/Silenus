@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -49,10 +51,9 @@ class AddReviewFragment : Fragment() {
         setUpSubmitButton()
         setUpLocationButton()
         setUpLocationChosen()
-        viewModel.location.value = ""
+        handleOnBackPressed()
 
     }
-
 
     override fun onStart() {
         super.onStart()
@@ -82,8 +83,10 @@ class AddReviewFragment : Fragment() {
 
     private fun setUpLocationChosen() {
         sharedViewModel.chosenGeopoint.observe(viewLifecycleOwner, {
-            val geocoder = Geocoder(context, Locale.getDefault())
-            viewModel.setUpLocationInfo(it, geocoder)
+            it?.let {
+                val geocoder = Geocoder(context, Locale.getDefault())
+                viewModel.setUpLocationInfo(it, geocoder)
+            }
         })
     }
 
@@ -94,6 +97,14 @@ class AddReviewFragment : Fragment() {
                 findNavController().navigate(
                     AddReviewFragmentDirections.actionAddReviewFragmentToLoginFragment())
             }
+    }
+
+    private fun handleOnBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            sharedViewModel.chosenGeopoint.value = null
+            findNavController().navigate(
+                AddReviewFragmentDirections.actionAddReviewFragmentToWelcomeFragment())
+        }
     }
 
 }

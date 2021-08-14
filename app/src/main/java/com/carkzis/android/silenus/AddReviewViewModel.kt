@@ -1,6 +1,7 @@
 package com.carkzis.android.silenus
 
 import android.location.Geocoder
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Timestamp
@@ -17,8 +18,12 @@ class AddReviewViewModel @Inject constructor() : ViewModel() {
     var barName = MutableLiveData<String>()
     var rating = MutableLiveData<Float>()
     var location = MutableLiveData<String>()
-    private var geopoint = MutableLiveData<GeoPoint>()
     var description = MutableLiveData<String>()
+
+    private var _geopoint = MutableLiveData<GeoPoint>()
+    val geopoint: LiveData<GeoPoint>
+        get() = _geopoint
+
     var submitDate = MutableLiveData<Timestamp>()
 
     fun barSubmission() {
@@ -31,7 +36,7 @@ class AddReviewViewModel @Inject constructor() : ViewModel() {
     }
 
     fun setUpLocationInfo(geoPoint: GeoPoint, geoCoder: Geocoder) {
-        geopoint.value = geoPoint
+        _geopoint.value = geoPoint
         var address: String = ""
         try {
             address = geoCoder
@@ -42,5 +47,9 @@ class AddReviewViewModel @Inject constructor() : ViewModel() {
             location.value = "Nowhere Land"
         }
         Timber.e(address)
+    }
+
+    fun resetLocation() {
+        location.value = ""
     }
 }
