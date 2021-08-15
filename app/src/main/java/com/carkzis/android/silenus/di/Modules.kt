@@ -36,12 +36,45 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideRepository(
+    fun provideUserRepository(
         @LocalUserDataSource localUserDataSource: UserDataSource,
         @RemoteUserDataSource remoteUserDataSource: UserDataSource
     ) : UserRepository {
         return DefaultUserRepository(
             localUserDataSource, remoteUserDataSource
+        )
+    }
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class LocalMainDataSource
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class RemoteMainDataSource
+
+    @Singleton
+    @LocalMainDataSource
+    @Provides
+    fun provideMainLocalDataSource() : MainDataSource {
+        return MainLocalDataSource
+    }
+
+    @Singleton
+    @RemoteUserDataSource
+    @Provides
+    fun provideMainRemoteDataSource() : MainDataSource {
+        return MainRemoteDataSource
+    }
+
+    @Singleton
+    @Provides
+    fun provideMainRepository(
+        @LocalMainDataSource localMainDataSource: MainDataSource,
+        @RemoteMainDataSource remoteMainDataSource: MainDataSource
+    ) : MainRepository {
+        return DefaultMainRepository(
+            localMainDataSource, remoteMainDataSource
         )
     }
 
