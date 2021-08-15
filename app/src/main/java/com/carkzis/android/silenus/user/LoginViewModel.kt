@@ -1,9 +1,11 @@
-package com.carkzis.android.silenus
+package com.carkzis.android.silenus.user
 
 import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.carkzis.android.silenus.Event
+import com.carkzis.android.silenus.R
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -7,7 +7,7 @@
 
   <fragment
     android:id="@+id/welcomeFragment"
-    android:name="com.carkzis.android.silenus.WelcomeFragment"
+    android:name="com.carkzis.android.silenus.welcome.WelcomeFragment"
     android:label="fragment_welcome"
     tools:layout="@layout/fragment_welcome" >
     <action
@@ -21,7 +21,7 @@
   </fragment>
   <fragment
     android:id="@+id/loginFragment"
-    android:name="com.carkzis.android.silenus.LoginFragment"
+    android:name="com.carkzis.android.silenus.user.LoginFragment"
     android:label="fragment_login"
     tools:layout="@layout/fragment_login" >
     <action
@@ -32,7 +32,7 @@
   </fragment>
   <fragment
     android:id="@+id/addReviewFragment"
-    android:name="com.carkzis.android.silenus.AddReviewFragment"
+    android:name="com.carkzis.android.silenus.review.AddReviewFragment"
     android:label="fragment_add_review"
     tools:layout="@layout/fragment_add_review" >
     <action

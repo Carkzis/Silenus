@@ -1,12 +1,11 @@
-package com.carkzis.android.silenus
+package com.carkzis.android.silenus.welcome
 
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.carkzis.android.silenus.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 

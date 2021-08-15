@@ -1,4 +1,4 @@
-package com.carkzis.android.silenus
+package com.carkzis.android.silenus.welcome
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.carkzis.android.silenus.R
+import com.carkzis.android.silenus.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentWelcomeBinding
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
@@ -46,7 +48,8 @@ class WelcomeFragment : Fragment() {
 
         if (authorisation.currentUser == null) {
             findNavController().navigate(
-                WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment())
+                WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
+            )
         } else if (Firebase.auth.currentUser?.displayName == null ||
             Firebase.auth.currentUser?.displayName == "") {
             logout(R.string.null_user_error)
@@ -85,7 +88,8 @@ class WelcomeFragment : Fragment() {
             .addOnCompleteListener {
                 sharedViewModel.toastMe(getString(reason))
                 findNavController().navigate(
-                    WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment())
+                    WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
+                )
             }
     }
 

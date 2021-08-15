@@ -1,10 +1,10 @@
-package com.carkzis.android.silenus
+package com.carkzis.android.silenus.data
 
-import android.util.Log
+import com.carkzis.android.silenus.User
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class UserRepository : Repository {
+object UserRemoteDataSource : UserDataSource {
 
     lateinit var firestore: FirebaseFirestore
 
@@ -16,4 +16,5 @@ class UserRepository : Repository {
             .addOnSuccessListener { Timber.d("Member added with id ${userId}") }
             .addOnFailureListener { Timber.d("Failure to add user document...")}
     }
+
 }

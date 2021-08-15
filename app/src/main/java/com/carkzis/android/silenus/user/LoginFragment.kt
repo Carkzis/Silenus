@@ -1,4 +1,4 @@
-package com.carkzis.android.silenus
+package com.carkzis.android.silenus.user
 
 import android.app.Activity.RESULT_OK
 import android.os.Bundle
@@ -9,7 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.carkzis.android.silenus.R
+import com.carkzis.android.silenus.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentLoginBinding
+import com.carkzis.android.silenus.showToast
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth

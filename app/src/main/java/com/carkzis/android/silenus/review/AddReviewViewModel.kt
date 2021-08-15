@@ -1,4 +1,4 @@
-package com.carkzis.android.silenus
+package com.carkzis.android.silenus.review
 
 import android.location.Geocoder
 import androidx.lifecycle.LiveData
@@ -9,7 +9,6 @@ import com.google.firebase.firestore.GeoPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
 import java.lang.Exception
-import java.sql.Time
 import javax.inject.Inject
 
 @HiltViewModel

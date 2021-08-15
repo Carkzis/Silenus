@@ -2,14 +2,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
-  tools:context=".WelcomeFragment">
+  tools:context=".welcome.WelcomeFragment">
 
   <data>
     <import type="android.view.View" />
     <import type="androidx.core.content.ContextCompat" />
     <variable
       name="welcomeViewModel"
-      type="com.carkzis.android.silenus.WelcomeViewModel" />
+      type="com.carkzis.android.silenus.welcome.WelcomeViewModel" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
