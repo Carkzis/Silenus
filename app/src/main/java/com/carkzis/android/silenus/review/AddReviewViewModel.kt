@@ -4,6 +4,8 @@ import android.location.Geocoder
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.carkzis.android.silenus.data.DefaultMainRepository
+import com.carkzis.android.silenus.data.MainRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +14,9 @@ import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
-class AddReviewViewModel @Inject constructor() : ViewModel() {
+class AddReviewViewModel @Inject constructor(
+    private val repository: MainRepository
+) : ViewModel() {
 
     var barName = MutableLiveData<String>()
     var rating = MutableLiveData<Float>()
@@ -48,7 +52,4 @@ class AddReviewViewModel @Inject constructor() : ViewModel() {
         Timber.e(address)
     }
 
-    fun resetLocation() {
-        location.value = ""
-    }
 }

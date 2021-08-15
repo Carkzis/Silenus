@@ -61,7 +61,7 @@ object DatabaseModule {
     }
 
     @Singleton
-    @RemoteUserDataSource
+    @RemoteMainDataSource
     @Provides
     fun provideMainRemoteDataSource() : MainDataSource {
         return MainRemoteDataSource

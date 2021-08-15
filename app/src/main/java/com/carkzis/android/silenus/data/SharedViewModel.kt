@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.carkzis.android.silenus.data.UserRepository
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.GeoPoint
@@ -16,8 +17,9 @@ class SharedViewModel @Inject constructor(
     private val repository: UserRepository
 ) : ViewModel() {
 
-    // This relates to the choices when
-    var chosenGeopoint = MutableLiveData<GeoPoint>()
+    private var _chosenGeopoint = MutableLiveData<GeoPoint?>()
+    val chosenGeopoint: LiveData<GeoPoint?>
+        get() = _chosenGeopoint
 
     fun addUser() {
         val userProfile = Firebase.auth.currentUser
@@ -32,6 +34,14 @@ class SharedViewModel @Inject constructor(
             )
         }
         repository.addUser(newUser!!, userProfile.uid)
+    }
+
+    fun setGeopoint(latLng: LatLng) {
+        _chosenGeopoint.value = GeoPoint(latLng.latitude, latLng.longitude)
+    }
+
+    fun resetGeopoint() {
+        _chosenGeopoint.value = null
     }
 
     private var _toastText = MutableLiveData<Event<String>>()

@@ -104,7 +104,7 @@ class AddReviewFragment : Fragment() {
 
     private fun handleOnBackPressed() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            sharedViewModel.chosenGeopoint.value = null
+            sharedViewModel.resetGeopoint()
             findNavController().navigate(
                 AddReviewFragmentDirections.actionAddReviewFragmentToWelcomeFragment()
             )

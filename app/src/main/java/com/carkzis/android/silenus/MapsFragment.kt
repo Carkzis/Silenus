@@ -54,8 +54,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             builder.setTitle(R.string.location_selected)
             builder.setMessage(R.string.this_place_query)
             builder.setPositiveButton(R.string.yes) {_, _ ->
-                sharedViewModel.chosenGeopoint.value = GeoPoint(
-                    latitudeLongitude.latitude, latitudeLongitude.longitude)
+                sharedViewModel.setGeopoint(latitudeLongitude)
                 findNavController().navigate(
                     MapsFragmentDirections.actionMapsFragmentToAddReviewFragment())
                 marker?.remove()
