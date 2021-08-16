@@ -39,7 +39,7 @@ class AddReviewViewModel @Inject constructor(
 
     fun setUpLocationInfo(geoPoint: GeoPoint, geoCoder: Geocoder) {
         _geopoint.value = geoPoint
-        var address: String = ""
+        var address = ""
         try {
             address = geoCoder
                 .getFromLocation(geoPoint.latitude, geoPoint.longitude, 1)[0]
@@ -49,6 +49,18 @@ class AddReviewViewModel @Inject constructor(
             location.value = "Nowhere Land"
         }
         Timber.e(address)
+    }
+
+    fun setUpBarName(name: String) {
+        barName.value = name
+    }
+
+    fun setUpRating(barRating: Float) {
+        rating.value = barRating
+    }
+
+    fun setUpDescription(summary: String) {
+        description.value = summary
     }
 
 }

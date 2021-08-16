@@ -51,7 +51,7 @@ class AddReviewFragment : Fragment() {
 
         setUpSubmitButton()
         setUpLocationButton()
-        setUpLocationChosen()
+        setUpFieldEntries()
         handleOnBackPressed()
 
     }
@@ -77,17 +77,34 @@ class AddReviewFragment : Fragment() {
 
     private fun setUpLocationButton() {
         viewDataBinding.locationBarEdittext.setOnClickListener {
+            sharedViewModel.setBarDetails(
+                viewModel.barName.value, viewModel.rating.value, viewModel.description.value)
             findNavController().navigate(
                 AddReviewFragmentDirections.actionAddReviewFragmentToMapsFragment()
             )
         }
     }
 
-    private fun setUpLocationChosen() {
+    private fun setUpFieldEntries() {
         sharedViewModel.chosenGeopoint.observe(viewLifecycleOwner, {
             it?.let {
                 val geocoder = Geocoder(context, Locale.getDefault())
                 viewModel.setUpLocationInfo(it, geocoder)
+            }
+        })
+        sharedViewModel.reviewBarName.observe(viewLifecycleOwner, {
+            it?.let {
+                viewModel.setUpBarName(it)
+            }
+        })
+        sharedViewModel.reviewRating.observe(viewLifecycleOwner, {
+            it?.let {
+                viewModel.setUpRating(it)
+            }
+        })
+        sharedViewModel.reviewDescription.observe(viewLifecycleOwner, {
+            it?.let {
+                viewModel.setUpDescription(it)
             }
         })
     }
@@ -104,7 +121,7 @@ class AddReviewFragment : Fragment() {
 
     private fun handleOnBackPressed() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            sharedViewModel.resetGeopoint()
+            sharedViewModel.resetReviewScreen()
             findNavController().navigate(
                 AddReviewFragmentDirections.actionAddReviewFragmentToWelcomeFragment()
             )

@@ -49,18 +49,6 @@ class WelcomeFragment : Fragment() {
 
         sharedViewModel.authoriseUser()
 
-//        if (authorisation.currentUser == null) {
-//            findNavController().navigate(
-//                WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
-//            )
-//        } else if (Firebase.auth.currentUser?.displayName == null ||
-//            Firebase.auth.currentUser?.displayName == "") {
-//            setUpLogout(R.string.null_user_error)
-//        } else {
-//            viewModel.setUsername()
-//            sharedViewModel.addUser()
-//        }
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -24,10 +24,24 @@ class SharedViewModel @Inject constructor(
     private val authorisation: FirebaseAuth
 ) : ViewModel() {
 
+    // These are for the review screen, saving the data when we are taken to the map fragment.
     private var _chosenGeopoint = MutableLiveData<GeoPoint?>()
     val chosenGeopoint: LiveData<GeoPoint?>
         get() = _chosenGeopoint
 
+    private var _reviewBarName = MutableLiveData<String?>()
+    val reviewBarName: LiveData<String?>
+        get() = _reviewBarName
+
+    private var _reviewRating = MutableLiveData<Float?>()
+    val reviewRating: LiveData<Float?>
+        get() = _reviewRating
+
+    private var _reviewDescription = MutableLiveData<String?>()
+    val reviewDescription: LiveData<String?>
+        get() = _reviewDescription
+
+    // Shared user data across fragments
     private var _logout = MutableLiveData<Event<Int>>()
     val logout: LiveData<Event<Int>>
         get() = _logout
@@ -67,8 +81,17 @@ class SharedViewModel @Inject constructor(
         _chosenGeopoint.value = GeoPoint(latLng.latitude, latLng.longitude)
     }
 
-    fun resetGeopoint() {
+    fun setBarDetails(name: String?, rating: Float?, description: String?) {
+        _reviewBarName.value = name
+        _reviewRating.value = rating
+        _reviewDescription.value = description
+    }
+
+    fun resetReviewScreen() {
         _chosenGeopoint.value = null
+        _reviewBarName.value = null
+        _reviewRating.value = null
+        _reviewDescription.value = null
     }
 
     private var _toastText = MutableLiveData<Event<String>>()
