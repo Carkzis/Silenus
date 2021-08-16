@@ -16,6 +16,7 @@ import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,7 +25,7 @@ class SharedViewModel @Inject constructor(
     private val authorisation: FirebaseAuth
 ) : ViewModel() {
 
-    // These are for the review screen, saving the data when we are taken to the map fragment.
+//     These are for the review screen, saving the data when we are taken to the map fragment.
     private var _chosenGeopoint = MutableLiveData<GeoPoint?>()
     val chosenGeopoint: LiveData<GeoPoint?>
         get() = _chosenGeopoint
@@ -64,7 +65,7 @@ class SharedViewModel @Inject constructor(
         _logout.value = Event(R.string.logged_out)
     }
 
-    // TODO: BE VARY CAREFUL WITH THIS.
+    // WARNING: Sketchy. Don't use with WelcomeFragment, or you will get an infinite loop.
     fun authoriseUser() {
         if (authorisation.currentUser == null) {
             _navToLogin.value = Event(true)

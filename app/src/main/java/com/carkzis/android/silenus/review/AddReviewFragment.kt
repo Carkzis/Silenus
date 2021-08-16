@@ -130,12 +130,12 @@ class AddReviewFragment : Fragment() {
     }
 
     private fun handleOnBackPressed() {
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            sharedViewModel.resetReviewScreen()
-            findNavController().navigate(
-                AddReviewFragmentDirections.actionAddReviewFragmentToWelcomeFragment()
-            )
-        }
+//        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+//            sharedViewModel.resetReviewScreen()
+//            findNavController().navigate(
+//                AddReviewFragmentDirections.actionAddReviewFragmentToWelcomeFragment()
+//            )
+//        }
     }
 
 }

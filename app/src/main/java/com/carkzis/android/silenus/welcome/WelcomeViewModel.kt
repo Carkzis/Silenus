@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import timber.log.Timber
 
 @HiltViewModel
 class WelcomeViewModel @Inject constructor() : ViewModel(){

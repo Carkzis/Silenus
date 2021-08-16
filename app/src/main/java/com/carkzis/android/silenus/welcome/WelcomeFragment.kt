@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class WelcomeFragment : Fragment() {
@@ -45,7 +46,7 @@ class WelcomeFragment : Fragment() {
 
     }
 
-    // TODO: BE VARY CAREFUL WITH THIS AUTHORISATION BUSINESS RE MVVM!
+    // For whatever reason, authorisation needs to go here, not in the view model.
     override fun onStart() {
         super.onStart()
 
@@ -71,6 +72,7 @@ class WelcomeFragment : Fragment() {
         setUpLogout()
         setUpNavigateToLogin()
         setUpUserDetails()
+        Timber.e("this?")
 
     }
 
@@ -84,7 +86,6 @@ class WelcomeFragment : Fragment() {
     private fun setUpReviewsFab() {
         viewDataBinding.reviewsFab.setOnClickListener {
             findNavController().navigate(
-                // TODO: This is subject to change to the fragment with the list of reviews.
                 WelcomeFragmentDirections.actionWelcomeFragmentToAddReviewFragment()
             )
         }
@@ -118,14 +119,5 @@ class WelcomeFragment : Fragment() {
         })
     }
 
-//    private fun setUpLogout() {
-//            AuthUI.getInstance().signOut(requireContext())
-//        .addOnCompleteListener {
-//            sharedViewModel.toastMe("yes")
-//            findNavController().navigate(
-//                WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
-//            )
-//        }
-//    }
 
 }
