@@ -4,7 +4,6 @@ import android.location.Geocoder
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.carkzis.android.silenus.data.DefaultMainRepository
 import com.carkzis.android.silenus.data.MainRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint

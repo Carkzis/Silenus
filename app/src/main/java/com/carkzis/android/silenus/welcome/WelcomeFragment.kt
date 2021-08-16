@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentWelcomeBinding
+import com.carkzis.android.silenus.showToast
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -46,17 +47,19 @@ class WelcomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        if (authorisation.currentUser == null) {
-            findNavController().navigate(
-                WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
-            )
-        } else if (Firebase.auth.currentUser?.displayName == null ||
-            Firebase.auth.currentUser?.displayName == "") {
-            logout(R.string.null_user_error)
-        } else {
-            viewModel.setUsername()
-            sharedViewModel.addUser()
-        }
+        sharedViewModel.authoriseUser()
+
+//        if (authorisation.currentUser == null) {
+//            findNavController().navigate(
+//                WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
+//            )
+//        } else if (Firebase.auth.currentUser?.displayName == null ||
+//            Firebase.auth.currentUser?.displayName == "") {
+//            setUpLogout(R.string.null_user_error)
+//        } else {
+//            viewModel.setUsername()
+//            sharedViewModel.addUser()
+//        }
 
     }
 
@@ -65,14 +68,18 @@ class WelcomeFragment : Fragment() {
 
         setUpLogoutFab()
         setUpReviewsFab()
+        setUpLogout()
+        setUpNavigateToLogin()
+        setUpUserDetails()
 
     }
 
     private fun setUpLogoutFab() {
         viewDataBinding.logoutFab.setOnClickListener {
-            logout(R.string.logged_out)
+            sharedViewModel.chooseLogout()
         }
     }
+
 
     private fun setUpReviewsFab() {
         viewDataBinding.reviewsFab.setOnClickListener {
@@ -83,15 +90,32 @@ class WelcomeFragment : Fragment() {
         }
     }
 
-    private fun logout(reason: Int) {
-        AuthUI.getInstance().signOut(requireContext())
-            .addOnCompleteListener {
-                sharedViewModel.toastMe(getString(reason))
-                findNavController().navigate(
-                    WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
-                )
-            }
+    private fun setUpNavigateToLogin() {
+        sharedViewModel.navToLogin.observe(viewLifecycleOwner, {
+            findNavController().navigate(
+                WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
+            )
+        })
     }
 
+    private fun setUpUserDetails() {
+        sharedViewModel.username.observe(viewLifecycleOwner, {
+            viewModel.setUsername()
+        })
+    }
+
+    private fun setUpLogout() {
+        sharedViewModel.logout.observe(viewLifecycleOwner, {
+            it.getContextIfNotHandled()?.let { reason ->
+                AuthUI.getInstance().signOut(requireContext())
+                    .addOnCompleteListener {
+                        sharedViewModel.toastMe(getString(reason))
+                        findNavController().navigate(
+                            WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
+                        )
+                    }
+            }
+        })
+    }
 
 }
