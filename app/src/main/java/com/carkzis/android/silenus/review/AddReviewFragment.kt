@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentAddReviewBinding
+import com.carkzis.android.silenus.welcome.WelcomeFragmentDirections
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -54,19 +55,16 @@ class AddReviewFragment : Fragment() {
         setUpFieldEntries()
         handleOnBackPressed()
 
+        setUpLogout()
+        setUpNavigateToLogin()
+
     }
 
     override fun onStart() {
         super.onStart()
 
-        if (authorisation.currentUser == null) {
-            findNavController().navigate(
-                AddReviewFragmentDirections.actionAddReviewFragmentToLoginFragment()
-            )
-        } else if (Firebase.auth.currentUser?.displayName == null ||
-            Firebase.auth.currentUser?.displayName == "") {
-            logout(R.string.null_user_error)
-        }
+        sharedViewModel.authoriseUser()
+
     }
 
     private fun setUpSubmitButton() {
@@ -109,14 +107,26 @@ class AddReviewFragment : Fragment() {
         })
     }
 
-    private fun logout(reason: Int) {
-        AuthUI.getInstance().signOut(requireContext())
-            .addOnCompleteListener {
-                sharedViewModel.toastMe(getString(reason))
-                findNavController().navigate(
-                    AddReviewFragmentDirections.actionAddReviewFragmentToLoginFragment()
-                )
+    private fun setUpLogout() {
+        sharedViewModel.logout.observe(viewLifecycleOwner, {
+            it.getContextIfNotHandled()?.let { reason ->
+                AuthUI.getInstance().signOut(requireContext())
+                    .addOnCompleteListener {
+                        sharedViewModel.toastMe(getString(reason))
+                        findNavController().navigate(
+                            AddReviewFragmentDirections.actionAddReviewFragmentToLoginFragment()
+                        )
+                    }
             }
+        })
+    }
+
+    private fun setUpNavigateToLogin() {
+        sharedViewModel.navToLogin.observe(viewLifecycleOwner, {
+            findNavController().navigate(
+                AddReviewFragmentDirections.actionAddReviewFragmentToLoginFragment()
+            )
+        })
     }
 
     private fun handleOnBackPressed() {

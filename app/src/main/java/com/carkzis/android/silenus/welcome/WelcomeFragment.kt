@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.carkzis.android.silenus.Event
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentWelcomeBinding
@@ -44,10 +45,21 @@ class WelcomeFragment : Fragment() {
 
     }
 
+    // TODO: BE VARY CAREFUL WITH THIS AUTHORISATION BUSINESS RE MVVM!
     override fun onStart() {
         super.onStart()
 
-        sharedViewModel.authoriseUser()
+        if (authorisation.currentUser == null) {
+            findNavController().navigate(
+                WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
+            )
+        } else if (Firebase.auth.currentUser?.displayName == null ||
+            Firebase.auth.currentUser?.displayName == "") {
+            setUpLogout()
+        } else {
+            viewModel.setUsername()
+            sharedViewModel.addUser()
+        }
 
     }
 
@@ -105,5 +117,15 @@ class WelcomeFragment : Fragment() {
             }
         })
     }
+
+//    private fun setUpLogout() {
+//            AuthUI.getInstance().signOut(requireContext())
+//        .addOnCompleteListener {
+//            sharedViewModel.toastMe("yes")
+//            findNavController().navigate(
+//                WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
+//            )
+//        }
+//    }
 
 }

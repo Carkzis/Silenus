@@ -54,7 +54,7 @@ class SharedViewModel @Inject constructor(
     val username: LiveData<String>
         get() = _username
 
-    private fun addUser() {
+    fun addUser() {
         viewModelScope.launch {
             repository.addUser()
         }
@@ -64,6 +64,7 @@ class SharedViewModel @Inject constructor(
         _logout.value = Event(R.string.logged_out)
     }
 
+    // TODO: BE VARY CAREFUL WITH THIS.
     fun authoriseUser() {
         if (authorisation.currentUser == null) {
             _navToLogin.value = Event(true)
