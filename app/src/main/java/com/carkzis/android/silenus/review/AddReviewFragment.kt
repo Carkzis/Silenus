@@ -123,19 +123,23 @@ class AddReviewFragment : Fragment() {
 
     private fun setUpNavigateToLogin() {
         sharedViewModel.navToLogin.observe(viewLifecycleOwner, {
-            findNavController().navigate(
-                AddReviewFragmentDirections.actionAddReviewFragmentToLoginFragment()
-            )
+            it.getContextIfNotHandled()?.let {
+                if (it) {
+                    findNavController().navigate(
+                        WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
+                    )
+                }
+            }
         })
     }
 
     private fun handleOnBackPressed() {
-//        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-//            sharedViewModel.resetReviewScreen()
-//            findNavController().navigate(
-//                AddReviewFragmentDirections.actionAddReviewFragmentToWelcomeFragment()
-//            )
-//        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            sharedViewModel.resetReviewScreen()
+            findNavController().navigate(
+                AddReviewFragmentDirections.actionAddReviewFragmentToWelcomeFragment()
+            )
+        }
     }
 
 }

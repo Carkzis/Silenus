@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -83,7 +84,7 @@ class LoginFragment : Fragment() {
     }
 
     // Note: for some reason, this is not called when the member registers/signs in using password
-    // and email, so no welcome message for them.
+    // and email.
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
         if (result.resultCode == RESULT_OK) {
             findNavController().navigate(

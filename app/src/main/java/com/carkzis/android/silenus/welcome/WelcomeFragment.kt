@@ -46,21 +46,10 @@ class WelcomeFragment : Fragment() {
 
     }
 
-    // For whatever reason, authorisation needs to go here, not in the view model.
     override fun onStart() {
         super.onStart()
 
-        if (authorisation.currentUser == null) {
-            findNavController().navigate(
-                WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
-            )
-        } else if (Firebase.auth.currentUser?.displayName == null ||
-            Firebase.auth.currentUser?.displayName == "") {
-            setUpLogout()
-        } else {
-            viewModel.setUsername()
-            sharedViewModel.addUser()
-        }
+        sharedViewModel.authoriseUser()
 
     }
 
@@ -72,7 +61,6 @@ class WelcomeFragment : Fragment() {
         setUpLogout()
         setUpNavigateToLogin()
         setUpUserDetails()
-        Timber.e("this?")
 
     }
 
@@ -93,9 +81,13 @@ class WelcomeFragment : Fragment() {
 
     private fun setUpNavigateToLogin() {
         sharedViewModel.navToLogin.observe(viewLifecycleOwner, {
-            findNavController().navigate(
-                WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
-            )
+            it.getContextIfNotHandled()?.let {
+                if (it) {
+                    findNavController().navigate(
+                        WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
+                    )
+                }
+            }
         })
     }
 
