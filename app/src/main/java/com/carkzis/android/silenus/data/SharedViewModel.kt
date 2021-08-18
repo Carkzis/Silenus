@@ -65,12 +65,12 @@ class SharedViewModel @Inject constructor(
         _logout.value = Event(R.string.logged_out)
     }
 
-    // WARNING: Sketchy. Don't use with WelcomeFragment, or you will get an infinite loop.
     fun authoriseUser() {
-        if (authorisation.currentUser == null) {
+        val auth = repository.getUser()
+        if (auth.currentUser == null) {
             _navToLogin.value = Event(true)
-        } else if (authorisation.currentUser?.displayName == null ||
-            authorisation.currentUser?.displayName == "") {
+        } else if (auth.currentUser?.displayName == null ||
+            auth.currentUser?.displayName == "") {
             _logout.value = Event(R.string.null_user_error)
         } else {
             _username.value = repository.getUsername()

@@ -1,6 +1,7 @@
 package com.carkzis.android.silenus.data
 
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -30,7 +31,7 @@ class UserRepositoryImpl(private val firestore: FirebaseFirestore): UserReposito
                         Timber.d("Member added with id ${userProfile.uid}")
                     }
                     .addOnFailureListener {
-                        Timber.d("Failure to add user document...")
+                        Timber.d("Failed to add user document...")
                     }
             }
         }
@@ -38,6 +39,10 @@ class UserRepositoryImpl(private val firestore: FirebaseFirestore): UserReposito
 
     override fun getUsername() : String {
         return Firebase.auth.currentUser?.displayName ?: ""
+    }
+
+    override fun getUser() : FirebaseAuth {
+        return Firebase.auth
     }
 
 }

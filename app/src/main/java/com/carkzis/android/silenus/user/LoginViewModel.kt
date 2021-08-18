@@ -6,13 +6,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.carkzis.android.silenus.Event
 import com.carkzis.android.silenus.R
+import com.carkzis.android.silenus.data.UserRepository
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val repository: UserRepository,
+    private val authorisation: FirebaseAuth
+) : ViewModel() {
 
     private var _toastText = MutableLiveData<Event<String>>()
     val toastText: LiveData<Event<String>>
@@ -22,8 +27,18 @@ class LoginViewModel @Inject constructor() : ViewModel() {
     val loginIntent: LiveData<Event<Intent>>
         get() = _loginIntent
 
+    private var _navToWelcome = MutableLiveData<Event<Boolean>>()
+    val navToWelcome: LiveData<Event<Boolean>>
+        get() = _navToWelcome
+
     fun signedInToast(message: String) {
         showToastMessage(message)
+    }
+
+    fun authoriseUser() {
+        if (repository.getUser().currentUser != null) {
+            _navToWelcome.value = Event(true)
+        }
     }
 
     private fun showToastMessage(message: String) {

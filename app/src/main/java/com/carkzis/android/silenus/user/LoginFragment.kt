@@ -29,8 +29,6 @@ class LoginFragment : Fragment() {
 
     private lateinit var viewDataBinding: FragmentLoginBinding
 
-    private lateinit var authorisation: FirebaseAuth
-
     val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()) { res ->
             this.onSignInResult(res)
@@ -46,8 +44,6 @@ class LoginFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
         }
 
-        authorisation = Firebase.auth
-
         return viewDataBinding.root
     }
 
@@ -57,16 +53,25 @@ class LoginFragment : Fragment() {
         setUpLoginButton()
         setUpToast()
         setUpLoginIntentListener()
+        setUpPreAuthorisedListener()
 
     }
 
     override fun onStart() {
         super.onStart()
-        if (Firebase.auth.currentUser != null) {
-            findNavController().navigate(
-                LoginFragmentDirections.actionLoginFragmentToWelcomeFragment()
-            )
-        }
+        viewModel.authoriseUser()
+    }
+
+    private fun setUpPreAuthorisedListener() {
+        viewModel.navToWelcome.observe(viewLifecycleOwner, {
+            it.getContextIfNotHandled()?.let {
+                if (it) {
+                    findNavController().navigate(
+                        LoginFragmentDirections.actionLoginFragmentToWelcomeFragment()
+                    )
+                }
+            }
+        })
     }
 
     private fun setUpLoginButton() {

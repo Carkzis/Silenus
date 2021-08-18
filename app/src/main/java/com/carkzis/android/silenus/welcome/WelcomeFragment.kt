@@ -28,8 +28,6 @@ class WelcomeFragment : Fragment() {
 
     private lateinit var viewDataBinding : FragmentWelcomeBinding
 
-    private lateinit var authorisation: FirebaseAuth
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,8 +37,6 @@ class WelcomeFragment : Fragment() {
             welcomeViewModel = viewModel
             lifecycleOwner = viewLifecycleOwner
         }
-
-        authorisation = Firebase.auth
 
         return viewDataBinding.root
 
