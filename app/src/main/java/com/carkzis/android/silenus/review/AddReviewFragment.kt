@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentAddReviewBinding
+import com.carkzis.android.silenus.showToast
 import com.carkzis.android.silenus.welcome.WelcomeFragmentDirections
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
@@ -29,8 +30,6 @@ class AddReviewFragment : Fragment() {
 
     private lateinit var viewDataBinding : FragmentAddReviewBinding
 
-    private lateinit var authorisation: FirebaseAuth
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,8 +39,6 @@ class AddReviewFragment : Fragment() {
             addReviewViewModel = viewModel
             lifecycleOwner = viewLifecycleOwner
         }
-
-        authorisation = Firebase.auth
 
         // Inflate the layout for this fragment
         return viewDataBinding.root
@@ -54,9 +51,11 @@ class AddReviewFragment : Fragment() {
         setUpLocationButton()
         setUpFieldEntries()
         handleOnBackPressed()
+        setUpToast()
 
         setUpLogout()
         setUpNavigateToLogin()
+        setUpNavigateToWelcome() // To be changed to navigate to member's list of items.
 
     }
 
@@ -69,7 +68,7 @@ class AddReviewFragment : Fragment() {
 
     private fun setUpSubmitButton() {
         viewDataBinding.submitBarButton.setOnClickListener {
-            viewModel.barSubmission()
+            viewModel.submissionPreChecks()
         }
     }
 
@@ -126,12 +125,27 @@ class AddReviewFragment : Fragment() {
             it.getContextIfNotHandled()?.let {
                 if (it) {
                     findNavController().navigate(
-                        WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
+                        AddReviewFragmentDirections.actionAddReviewFragmentToLoginFragment()
                     )
                 }
             }
         })
     }
+
+    // TODO: This will actually be changed to nagivate to the member's list of reviews.
+    private fun setUpNavigateToWelcome() {
+        viewModel.navToWelcome.observe(viewLifecycleOwner, {
+            it.getContextIfNotHandled()?.let {
+                if (it) {
+                    sharedViewModel.resetReviewScreen()
+                    findNavController().navigate(
+                        AddReviewFragmentDirections.actionAddReviewFragmentToWelcomeFragment()
+                    )
+                }
+            }
+        })
+    }
+
 
     private fun handleOnBackPressed() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -140,6 +154,14 @@ class AddReviewFragment : Fragment() {
                 AddReviewFragmentDirections.actionAddReviewFragmentToWelcomeFragment()
             )
         }
+    }
+
+    private fun setUpToast() {
+        viewModel.toastText.observe(viewLifecycleOwner, {
+            it.getContextIfNotHandled()?.let { message ->
+                context?.showToast(requireContext().getString(message))
+            }
+        })
     }
 
 }

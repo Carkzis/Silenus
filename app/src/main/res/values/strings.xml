@@ -22,4 +22,7 @@
   <string name="this_place_query">Is this the place?</string>
   <string name="yes">Yes</string>
   <string name="no">No</string>
+  <string name="no_establishment">Please enter an establishment!</string>
+  <string name="no_location">Please select a location!</string>
+  <string name="error">An error occurred...</string>
 </resources>

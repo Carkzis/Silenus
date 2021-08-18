@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.carkzis.android.silenus.Event
+import com.carkzis.android.silenus.data.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.google.firebase.auth.ktx.auth
@@ -11,7 +12,9 @@ import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
 @HiltViewModel
-class WelcomeViewModel @Inject constructor() : ViewModel(){
+class WelcomeViewModel @Inject constructor(
+    private val repository: UserRepository
+) : ViewModel(){
 
     private var _toastText = MutableLiveData<Event<String>>()
     val toastText: LiveData<Event<String>>
@@ -22,7 +25,7 @@ class WelcomeViewModel @Inject constructor() : ViewModel(){
         get() = _username
 
     fun setUsername() {
-        _username.value = Firebase.auth.currentUser?.displayName
+        _username.value = repository.getUsername()
     }
 
     fun toastMe(message: String) {
