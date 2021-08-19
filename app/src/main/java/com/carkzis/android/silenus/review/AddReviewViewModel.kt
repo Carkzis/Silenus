@@ -47,11 +47,12 @@ class AddReviewViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
+            // TODO: Add try catch, and make failure throw exception in repository.
             repository.addReview(Review(
                 barName.value,
                 rating.value,
                 location.value,
-                geopoint.value.toString(),
+                geopoint.value,
                 description.value,
                 Timestamp.now(),
                 userRepository.getUser().uid

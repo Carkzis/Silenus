@@ -16,7 +16,7 @@ data class Review(
     val establishment: String?,
     val rating: Float?,
     val location: String?,
-    val geo: String?,
+    val geo: GeoPoint?,
     val description: String?,
     val dateAdded: Timestamp,
     val uid: String?

@@ -22,7 +22,6 @@ class UserRepositoryImpl(private val firestore: FirebaseFirestore): UserReposito
             )
         }
 
-        // Check if the user exists.
         val users = userProfile?.let { firestore.collection("users").document(it.uid) }
 
         if (users != null) {

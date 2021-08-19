@@ -123,11 +123,9 @@ class AddReviewFragment : Fragment() {
     private fun setUpNavigateToLogin() {
         sharedViewModel.navToLogin.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let {
-                if (it) {
                     findNavController().navigate(
                         AddReviewFragmentDirections.actionAddReviewFragmentToLoginFragment()
                     )
-                }
             }
         })
     }
@@ -136,12 +134,10 @@ class AddReviewFragment : Fragment() {
     private fun setUpNavigateToWelcome() {
         viewModel.navToWelcome.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let {
-                if (it) {
                     sharedViewModel.resetReviewScreen()
                     findNavController().navigate(
                         AddReviewFragmentDirections.actionAddReviewFragmentToWelcomeFragment()
                     )
-                }
             }
         })
     }
