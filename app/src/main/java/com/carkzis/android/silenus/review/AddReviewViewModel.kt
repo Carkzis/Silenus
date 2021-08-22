@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.carkzis.android.silenus.Event
+import com.carkzis.android.silenus.LoadingState
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.MainRepository
 import com.carkzis.android.silenus.data.Review
@@ -13,6 +14,10 @@ import com.carkzis.android.silenus.data.UserRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.lang.Exception
@@ -45,9 +50,12 @@ class AddReviewViewModel @Inject constructor(
         } else if (geopoint.value == null) {
             showToastMessage(R.string.error)
         }
+        progressToAddingReview() // This means we can go ahead with this!
+    }
 
-        viewModelScope.launch {
-            // TODO: Add try catch, and make failure throw exception in repository.
+    private fun progressToAddingReview() {
+
+        viewModelScope.launch() {
             repository.addReview(Review(
                 barName.value,
                 rating.value,
@@ -56,8 +64,21 @@ class AddReviewViewModel @Inject constructor(
                 description.value,
                 Timestamp.now(),
                 userRepository.getUser().uid
-            ))
-            _navToWelcome.value = Event(true)
+            )).collect { loadingState ->
+                when (loadingState) {
+                    is LoadingState.Loading -> {
+                        // Cool beans.
+                        showToastMessage(loadingState.message)
+                    }
+                    is LoadingState.Success -> {
+                        showToastMessage(loadingState.message)
+                        _navToWelcome.value = Event(true)
+                        Timber.e("Did we succeed?")
+                    }
+                    is LoadingState.Error ->
+                        showToastMessage(loadingState.message)
+                }
+            }
         }
     }
 
