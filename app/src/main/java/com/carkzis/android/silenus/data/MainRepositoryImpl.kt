@@ -22,12 +22,12 @@ import kotlin.coroutines.suspendCoroutine
 
 class MainRepositoryImpl (private val firestore: FirebaseFirestore) : MainRepository {
 
-    private val reviews = firestore.collection(getCollectionName(Constants.REVIEWS))
-
     /**
      * Add a review for a member into the database.
      */
     override suspend fun addReview(review: Review) = flow {
+
+        val reviews = firestore.collection(getCollectionName(Constants.REVIEWS))
 
         emit(LoadingState.Loading(R.string.loading)) // Loading!
 

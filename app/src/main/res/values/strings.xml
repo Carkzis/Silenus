@@ -27,5 +27,7 @@
   <string name="error">An error occurred…</string>
   <string name="error_adding_review">Error adding review.</string>
   <string name="review_added">Review added!</string>
+  <string name="error_adding_user">Error adding user.</string>
+  <string name="user_added">Review added!</string>
   <string name="loading">Loading…</string>
 </resources>

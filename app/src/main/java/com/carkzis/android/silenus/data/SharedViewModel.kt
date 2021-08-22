@@ -15,6 +15,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -55,9 +56,21 @@ class SharedViewModel @Inject constructor(
     val username: LiveData<String>
         get() = _username
 
-    fun addUser() {
-        viewModelScope.launch {
-            repository.addUser()
+    private fun addUser() {
+        viewModelScope.launch() {
+            repository.addUser().collect { loadingState ->
+                when (loadingState) {
+                    is LoadingState.Loading -> {
+                        Timber.e("Adding user...")
+                    }
+                    is LoadingState.Success -> {
+                        Timber.e("User added.")
+                    }
+                    is LoadingState.Error -> {
+                        Timber.e("Error adding user.")
+                    }
+                }
+            }
         }
     }
 
