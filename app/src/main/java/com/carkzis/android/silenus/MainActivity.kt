@@ -24,5 +24,4 @@ class MainActivity : AppCompatActivity() {
             FirebaseFunctions.getInstance().useEmulator("10.0.2.2", 5001)
         }
     }
-
 }
