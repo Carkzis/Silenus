@@ -4,19 +4,16 @@ import com.carkzis.android.silenus.Constants
 import com.carkzis.android.silenus.LoadingState
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.getCollectionName
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks.await
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -31,11 +28,12 @@ class MainRepositoryImpl (private val firestore: FirebaseFirestore) : MainReposi
 
         emit(LoadingState.Loading(R.string.loading)) // Loading!
 
+        // This ensures we await the result of the query before we emit again.
         val reviewReference = suspendCoroutine<DocumentReference> { cont ->
-            reviews.add(review).addOnCompleteListener { it ->
-                cont.resume(it.result)
-            }
-        } // This ensures we await the result of the query before we emit again.
+            reviews.add(review)
+                .addOnSuccessListener { cont.resume(it) }
+                .addOnFailureListener { throw Exception() }
+        }
 
         emit(LoadingState.Success(R.string.review_added, reviewReference)) // Emit the result!
 

@@ -67,13 +67,11 @@ class AddReviewViewModel @Inject constructor(
             )).collect { loadingState ->
                 when (loadingState) {
                     is LoadingState.Loading -> {
-                        // Cool beans.
-                        showToastMessage(loadingState.message)
+                        Timber.e("Posting review...")
                     }
                     is LoadingState.Success -> {
                         showToastMessage(loadingState.message)
                         _navToWelcome.value = Event(true)
-                        Timber.e("Did we succeed?")
                     }
                     is LoadingState.Error ->
                         showToastMessage(loadingState.message)

@@ -6,7 +6,7 @@ import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
-    suspend fun addUser(): Flow<LoadingState<Boolean>>
+    suspend fun addUser(): Flow<LoadingState<Int>>
     fun getUsername() : String
     fun getUser() : FirebaseAuth
 }

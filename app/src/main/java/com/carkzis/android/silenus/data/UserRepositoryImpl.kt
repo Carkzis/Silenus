@@ -7,38 +7,39 @@ import com.carkzis.android.silenus.getCollectionName
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class UserRepositoryImpl(private val firestore: FirebaseFirestore): UserRepository {
 
-    override suspend fun addUser() = flow<LoadingState<Boolean>> {
-
-        Timber.e("Did we get here?")
+    override suspend fun addUser() = flow {
 
         emit(LoadingState.Loading(R.string.loading)) // Loading!
 
-        val newUser = getUserDetails()
+        val newUser = getUserDetails().first
+        val uId = getUserDetails().second
         val users = firestore.collection(getCollectionName(Constants.USERS))
 
-        suspendCoroutine<Boolean> { cont ->
-            users.document(newUser.second).set(newUser.first).addOnCompleteListener { _ ->
-                Timber.e("Or here?")
-                cont.resume(true)
-            }
-        } // This ensures we await the result of the query before we emit again.
+        // This ensures we await the result of the query before we emit again.
+        val result = suspendCoroutine<Int> { cont ->
 
-        emit(LoadingState.Success(R.string.user_added))
+            users.document(uId).set(newUser)
+                .addOnSuccessListener { cont.resume(R.string.user_added)}
+                .addOnFailureListener { throw Exception() }
+        }
+
+        emit(LoadingState.Success<Int>(result))
+
     }.catch {
+
         emit(LoadingState.Error(R.string.error, Exception())) // Emit the error if we get here...
+
     }.flowOn(Dispatchers.IO)
 
     override fun getUsername() : String {
