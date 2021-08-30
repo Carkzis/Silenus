@@ -18,6 +18,9 @@
     <action
       android:id="@+id/action_welcomeFragment_to_addReviewFragment"
       app:destination="@id/addReviewFragment" />
+    <action
+      android:id="@+id/action_welcomeFragment_to_yourReviewsFragment"
+      app:destination="@id/yourReviewsFragment" />
   </fragment>
   <fragment
     android:id="@+id/loginFragment"
@@ -60,5 +63,10 @@
       app:popUpTo="@id/addReviewFragment"
       app:popUpToInclusive="true" />
   </fragment>
+  <fragment
+    android:id="@+id/yourReviewsFragment"
+    android:name="com.carkzis.android.silenus.review.YourReviewsFragment"
+    android:label="fragment_your_reviews"
+    tools:layout="@layout/fragment_your_reviews" />
 
 </navigation>
