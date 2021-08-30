@@ -45,7 +45,7 @@ class MainRepositoryImpl (private val firestore: FirebaseFirestore) : MainReposi
     /**
      * Get the member's reviews, to put into the database.
      */
-    suspend fun getYourReviews() = flow {
+    override suspend fun getYourReviews() = flow {
         val reviews = firestore.collection(getCollectionName(Constants.REVIEWS))
 
         emit(LoadingState.Loading(R.string.loading)) // Loading!

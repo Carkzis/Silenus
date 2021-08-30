@@ -7,7 +7,7 @@
     <import type="android.view.View" />
     <import type="androidx.core.content.ContextCompat" />
     <variable
-      name="yourReviewsViewModel"
+      name="yourReview"
       type="com.carkzis.android.silenus.data.YourReview" />
   </data>
 
