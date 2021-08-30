@@ -8,11 +8,10 @@ import com.google.firebase.firestore.GeoPoint
  */
 
 data class YourReview(
-    val id: String,
-    val establishment: String,
-    val rating: Float,
-    val location: String,
-    val geo: GeoPoint,
-    val description: String?,
-    val dateAdded: Timestamp,
+    val establishment: String? = null,
+    val rating: Float? = null,
+    val location: String? = null,
+    val description: String? = null,
+    val dateAdded: Timestamp? = null,
+    //    val geo: GeoPoint? = null,
 )

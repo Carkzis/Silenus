@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -52,13 +53,14 @@ class MainRepositoryImpl (private val firestore: FirebaseFirestore) : MainReposi
 
         val yourReviewList = suspendCoroutine<QuerySnapshot> { cont ->
             reviews.get()
-                .addOnSuccessListener { cont.resume(it) }
+                .addOnSuccessListener { cont.resume(it) } // This is successful.
                 .addOnFailureListener { throw Exception() }
         }.toObjects(YourReview::class.java) // This converts the snapshot into a list.
 
         emit(LoadingState.Success(R.string.reviews_retrieved, yourReviewList))
 
-    }.catch {
-        emit(LoadingState.Error(R.string.error, Exception())) // Emit the error if we get here...
+//    }
+//        .catch {
+//        emit(LoadingState.Error(R.string.error, Exception())) // Emit the error if we get here...
     }.flowOn(Dispatchers.IO)
 }

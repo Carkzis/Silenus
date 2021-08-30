@@ -41,6 +41,7 @@ class YourReviewsViewModel @Inject constructor(
                         }
                         is LoadingState.Success -> {
                             _yourReviews.value = loadingState.data!!
+//                            Timber.e(loadingState.data.toString())
                             Timber.e("Reviews loaded!")
                         }
                         is LoadingState.Error ->

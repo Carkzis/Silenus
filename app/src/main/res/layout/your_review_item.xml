@@ -22,6 +22,7 @@
       android:layout_marginStart="8dp"
       android:layout_marginTop="8dp"
       android:textSize="20sp"
+      android:text="@{yourReview.establishment}"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       tools:text="Establishment" />
@@ -32,6 +33,7 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="8dp"
       android:layout_marginTop="8dp"
+      android:text="@{yourReview.location}"
       app:layout_constraintEnd_toStartOf="@+id/your_rev_description"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/your_rev_establishment"
@@ -46,6 +48,8 @@
       android:layout_marginEnd="8dp"
       android:layout_marginBottom="8dp"
       android:textSize="12sp"
+      android:textColor="@color/black"
+      android:text="@{yourReview.description}"
       app:layout_constraintBottom_toTopOf="@+id/your_rev_bar"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.0"
@@ -75,6 +79,7 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toEndOf="@+id/your_rev_establishment" />
+    <!--      android:rating="@{yourReview.rating}"-->
 
 
   </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.carkzis.android.silenus.data.YourReview
 import com.carkzis.android.silenus.databinding.YourReviewItemBinding
-import kotlinx.coroutines.NonDisposableHandle
-import kotlinx.coroutines.NonDisposableHandle.parent
 
 class YourReviewsAdapter : ListAdapter<YourReview, YourReviewsAdapter.YourReviewsViewHolder>(YourReviewsDiffCallBack()),
     Filterable {
@@ -40,7 +38,8 @@ class YourReviewsAdapter : ListAdapter<YourReview, YourReviewsAdapter.YourReview
     class YourReviewsViewHolder constructor(private var binding: YourReviewItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
             fun bind(item: YourReview) {
-                binding.yourReview
+                binding.yourReview = item
+                binding.executePendingBindings()
             }
             companion object {
                 fun from(parent: ViewGroup): YourReviewsViewHolder {
@@ -65,8 +64,8 @@ class YourReviewsAdapter : ListAdapter<YourReview, YourReviewsAdapter.YourReview
                 // Checking date, establishment and location currently.
                 reviewList.filter {
                     it.dateAdded.toString().lowercase().contains(constraint!!.toString().lowercase())
-                            || it.establishment.lowercase().contains(constraint.toString().lowercase())
-                            || it.location.lowercase().contains(constraint.toString().lowercase())
+                            || it.establishment!!.lowercase().contains(constraint.toString().lowercase())
+                            || it.location!!.lowercase().contains(constraint.toString().lowercase())
                 }.forEach {
                     filteredList.add(it)
                 }
@@ -96,7 +95,7 @@ class YourReviewsAdapter : ListAdapter<YourReview, YourReviewsAdapter.YourReview
 
 class YourReviewsDiffCallBack : DiffUtil.ItemCallback<YourReview>() {
     override fun areItemsTheSame(oldItem: YourReview, newItem: YourReview): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.dateAdded == newItem.dateAdded
     }
 
     override fun areContentsTheSame(oldItem: YourReview, newItem: YourReview): Boolean {

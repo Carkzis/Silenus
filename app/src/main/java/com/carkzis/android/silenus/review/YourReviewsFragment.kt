@@ -13,6 +13,7 @@ import com.carkzis.android.silenus.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentAddReviewBinding
 import com.carkzis.android.silenus.databinding.FragmentYourReviewsBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
@@ -48,6 +49,7 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun setUpDataObserver() {
         viewModel.yourReviews.observe(viewLifecycleOwner, {
+            Timber.e(it.toString())
             yourReviewsAdapter.addItemsToAdapter(it)
         })
     }
