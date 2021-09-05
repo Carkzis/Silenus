@@ -33,6 +33,7 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
             lifecycleOwner = viewLifecycleOwner
         }
 
+        // This has been placed here for now.
         yourReviewsAdapter = YourReviewsAdapter(YourReviewsAdapter.OnClickListener {
             this.findNavController().navigate(
                 YourReviewsFragmentDirections.actionYourReviewsFragmentToMapsFragment())

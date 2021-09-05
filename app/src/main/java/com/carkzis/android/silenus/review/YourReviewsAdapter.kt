@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.carkzis.android.silenus.data.YourReview
 import com.carkzis.android.silenus.databinding.YourReviewItemBinding
+import timber.log.Timber
 
 class YourReviewsAdapter(private val onClickListener: OnClickListener) : ListAdapter<YourReview, YourReviewsAdapter.YourReviewsViewHolder>(YourReviewsDiffCallBack()),
     Filterable {
@@ -24,7 +25,7 @@ class YourReviewsAdapter(private val onClickListener: OnClickListener) : ListAda
         holder.itemView.setOnClickListener {
             onClickListener.onClick(review)
         }
-        holder.bind(review)
+        holder.bind(reviewListFiltered[position])
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): YourReviewsViewHolder {
@@ -65,15 +66,16 @@ class YourReviewsAdapter(private val onClickListener: OnClickListener) : ListAda
                 // If the search string is empty, we show all the items (the default).
                 reviewListFiltered = reviewList
             } else {
+                Timber.e(reviewList[0].toString())
                 val filteredList = ArrayList<YourReview>()
                 // Checking date, establishment and location currently.
                 reviewList.filter {
-                    it.dateAdded.toString().lowercase().contains(constraint!!.toString().lowercase())
-                            || it.establishment!!.lowercase().contains(constraint.toString().lowercase())
-                            || it.location!!.lowercase().contains(constraint.toString().lowercase())
+                    // TODO: Only searching by establishment works, doesn't like locations!
+                       it.establishment!!.lowercase().contains(constraint.toString().lowercase())
                 }.forEach {
                     filteredList.add(it)
                 }
+                Timber.e(filteredList.toString())
                 reviewListFiltered = filteredList
             }
 
