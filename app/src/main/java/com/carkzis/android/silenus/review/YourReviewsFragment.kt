@@ -8,9 +8,8 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.carkzis.android.silenus.R
+import androidx.navigation.fragment.findNavController
 import com.carkzis.android.silenus.SharedViewModel
-import com.carkzis.android.silenus.databinding.FragmentAddReviewBinding
 import com.carkzis.android.silenus.databinding.FragmentYourReviewsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -34,7 +33,10 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
             lifecycleOwner = viewLifecycleOwner
         }
 
-        yourReviewsAdapter = YourReviewsAdapter()
+        yourReviewsAdapter = YourReviewsAdapter(YourReviewsAdapter.OnClickListener {
+            this.findNavController().navigate(
+                YourReviewsFragmentDirections.actionYourReviewsFragmentToMapsFragment())
+        })
 
         viewDataBinding.yourReviewsRecylerview.adapter = yourReviewsAdapter
 
@@ -46,6 +48,11 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
         super.onViewCreated(view, savedInstanceState)
         setUpDataObserver()
         setUpSearchView()
+        setUpItemListener()
+    }
+
+    private fun setUpItemListener() {
+
     }
 
     private fun setUpDataObserver() {

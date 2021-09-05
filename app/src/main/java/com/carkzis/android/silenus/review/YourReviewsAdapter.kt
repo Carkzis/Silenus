@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.carkzis.android.silenus.data.YourReview
 import com.carkzis.android.silenus.databinding.YourReviewItemBinding
 
-class YourReviewsAdapter : ListAdapter<YourReview, YourReviewsAdapter.YourReviewsViewHolder>(YourReviewsDiffCallBack()),
+class YourReviewsAdapter(private val onClickListener: OnClickListener) : ListAdapter<YourReview, YourReviewsAdapter.YourReviewsViewHolder>(YourReviewsDiffCallBack()),
     Filterable {
 
     // Create blank lists for the normal list, and the filtered version.
@@ -19,7 +19,12 @@ class YourReviewsAdapter : ListAdapter<YourReview, YourReviewsAdapter.YourReview
     var reviewListFiltered : ArrayList<YourReview> = ArrayList()
 
     override fun onBindViewHolder(holder: YourReviewsViewHolder, position: Int) {
-        holder.bind(reviewListFiltered[position])
+        // TODO: Changed this.
+        val review = reviewListFiltered[position]
+        holder.itemView.setOnClickListener {
+            onClickListener.onClick(review)
+        }
+        holder.bind(review)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): YourReviewsViewHolder {
@@ -90,6 +95,13 @@ class YourReviewsAdapter : ListAdapter<YourReview, YourReviewsAdapter.YourReview
 
     }
 
+    /**
+     * Basically, we provide a higher-order function into the class.  onClick will perform this
+     * function, which takes a YourReview data class, performs a job and returns Unit (nothing).
+     */
+    class OnClickListener(val clickListener: (review: YourReview) -> Unit) {
+        fun onClick(review: YourReview) = clickListener(review)
+    }
 
 }
 

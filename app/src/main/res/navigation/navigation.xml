@@ -67,6 +67,10 @@
     android:id="@+id/yourReviewsFragment"
     android:name="com.carkzis.android.silenus.review.YourReviewsFragment"
     android:label="fragment_your_reviews"
-    tools:layout="@layout/fragment_your_reviews" />
+    tools:layout="@layout/fragment_your_reviews" >
+    <action
+      android:id="@+id/action_yourReviewsFragment_to_mapsFragment"
+      app:destination="@id/mapsFragment" />
+  </fragment>
 
 </navigation>
