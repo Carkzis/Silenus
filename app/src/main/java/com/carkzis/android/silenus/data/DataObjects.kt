@@ -3,6 +3,7 @@ package com.carkzis.android.silenus.data
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
 
+// TODO: This is not a UI model despite the name (needs changing), but will need a dedicated model.
 data class UserModel(
     val name: String?,
     val email: String?,

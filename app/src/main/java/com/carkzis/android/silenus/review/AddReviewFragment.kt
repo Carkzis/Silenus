@@ -10,6 +10,7 @@ import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.carkzis.android.silenus.MapReason
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentAddReviewBinding
@@ -72,10 +73,15 @@ class AddReviewFragment : Fragment() {
         }
     }
 
+    /**
+     * This listens to clicks on the location EditText to bring up the map fragment.
+     */
     private fun setUpLocationButton() {
         viewDataBinding.locationBarEdittext.setOnClickListener {
             sharedViewModel.setBarDetails(
                 viewModel.barName.value, viewModel.rating.value, viewModel.description.value)
+            // Set the reason for opening the map.
+            sharedViewModel.setMapOpenReason(MapReason.ADDREV)
             findNavController().navigate(
                 AddReviewFragmentDirections.actionAddReviewFragmentToMapsFragment()
             )

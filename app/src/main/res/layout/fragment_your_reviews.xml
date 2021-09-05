@@ -35,6 +35,8 @@
       android:elevation="1dp"
       android:iconifiedByDefault="false"
       android:queryHint="Search"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>

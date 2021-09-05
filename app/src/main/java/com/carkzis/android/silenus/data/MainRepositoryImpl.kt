@@ -59,8 +59,8 @@ class MainRepositoryImpl (private val firestore: FirebaseFirestore) : MainReposi
 
         emit(LoadingState.Success(R.string.reviews_retrieved, yourReviewList))
 
-//    }
-//        .catch {
-//        emit(LoadingState.Error(R.string.error, Exception())) // Emit the error if we get here...
+    }
+        .catch {
+        emit(LoadingState.Error(R.string.error, Exception())) // Emit the error if we get here...
     }.flowOn(Dispatchers.IO)
 }

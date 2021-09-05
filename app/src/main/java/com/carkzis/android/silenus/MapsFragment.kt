@@ -37,12 +37,22 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
-
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        setUpLocationRequest(map)
+        // TODO: Check this, I have change this and it needs testing.
+        mapReasonListener(map)
+    }
+
+    // TODO: This allows us to reuse the map depending on the source, may be a bad idea!
+    private fun mapReasonListener(map: GoogleMap) {
+        sharedViewModel.mapReason.observe(viewLifecycleOwner, {
+            when (it) {
+                MapReason.ADDREV -> setUpLocationRequest(map)
+                else -> Timber.e("No map reason supplied.")
+            }
+        })
     }
 
     private fun setUpLocationRequest(map: GoogleMap) {

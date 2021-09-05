@@ -13,5 +13,5 @@ data class YourReview(
     val location: String? = null,
     val description: String? = null,
     val dateAdded: Timestamp? = null,
-    //    val geo: GeoPoint? = null,
+    val geo: GeoPoint? = null,
 )
