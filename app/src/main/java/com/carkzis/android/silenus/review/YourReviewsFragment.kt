@@ -45,21 +45,27 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpDataObserver()
+        setUpSearchView()
     }
 
     private fun setUpDataObserver() {
         viewModel.yourReviews.observe(viewLifecycleOwner, {
-            Timber.e(it.toString())
             yourReviewsAdapter.addItemsToAdapter(it)
         })
     }
 
+    private fun setUpSearchView() {
+        viewDataBinding.searchview.setOnQueryTextListener(this)
+    }
+
     override fun onQueryTextSubmit(query: String?) : Boolean {
+        Timber.e("are you doing something")
         yourReviewsAdapter.filter.filter(query)
         return false
     }
 
     override fun onQueryTextChange(newText: String?) : Boolean {
+        Timber.e("are you doing something")
         yourReviewsAdapter.filter.filter(newText)
         return false
     }
