@@ -13,78 +13,128 @@
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="128dp">
+    android:layout_height="128dp"
+    android:layout_margin="4dp"
+    android:background="@drawable/your_review_border">
 
-    <TextView
-      android:id="@+id/your_rev_establishment"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="8dp"
-      android:layout_marginTop="8dp"
-      android:textSize="20sp"
-      android:text="@{yourReview.establishment}"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      tools:text="Establishment" />
-
-    <TextView
-      android:id="@+id/your_rev_location"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="8dp"
-      android:layout_marginTop="8dp"
-      android:text="@{yourReview.location}"
-      app:layout_constraintEnd_toStartOf="@+id/your_rev_description"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/your_rev_establishment"
-      tools:text="Stockport, UK" />
-
-    <TextView
-      android:id="@+id/your_rev_description"
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/your_rev_name_constraint"
       android:layout_width="0dp"
       android:layout_height="0dp"
-      android:layout_marginStart="8dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginEnd="8dp"
-      android:layout_marginBottom="8dp"
-      android:textSize="12sp"
-      android:textColor="@color/black"
-      android:text="@{yourReview.description}"
-      app:layout_constraintBottom_toTopOf="@+id/your_rev_bar"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toEndOf="@+id/your_rev_establishment"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_bias="0.247"
-      tools:text="This is text! It is a description! Let us celebrate please." />
-
-    <ImageView
-      android:id="@+id/your_review_map"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toStartOf="@+id/your_rev_description"
+      app:layout_constraintEnd_toStartOf="@+id/your_review_guideline"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintHorizontal_weight="1"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/your_rev_location"
-      app:srcCompat="@android:drawable/ic_dialog_map" />
+      app:layout_constraintTop_toTopOf="parent">
 
-    <RatingBar
-      android:id="@+id/your_rev_bar"
-      style="?android:ratingBarStyleSmall"
+      <TextView
+        android:id="@+id/your_rev_establishment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text="@{yourReview.establishment}"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/your_rev_location"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Establishment" />
+
+      <TextView
+        android:id="@+id/your_rev_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text="@{yourReview.location}"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/your_review_map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/your_rev_establishment"
+        tools:text="Stockport, Manchester, Marcland, UK" />
+
+      <ImageView
+        android:id="@+id/your_review_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/your_rev_location"
+        app:srcCompat="@android:drawable/ic_dialog_map" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/your_review_guideline"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="8dp"
-      android:gravity="center"
-      android:numStars="5"
+      android:orientation="vertical"
+      app:layout_constraintGuide_percent="0.35" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/your_rev_desc_constraint"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toEndOf="@+id/your_rev_establishment" />
-    <!--      android:rating="@{yourReview.rating}"-->
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintHorizontal_weight="3"
+      app:layout_constraintStart_toEndOf="@+id/your_review_guideline"
+      app:layout_constraintTop_toTopOf="parent">
 
+      <TextView
+        android:id="@+id/your_rev_description"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/your_rev_desc_border"
+        android:text="@{yourReview.description}"
+        android:ellipsize="marquee"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/your_rev_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:text="This is text! It is a description! Let us celebrate please." />
+
+      <RatingBar
+        android:id="@+id/your_rev_bar"
+        style="?android:ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:numStars="5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+      <!--      android:rating="@{yourReview.rating}"-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
-
 </layout>
-
-
