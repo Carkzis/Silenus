@@ -30,7 +30,10 @@ class YourReviewsViewModel @Inject constructor(
         getAndAttachReviews()
     }
 
-    // TODO: LOOK HERE!
+    /**
+     * Gets a list of reviews from MainRepository, and adds them to the yourReviews LiveData
+     * to be observed by the YourReviewsFragment.
+     */
     private fun getAndAttachReviews() {
         viewModelScope.launch {
             repository.getYourReviews()
@@ -41,7 +44,6 @@ class YourReviewsViewModel @Inject constructor(
                         }
                         is LoadingState.Success -> {
                             _yourReviews.value = loadingState.data!!
-//                            Timber.e(loadingState.data.toString())
                             Timber.e("Reviews loaded!")
                         }
                         is LoadingState.Error ->

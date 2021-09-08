@@ -45,7 +45,13 @@
       app:popUpToInclusive="true" />
     <action
       android:id="@+id/action_addReviewFragment_to_mapsFragment"
-      app:destination="@id/mapsFragment" />
+      app:destination="@id/mapsFragment" >
+      <argument
+        android:name="yourReviewsMapLocation"
+        app:argType="string[]"
+        android:defaultValue="@null"
+        app:nullable="true" />
+    </action>
     <action
       android:id="@+id/action_addReviewFragment_to_welcomeFragment"
       app:destination="@id/welcomeFragment"
@@ -62,6 +68,10 @@
       app:destination="@id/addReviewFragment"
       app:popUpTo="@id/addReviewFragment"
       app:popUpToInclusive="true" />
+    <argument
+      android:name="yourReviewsMapLocation"
+      app:argType="string[]"
+      app:nullable="true" />
   </fragment>
   <fragment
     android:id="@+id/yourReviewsFragment"
@@ -70,7 +80,11 @@
     tools:layout="@layout/fragment_your_reviews" >
     <action
       android:id="@+id/action_yourReviewsFragment_to_mapsFragment"
-      app:destination="@id/mapsFragment" />
+      app:destination="@id/mapsFragment" >
+      <argument
+        android:name="yourReviewsMapLocation"
+        app:argType="string[]" />
+    </action>
   </fragment>
 
 </navigation>

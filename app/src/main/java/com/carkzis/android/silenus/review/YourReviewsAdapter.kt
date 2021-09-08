@@ -25,8 +25,12 @@ class YourReviewsAdapter(private val onClickListener: OnClickListener) : ListAda
     override fun onBindViewHolder(holder: YourReviewsViewHolder, position: Int) {
         val review = reviewListFiltered[position]
         // This actions an on click listener when the map icon is clicked.
+        // TODO: Need to set it up so multiple views can be clicked.
         holder.itemView.findViewById<View>(R.id.your_rev_map).setOnClickListener {
-            onClickListener.onClick(review)
+            onClickListener.onMapClick(review)
+        }
+        holder.itemView.findViewById<View>(R.id.your_rev_description).setOnClickListener {
+            onClickListener.onDescriptionClick(review)
         }
         holder.bind(reviewListFiltered[position])
     }
@@ -104,8 +108,9 @@ class YourReviewsAdapter(private val onClickListener: OnClickListener) : ListAda
      * Basically, we provide a higher-order function into the class.  onClick will perform this
      * function, which takes a YourReview data class, performs a job and returns Unit (nothing).
      */
-    class OnClickListener(val clickListener: (review: YourReview) -> Unit) {
-        fun onClick(review: YourReview) = clickListener(review)
+    class OnClickListener(val clickListener: (review: YourReview) -> Unit, val otherClickListener: (review: YourReview) -> Unit) {
+        fun onMapClick(review: YourReview) = clickListener(review)
+        fun onDescriptionClick(review: YourReview) = otherClickListener(review)
     }
 
 }

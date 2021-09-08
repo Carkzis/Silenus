@@ -9,7 +9,9 @@ import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.carkzis.android.silenus.MapReason
 import com.carkzis.android.silenus.SharedViewModel
+import com.carkzis.android.silenus.data.YourReview
 import com.carkzis.android.silenus.databinding.FragmentYourReviewsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -33,8 +35,6 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
             lifecycleOwner = viewLifecycleOwner
         }
 
-        // TODO: This needs to go to the associated location.
-        // TODO: This also need to only do that when clicking the map button.
         yourReviewsAdapter = yourReviewsAdapter()
 
         viewDataBinding.yourReviewsRecylerview.adapter = yourReviewsAdapter
@@ -47,26 +47,57 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
         super.onViewCreated(view, savedInstanceState)
         setUpDataObserver()
         setUpSearchView()
-        setUpItemListener()
     }
 
+    /**
+     * Helper method to set up the review adapters methods initiated on their associated
+     * click listeners with the adapter class.
+     */
     private fun yourReviewsAdapter() : YourReviewsAdapter {
-        return YourReviewsAdapter(YourReviewsAdapter.OnClickListener {
-            this.findNavController().navigate(
-                YourReviewsFragmentDirections.actionYourReviewsFragmentToMapsFragment())
-        })
+        return YourReviewsAdapter(YourReviewsAdapter.OnClickListener(
+            {setUpMapClickListener(it)}, {setUpDescriptionClickListener()}))
     }
 
-    private fun setUpItemListener() {
-
+    /**
+     * Helper method that is used as a higher order function with the YourReviewsAdapter,
+     * which will direct the user to the location of the bar being reviewed on a map fragment.
+     */
+    private fun setUpMapClickListener(review: YourReview) {
+        val geoPoint = review.geo
+        sharedViewModel.setMapOpenReason(MapReason.VIEWREV)
+        // TODO: We are passing in the geoPoints as strings.
+        this.findNavController().navigate(
+            YourReviewsFragmentDirections.actionYourReviewsFragmentToMapsFragment(
+                arrayOf(geoPoint?.latitude.toString(), geoPoint?.longitude.toString()))
+        )
     }
 
+    /**
+     * Helper method that is used as a higher order function within the YourReviewsAdapter,
+     * which will perform an action on clicking the review items description box.
+     */
+    private fun setUpDescriptionClickListener() {
+        this.findNavController().navigate(
+            YourReviewsFragmentDirections.actionYourReviewsFragmentToMapsFragment(
+                    arrayOf("20.007826849269325", "1.7928498610854149")))
+    }
+
+    /**
+     * This observes the data in the recyclerview, and also resubmits a blank query
+     * and returning to the fragment from the map.
+     */
     private fun setUpDataObserver() {
         viewModel.yourReviews.observe(viewLifecycleOwner, {
             yourReviewsAdapter.addItemsToAdapter(it)
+            // TODO: Can change this to use a viewModel that stores the query.
+            onQueryTextSubmit("")
         })
     }
 
+    /**
+     * Sets up the the search view, which allows us to type a query and filter the
+     * users reviews appropriately.
+     */
     private fun setUpSearchView() {
         viewDataBinding.searchview.setOnQueryTextListener(this)
     }

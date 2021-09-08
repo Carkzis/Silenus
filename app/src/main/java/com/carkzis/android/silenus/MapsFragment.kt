@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -24,6 +25,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
 
     private val sharedViewModel by activityViewModels<SharedViewModel>()
+
+    val args : MapsFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +44,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        // TODO: Check this, I have change this and it needs testing.
+        // TODO: Check this, I have changed this and it needs testing.
         mapReasonListener(map)
     }
 
@@ -50,9 +53,23 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         sharedViewModel.mapReason.observe(viewLifecycleOwner, {
             when (it) {
                 MapReason.ADDREV -> setUpLocationRequest(map)
+                MapReason.VIEWREV -> setUpReviewLocation(map)
                 else -> Timber.e("No map reason supplied.")
             }
         })
+    }
+
+    /**
+     * This will home in onto the bar location on the map.
+     */
+    private fun setUpReviewLocation(map: GoogleMap) {
+        Timber.e("Got here!") // And so it did!
+        val latLng = args.yourReviewsMapLocation
+        val lat = latLng!![0]
+        val lng = latLng[1]
+        Timber.e(lat)
+        Timber.e(lng)
+        // This may be better using viewModels tbh. Do not like safeArgs.
     }
 
     private fun setUpLocationRequest(map: GoogleMap) {
