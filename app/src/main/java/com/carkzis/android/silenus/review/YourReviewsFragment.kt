@@ -33,11 +33,9 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
             lifecycleOwner = viewLifecycleOwner
         }
 
-        // This has been placed here for now.
-        yourReviewsAdapter = YourReviewsAdapter(YourReviewsAdapter.OnClickListener {
-            this.findNavController().navigate(
-                YourReviewsFragmentDirections.actionYourReviewsFragmentToMapsFragment())
-        })
+        // TODO: This needs to go to the associated location.
+        // TODO: This also need to only do that when clicking the map button.
+        yourReviewsAdapter = yourReviewsAdapter()
 
         viewDataBinding.yourReviewsRecylerview.adapter = yourReviewsAdapter
 
@@ -50,6 +48,13 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
         setUpDataObserver()
         setUpSearchView()
         setUpItemListener()
+    }
+
+    private fun yourReviewsAdapter() : YourReviewsAdapter {
+        return YourReviewsAdapter(YourReviewsAdapter.OnClickListener {
+            this.findNavController().navigate(
+                YourReviewsFragmentDirections.actionYourReviewsFragmentToMapsFragment())
+        })
     }
 
     private fun setUpItemListener() {

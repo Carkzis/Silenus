@@ -60,7 +60,7 @@
         android:singleLine="true"
         android:text="@{yourReview.location}"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/your_review_map"
+        app:layout_constraintBottom_toTopOf="@+id/your_rev_map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +68,7 @@
         tools:text="Stockport, Manchester, Marcland, UK" />
 
       <ImageView
-        android:id="@+id/your_review_map"
+        android:id="@+id/your_rev_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"

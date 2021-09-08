@@ -2,12 +2,15 @@ package com.carkzis.android.silenus.review
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.core.view.allViews
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.YourReview
 import com.carkzis.android.silenus.databinding.YourReviewItemBinding
 import timber.log.Timber
@@ -20,9 +23,9 @@ class YourReviewsAdapter(private val onClickListener: OnClickListener) : ListAda
     var reviewListFiltered : ArrayList<YourReview> = ArrayList()
 
     override fun onBindViewHolder(holder: YourReviewsViewHolder, position: Int) {
-        // TODO: Changed this.
         val review = reviewListFiltered[position]
-        holder.itemView.setOnClickListener {
+        // This actions an on click listener when the map icon is clicked.
+        holder.itemView.findViewById<View>(R.id.your_rev_map).setOnClickListener {
             onClickListener.onClick(review)
         }
         holder.bind(reviewListFiltered[position])
