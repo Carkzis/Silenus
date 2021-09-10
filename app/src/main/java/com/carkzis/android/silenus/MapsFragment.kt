@@ -10,10 +10,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.maps.CameraUpdateFactory
 
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.GeoPoint
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,14 +67,18 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private fun setUpReviewLocation(map: GoogleMap) {
         Timber.e("Got here!") // And so it did!
         val latLng = args.yourReviewsMapLocation
-        val lat = latLng!![0]
-        val lng = latLng[1]
-        Timber.e(lat)
-        Timber.e(lng)
+        val latlng = LatLng(latLng!![0].toDouble(), latLng[1].toDouble())
+        val zoom = 10.0f
+        zoomMe(map, zoom, latlng)
         // This may be better using viewModels tbh. Do not like safeArgs.
     }
 
+    /**
+     * This sets up the map for when getting a location when adding a review.
+     * It has a listener to set a marker for where the reviewed establishment is.
+     */
     private fun setUpLocationRequest(map: GoogleMap) {
+
         map.setOnMapLongClickListener { latitudeLongitude ->
             // Add a marker to the map.
             val marker = map.addMarker(MarkerOptions().position(latitudeLongitude))
@@ -91,5 +97,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
             builder.show()
         }
+    }
+
+    private fun zoomMe(map: GoogleMap, zoom: Float, latLng: LatLng) {
+        map.addMarker(MarkerOptions().position(latLng))
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
     }
 }
