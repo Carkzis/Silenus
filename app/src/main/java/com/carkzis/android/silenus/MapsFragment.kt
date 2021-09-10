@@ -1,23 +1,27 @@
 package com.carkzis.android.silenus
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
-import androidx.fragment.app.Fragment
-
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
-
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.firebase.firestore.GeoPoint
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -25,6 +29,8 @@ import timber.log.Timber
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var map: GoogleMap
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private val sharedViewModel by activityViewModels<SharedViewModel>()
 
@@ -35,6 +41,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // TODO: See if we should remove this or not, needs Fragment activity.
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+
         return inflater.inflate(R.layout.fragment_maps, container, false)
     }
 
@@ -46,6 +55,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        map.mapType = GoogleMap.MAP_TYPE_HYBRID
         // TODO: Check this, I have changed this and it needs testing.
         mapReasonListener(map)
     }
@@ -65,7 +75,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
      * This will home in onto the bar location on the map.
      */
     private fun setUpReviewLocation(map: GoogleMap) {
-        Timber.e("Got here!") // And so it did!
         val latLng = args.yourReviewsMapLocation
         val latlng = LatLng(latLng!![0].toDouble(), latLng[1].toDouble())
         val zoom = 10.0f
@@ -102,5 +111,44 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private fun zoomMe(map: GoogleMap, zoom: Float, latLng: LatLng) {
         map.addMarker(MarkerOptions().position(latLng))
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
+    }
+
+    /**
+     * Get current position.
+     */
+    @SuppressLint("MissingPermission")
+    private fun getCurrentLocation(zoom: Float) {
+        if (!locationPermissionsApproved()) {
+            requestLocationPermissions()
+        }
+        val location = fusedLocationClient.lastLocation
+        location.addOnCompleteListener {
+            val currentLocation = location.result
+            val lat = currentLocation.latitude
+            val lng = currentLocation.longitude
+            val latLng = LatLng(lat, lng)
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
+        }
+    }
+
+    /**
+     * Request the permissions for locating the users positions.
+     */
+    private fun requestLocationPermissions() {
+        if (locationPermissionsApproved()) return
+        Timber.e("Requesting permissions.")
+        ActivityCompat.requestPermissions(requireActivity(),
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 0)
+    }
+
+    /**
+     * Check if we have the permissions to go check the users position.
+     */
+    private fun locationPermissionsApproved() : Boolean {
+        val fineLocationApproved = ContextCompat.checkSelfPermission(requireContext(),
+            android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        val coarseLocationApproved = ContextCompat.checkSelfPermission(requireContext(),
+            android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        return fineLocationApproved && coarseLocationApproved
     }
 }

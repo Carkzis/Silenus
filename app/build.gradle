@@ -63,6 +63,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'androidx.room:room-runtime:2.3.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
     kapt 'androidx.room:room-compiler:2.3.0'
     kapt 'androidx.databinding:databinding-compiler-common:4.2.2'
 

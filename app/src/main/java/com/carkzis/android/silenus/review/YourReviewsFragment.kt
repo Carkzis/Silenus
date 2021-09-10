@@ -103,13 +103,11 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     override fun onQueryTextSubmit(query: String?) : Boolean {
-        Timber.e("are you doing something")
         yourReviewsAdapter.filter.filter(query)
         return false
     }
 
     override fun onQueryTextChange(newText: String?) : Boolean {
-        Timber.e("are you doing something")
         yourReviewsAdapter.filter.filter(newText)
         return false
     }
