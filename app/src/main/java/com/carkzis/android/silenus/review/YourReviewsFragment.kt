@@ -9,12 +9,11 @@ import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.carkzis.android.silenus.MapReason
-import com.carkzis.android.silenus.SharedViewModel
+import com.carkzis.android.silenus.data.MapReason
+import com.carkzis.android.silenus.data.SharedViewModel
 import com.carkzis.android.silenus.data.YourReview
 import com.carkzis.android.silenus.databinding.FragmentYourReviewsBinding
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
@@ -55,7 +54,7 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
      */
     private fun yourReviewsAdapter() : YourReviewsAdapter {
         return YourReviewsAdapter(YourReviewsAdapter.OnClickListener(
-            {setUpMapClickListener(it)}, {setUpDescriptionClickListener()}))
+            {setUpMapClickListener(it)}, {setUpDescriptionClickListener(it)}))
     }
 
     /**
@@ -76,10 +75,10 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
      * Helper method that is used as a higher order function within the YourReviewsAdapter,
      * which will perform an action on clicking the review items description box.
      */
-    private fun setUpDescriptionClickListener() {
+    private fun setUpDescriptionClickListener(review: YourReview) {
+        sharedViewModel.setSingleReview(review)
         this.findNavController().navigate(
-            YourReviewsFragmentDirections.actionYourReviewsFragmentToMapsFragment(
-                    arrayOf("20.007826849269325", "1.7928498610854149")))
+            YourReviewsFragmentDirections.actionYourReviewsFragmentToSingleReviewFragment())
     }
 
     /**

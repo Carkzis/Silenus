@@ -1,19 +1,15 @@
-package com.carkzis.android.silenus
+package com.carkzis.android.silenus.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.findNavController
-import com.carkzis.android.silenus.data.UserModel
-import com.carkzis.android.silenus.data.UserRepository
-import com.carkzis.android.silenus.welcome.WelcomeFragmentDirections
+import com.carkzis.android.silenus.Event
+import com.carkzis.android.silenus.LoadingState
+import com.carkzis.android.silenus.R
 import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.GeoPoint
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -26,7 +22,9 @@ class SharedViewModel @Inject constructor(
     private val authorisation: FirebaseAuth
 ) : ViewModel() {
 
-    // These are for the review screen, saving the data when we are taken to the map fragment.
+    /**
+     * These are for the add review screen, saving the data when we are taken to the map fragment.
+     */
     private var _chosenGeopoint = MutableLiveData<GeoPoint?>()
     val chosenGeopoint: LiveData<GeoPoint?>
         get() = _chosenGeopoint
@@ -43,12 +41,16 @@ class SharedViewModel @Inject constructor(
     val reviewDescription: LiveData<String?>
         get() = _reviewDescription
 
-    // This relates to maps, an enum that limits what the map fragment is used for.
+    /**
+     * This relates to maps, an enum that limits what the map fragment is used for.
+     */
     private var _mapReason = MutableLiveData<MapReason?>()
     val mapReason: LiveData<MapReason?>
         get() = _mapReason
 
-    // Shared user data across fragments
+    /**
+     * Shared user data across fragments
+     */
     private var _logout = MutableLiveData<Event<Int>>()
     val logout: LiveData<Event<Int>>
         get() = _logout
@@ -60,6 +62,13 @@ class SharedViewModel @Inject constructor(
     private var _username = MutableLiveData<String>()
     val username: LiveData<String>
         get() = _username
+
+    /**
+     * This is for the individual review screen.
+     */
+    private val _singleReview = MutableLiveData<YourReview>()
+    val singleReview: LiveData<YourReview>
+        get() = _singleReview
 
     private fun addUser() {
         viewModelScope.launch() {
@@ -96,7 +105,6 @@ class SharedViewModel @Inject constructor(
         }
     }
 
-
     fun setGeopoint(latLng: LatLng) {
         _chosenGeopoint.value = GeoPoint(latLng.latitude, latLng.longitude)
     }
@@ -112,6 +120,10 @@ class SharedViewModel @Inject constructor(
         _reviewBarName.value = null
         _reviewRating.value = null
         _reviewDescription.value = null
+    }
+
+    fun setSingleReview(review: YourReview) {
+        _singleReview.value = review
     }
 
     fun setMapOpenReason(reason: MapReason) {

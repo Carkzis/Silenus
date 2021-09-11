@@ -8,17 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.carkzis.android.silenus.Event
-import com.carkzis.android.silenus.R
-import com.carkzis.android.silenus.SharedViewModel
+import com.carkzis.android.silenus.data.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentWelcomeBinding
-import com.carkzis.android.silenus.showToast
 import com.firebase.ui.auth.AuthUI
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class WelcomeFragment : Fragment() {

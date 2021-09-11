@@ -20,4 +20,8 @@ class SingleReviewViewModel @Inject constructor(
     val yourReview: LiveData<YourReview>
         get() = _yourReview
 
+    fun setUpRev(review: YourReview) {
+        _yourReview.value = review
+    }
+
 }
