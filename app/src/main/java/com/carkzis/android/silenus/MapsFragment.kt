@@ -56,7 +56,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         map.mapType = GoogleMap.MAP_TYPE_HYBRID
-        // TODO: Check this, I have changed this and it needs testing.
         mapReasonListener(map)
     }
 
@@ -108,6 +107,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * This zooms in on the requested position on the map.
+     */
     private fun zoomMe(map: GoogleMap, zoom: Float, latLng: LatLng) {
         map.addMarker(MarkerOptions().position(latLng))
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:context=".review.SingleReviewFragment">
+
+  <data>
+    <import type="android.view.View" />
+    <import type="androidx.core.content.ContextCompat" />
+    <variable
+      name="singleReviewViewModel"
+      type="com.carkzis.android.silenus.review.SingleReviewViewModel" />
+  </data>
+
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+      android:id="@+id/single_name_bar_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      android:gravity="center"
+      android:text="@{singleReviewViewModel.yourReview.establishment}"
+      android:textAlignment="center"
+      android:textSize="34sp"
+      app:layout_constraintBottom_toTopOf="@+id/single_location_text"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_chainStyle="packed"
+      tools:text="Marc Bar" />
+
+    <TextView
+      android:id="@+id/single_location_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      android:gravity="center"
+      android:text="@{singleReviewViewModel.yourReview.location}"
+      android:textAlignment="center"
+      android:textSize="24sp"
+      app:layout_constraintBottom_toTopOf="@+id/single_rating_bar"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/single_name_bar_text"
+      tools:text="Stockport, Cheshire" />
+
+    <RatingBar
+      android:id="@+id/single_rating_bar"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/single_location_text" />
+
+    <TextView
+      android:id="@+id/single_description_text"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      android:background="@drawable/description_border"
+      android:gravity="center"
+      android:text="@{singleReviewViewModel.yourReview.description}"
+      android:textAlignment="center"
+      android:textSize="20sp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/single_rating_bar"
+      tools:text="I liked this bar, it had amazing chips, but I really loved the belgium beers, 1 star!" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
