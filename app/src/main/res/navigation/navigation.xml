@@ -107,6 +107,18 @@
       android:name="yourReviewsMapLocation"
       app:argType="string[]" />
     </action>
+    <action
+      android:id="@+id/action_singleReviewFragment_to_editReviewFragment"
+      app:destination="@id/editReviewFragment" />
+  </fragment>
+  <fragment
+    android:id="@+id/editReviewFragment"
+    android:name="com.carkzis.android.silenus.review.EditReviewFragment"
+    android:label="fragment_edit_review"
+    tools:layout="@layout/fragment_edit_review" >
+    <action
+      android:id="@+id/action_editReviewFragment_to_mapsFragment"
+      app:destination="@id/mapsFragment" />
   </fragment>
 
 </navigation>

@@ -67,6 +67,9 @@ class SingleReviewFragment : Fragment() {
             }
             R.id.edit_rev_menu_button -> {
                 Timber.e("This will take me to the edit review fragment.")
+                findNavController().navigate(
+                    SingleReviewFragmentDirections.actionSingleReviewFragmentToEditReviewFragment()
+                )
                 true
             }
             else -> {

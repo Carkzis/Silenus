@@ -34,4 +34,6 @@
   <string name="add_review">Add Review</string>
   <string name="edit_review">Edit Review</string>
   <string name="view_location">View Location</string>
+  <string name="confirm">Confirm</string>
+  <string name="quit">Quit</string>
 </resources>

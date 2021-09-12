@@ -162,20 +162,10 @@
       android:inputType="textMultiLine"
       android:maxLength="255"
       android:text="@={addReviewViewModel.description}"
-      app:layout_constraintBottom_toTopOf="@+id/submit_bar_button"
+      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/description_bar_text" />
-
-    <Button
-      android:id="@+id/submit_bar_button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="16dp"
-      android:text="@string/submit_bar"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent" />
 
 
   </androidx.constraintlayout.widget.ConstraintLayout>

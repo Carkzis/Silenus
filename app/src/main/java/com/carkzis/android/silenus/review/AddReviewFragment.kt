@@ -2,14 +2,13 @@ package com.carkzis.android.silenus.review
 
 import android.location.Geocoder
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.MapReason
 import com.carkzis.android.silenus.data.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentAddReviewBinding
@@ -36,6 +35,8 @@ class AddReviewFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
         }
 
+        setHasOptionsMenu(true)
+
         // Inflate the layout for this fragment
         return viewDataBinding.root
     }
@@ -43,7 +44,7 @@ class AddReviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setUpSubmitButton()
+//        setUpSubmitButton()
         setUpLocationButton()
         setUpFieldEntries()
         handleOnBackPressed()
@@ -62,11 +63,28 @@ class AddReviewFragment : Fragment() {
 
     }
 
-    private fun setUpSubmitButton() {
-        viewDataBinding.submitBarButton.setOnClickListener {
-            viewModel.submissionPreChecks()
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.add_review_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.add_rev_menu_button -> {
+                viewModel.submissionPreChecks()
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
         }
     }
+
+//    private fun setUpSubmitButton() {
+//        viewDataBinding.submitBarButton.setOnClickListener {
+//            viewModel.submissionPreChecks()
+//        }
+//    }
 
     /**
      * This listens to clicks on the location EditText to bring up the map fragment.
