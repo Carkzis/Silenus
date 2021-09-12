@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.MapReason

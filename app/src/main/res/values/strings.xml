@@ -32,4 +32,6 @@
   <string name="loading">Loading…</string>
   <string name="reviews_retrieved">Reviews retrieved!</string>
   <string name="add_review">Add Review</string>
+  <string name="edit_review">Edit Review</string>
+  <string name="view_location">View Location</string>
 </resources>

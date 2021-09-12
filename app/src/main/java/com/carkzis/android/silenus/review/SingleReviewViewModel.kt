@@ -24,4 +24,9 @@ class SingleReviewViewModel @Inject constructor(
         _yourReview.value = review
     }
 
+    fun getGeo() : Array<String> {
+        return arrayOf(_yourReview.value?.geo?.latitude.toString(),
+        _yourReview.value?.geo?.longitude.toString())
+    }
+
 }

@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.carkzis.android.silenus.data.MapReason
@@ -36,7 +37,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private val sharedViewModel by activityViewModels<SharedViewModel>()
 
-    val args : MapsFragmentArgs by navArgs()
+    private val args : MapsFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -127,8 +128,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         } else {
             val location = fusedLocationClient.lastLocation
             location.addOnCompleteListener {
+                // Sometimes, despite saying otherwise, this can be null.
+                // May just be an emulator thing? Needs handling anyway.
+                if (it.result == null) return@addOnCompleteListener
                 val currentLocation = it.result
-                println(currentLocation.toString())
                 val lat = currentLocation.latitude
                 val lng = currentLocation.longitude
                 val latLng = LatLng(lat, lng)
@@ -144,7 +147,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         if (locationPermissionsApproved()) return
         Timber.e("Requesting permissions.")
         ActivityCompat.requestPermissions(requireActivity(),
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 0)
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 1)
     }
 
     /**

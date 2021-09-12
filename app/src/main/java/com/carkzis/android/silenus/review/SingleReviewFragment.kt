@@ -1,13 +1,13 @@
 package com.carkzis.android.silenus.review
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.carkzis.android.silenus.R
+import com.carkzis.android.silenus.data.MapReason
 import com.carkzis.android.silenus.data.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentSingleReviewBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,6 +30,8 @@ class SingleReviewFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
         }
 
+        setHasOptionsMenu(true)
+
         // Inflate the layout for this fragment
         return viewDataBinding.root
     }
@@ -45,6 +47,32 @@ class SingleReviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setUpReviewInformation()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.single_review_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.view_location_menu_button -> {
+                sharedViewModel.setMapOpenReason(MapReason.VIEWREV)
+                findNavController().navigate(
+                    SingleReviewFragmentDirections.actionSingleReviewFragmentToMapsFragment(
+                        viewModel.getGeo()
+                    )
+                )
+                true
+            }
+            R.id.edit_rev_menu_button -> {
+                Timber.e("This will take me to the edit review fragment.")
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
     }
 
     private fun setUpReviewInformation() {

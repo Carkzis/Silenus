@@ -99,6 +99,14 @@
     android:id="@+id/singleReviewFragment"
     android:name="com.carkzis.android.silenus.review.SingleReviewFragment"
     android:label="fragment_single_review"
-    tools:layout="@layout/fragment_single_review" />
+    tools:layout="@layout/fragment_single_review" >
+    <action
+      android:id="@+id/action_singleReviewFragment_to_mapsFragment"
+      app:destination="@id/mapsFragment" >
+    <argument
+      android:name="yourReviewsMapLocation"
+      app:argType="string[]" />
+    </action>
+  </fragment>
 
 </navigation>
