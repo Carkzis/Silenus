@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/marcj/AndroidStudioProjects/Silenus/app/src/main/res/drawable/add_item.xml" value="0.1" />
         <entry key="..\:/Users/marcj/AndroidStudioProjects/Silenus/app/src/main/res/drawable/description_border.xml" value="0.1" />
+        <entry key="..\:/Users/marcj/AndroidStudioProjects/Silenus/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.1" />
         <entry key="..\:/Users/marcj/AndroidStudioProjects/Silenus/app/src/main/res/drawable/your_rev_desc_border.xml" value="0.1" />
         <entry key="..\:/Users/marcj/AndroidStudioProjects/Silenus/app/src/main/res/drawable/your_review_border.xml" value="0.1" />
         <entry key="..\:/Users/marcj/AndroidStudioProjects/Silenus/app/src/main/res/layout/firebase_auth.xml" value="0.22554347826086957" />
@@ -13,6 +15,7 @@
         <entry key="..\:/Users/marcj/AndroidStudioProjects/Silenus/app/src/main/res/layout/fragment_welcome.xml" value="0.264" />
         <entry key="..\:/Users/marcj/AndroidStudioProjects/Silenus/app/src/main/res/layout/fragment_your_reviews.xml" value="0.20606884057971014" />
         <entry key="..\:/Users/marcj/AndroidStudioProjects/Silenus/app/src/main/res/layout/your_review_item.xml" value="0.4" />
+        <entry key="..\:/Users/marcj/AndroidStudioProjects/Silenus/app/src/main/res/menu/your_reviews_menu.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>

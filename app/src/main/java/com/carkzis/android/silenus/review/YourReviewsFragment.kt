@@ -1,14 +1,13 @@
 package com.carkzis.android.silenus.review
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.MapReason
 import com.carkzis.android.silenus.data.SharedViewModel
 import com.carkzis.android.silenus.data.YourReview
@@ -38,6 +37,8 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
 
         viewDataBinding.yourReviewsRecylerview.adapter = yourReviewsAdapter
 
+        setHasOptionsMenu(true)
+
         // Inflate the layout!
         return viewDataBinding.root
     }
@@ -46,6 +47,25 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
         super.onViewCreated(view, savedInstanceState)
         setUpDataObserver()
         setUpSearchView()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.your_reviews_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.add_rev_menu_button -> {
+                findNavController().navigate(
+                    YourReviewsFragmentDirections.actionYourReviewsFragmentToAddReviewFragment()
+                )
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
     }
 
     /**

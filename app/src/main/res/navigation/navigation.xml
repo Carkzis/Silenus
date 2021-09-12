@@ -57,6 +57,9 @@
       app:destination="@id/welcomeFragment"
       app:popUpTo="@id/welcomeFragment"
       app:popUpToInclusive="true" />
+    <action
+      android:id="@+id/action_addReviewFragment_to_yourReviewsFragment"
+      app:destination="@id/yourReviewsFragment" />
   </fragment>
   <fragment
     android:id="@+id/mapsFragment"
@@ -88,6 +91,9 @@
     <action
       android:id="@+id/action_yourReviewsFragment_to_singleReviewFragment"
       app:destination="@id/singleReviewFragment" />
+    <action
+      android:id="@+id/action_yourReviewsFragment_to_addReviewFragment"
+      app:destination="@id/addReviewFragment" />
   </fragment>
   <fragment
     android:id="@+id/singleReviewFragment"

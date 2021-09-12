@@ -76,11 +76,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
      * This will home in onto the bar location on the map.
      */
     private fun setUpReviewLocation(map: GoogleMap) {
+        // This may be better using viewModels tbh. Do not like safeArgs.
         val latLng = args.yourReviewsMapLocation
         val latlng = LatLng(latLng!![0].toDouble(), latLng[1].toDouble())
         val zoom = 10.0f
         zoomMe(map, zoom, latlng)
-        // This may be better using viewModels tbh. Do not like safeArgs.
     }
 
     /**
@@ -88,7 +88,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
      * It has a listener to set a marker for where the reviewed establishment is.
      */
     private fun setUpLocationRequest(map: GoogleMap) {
-
+        getCurrentLocation(15.0f)
         map.setOnMapLongClickListener { latitudeLongitude ->
             // Add a marker to the map.
             val marker = map.addMarker(MarkerOptions().position(latitudeLongitude))
@@ -124,14 +124,16 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private fun getCurrentLocation(zoom: Float) {
         if (!locationPermissionsApproved()) {
             requestLocationPermissions()
-        }
-        val location = fusedLocationClient.lastLocation
-        location.addOnCompleteListener {
-            val currentLocation = location.result
-            val lat = currentLocation.latitude
-            val lng = currentLocation.longitude
-            val latLng = LatLng(lat, lng)
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
+        } else {
+            val location = fusedLocationClient.lastLocation
+            location.addOnCompleteListener {
+                val currentLocation = it.result
+                println(currentLocation.toString())
+                val lat = currentLocation.latitude
+                val lng = currentLocation.longitude
+                val latLng = LatLng(lat, lng)
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
+            }
         }
     }
 

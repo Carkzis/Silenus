@@ -14,9 +14,6 @@ import com.carkzis.android.silenus.data.UserRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -71,7 +68,7 @@ class AddReviewViewModel @Inject constructor(
                     }
                     is LoadingState.Success -> {
                         showToastMessage(loadingState.message)
-                        _navToWelcome.value = Event(true)
+                        _navToYourReviews.value = Event(true)
                     }
                     is LoadingState.Error ->
                         showToastMessage(loadingState.message)
@@ -106,9 +103,9 @@ class AddReviewViewModel @Inject constructor(
         description.value = summary
     }
 
-    private var _navToWelcome = MutableLiveData<Event<Boolean>>()
-    val navToWelcome: LiveData<Event<Boolean>>
-        get() = _navToWelcome
+    private var _navToYourReviews = MutableLiveData<Event<Boolean>>()
+    val navToYourReviews: LiveData<Event<Boolean>>
+        get() = _navToYourReviews
 
     private var _toastText = MutableLiveData<Event<Int>>()
     val toastText: LiveData<Event<Int>>

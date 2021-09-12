@@ -51,7 +51,7 @@ class AddReviewFragment : Fragment() {
 
         setUpLogout()
         setUpNavigateToLogin()
-        setUpNavigateToWelcome() // To be changed to navigate to member's list of items.
+        setUpNavigateToYourReviews() // To be changed to navigate to member's list of items.
 
     }
 
@@ -132,12 +132,12 @@ class AddReviewFragment : Fragment() {
     }
 
     // TODO: This will actually be changed to nagivate to the member's list of reviews.
-    private fun setUpNavigateToWelcome() {
-        viewModel.navToWelcome.observe(viewLifecycleOwner, {
+    private fun setUpNavigateToYourReviews() {
+        viewModel.navToYourReviews.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let {
                     sharedViewModel.resetReviewScreen()
                     findNavController().navigate(
-                        AddReviewFragmentDirections.actionAddReviewFragmentToWelcomeFragment()
+                        AddReviewFragmentDirections.actionAddReviewFragmentToYourReviewsFragment()
                     )
             }
         })
@@ -148,7 +148,7 @@ class AddReviewFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             sharedViewModel.resetReviewScreen()
             findNavController().navigate(
-                AddReviewFragmentDirections.actionAddReviewFragmentToWelcomeFragment()
+                AddReviewFragmentDirections.actionAddReviewFragmentToYourReviewsFragment()
             )
         }
     }

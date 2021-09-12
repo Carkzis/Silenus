@@ -29,7 +29,7 @@
 
     <SearchView
       android:id="@+id/searchview"
-      android:layout_width="411dp"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="#55F5F5F5"
       android:elevation="1dp"
