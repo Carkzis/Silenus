@@ -81,10 +81,7 @@ class EditReviewFragment : Fragment() {
         sharedViewModel.singleReview.observe(viewLifecycleOwner, {
             it?.let {
                 val geocoder = Geocoder(context, Locale.getDefault())
-                viewModel.setUpLocationInfo(it.geo!!, geocoder)
-                viewModel.setUpBarName(it.establishment!!)
-                viewModel.setUpRating(it.rating!!)
-                it.description?.let { desc -> viewModel.setUpDescription(desc)}
+                viewModel.setUpReviewInfo(it, geocoder)
             }
         })
     }

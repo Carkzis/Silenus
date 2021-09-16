@@ -12,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -19,7 +20,7 @@ import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class MainRepositoryImpl (private val firestore: FirebaseFirestore) : MainRepository {
+class MainRepositoryImpl(private val firestore: FirebaseFirestore) : MainRepository {
 
     /**
      * Add a review for a member into the database.
@@ -61,6 +62,40 @@ class MainRepositoryImpl (private val firestore: FirebaseFirestore) : MainReposi
 
     }
         .catch {
-        emit(LoadingState.Error(R.string.error, Exception())) // Emit the error if we get here...
-    }.flowOn(Dispatchers.IO)
+            emit(
+                LoadingState.Error(
+                    R.string.error,
+                    Exception()
+                )
+            ) // Emit the error if we get here...
+        }.flowOn(Dispatchers.IO)
+
+    /**
+     * This edits a review, by setting the review again using the same document id.
+     */
+    override suspend fun editYourReview(review: Review) = flow {
+        val reviews = firestore.collection(getCollectionName(Constants.REVIEWS))
+
+        emit(LoadingState.Loading(R.string.loading)) // Loading!
+
+        // This ensures we await the result of the query before we emit again.
+        // There is no returned object, just void.
+        suspendCoroutine<Void> { cont ->
+            reviews.document(review.uid!!).set(review)
+                .addOnSuccessListener { cont.resume(it) }
+                .addOnFailureListener { throw Exception() }
+        }
+
+        // TODO: Need to change this so that Review is converted to YourReview on the way back.
+        emit(LoadingState.Success(R.string.review_added, review)) // Just emit the review!
+
+    }
+        .catch {
+            emit(
+                LoadingState.Error(
+                    R.string.error,
+                    Exception()
+                )
+            ) // Emit the error if we get here...
+        }.flowOn(Dispatchers.IO)
 }
