@@ -101,6 +101,10 @@ class AddReviewFragment : Fragment() {
         }
     }
 
+    /**
+     * Set up the fields, so that when you return to the fragment from the MapFragment,
+     * your fields are not emptied.
+     */
     private fun setUpFieldEntries() {
         sharedViewModel.chosenGeopoint.observe(viewLifecycleOwner, {
             it?.let {
@@ -149,7 +153,6 @@ class AddReviewFragment : Fragment() {
         })
     }
 
-    // TODO: This will actually be changed to nagivate to the member's list of reviews.
     private fun setUpNavigateToYourReviews() {
         viewModel.navToYourReviews.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let {
@@ -162,6 +165,10 @@ class AddReviewFragment : Fragment() {
     }
 
 
+    /**
+     * This will ensure, on pressing back, we don't go back to the Map but back to the
+     * reviews fragment.
+     */
     private fun handleOnBackPressed() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             sharedViewModel.resetReviewScreen()

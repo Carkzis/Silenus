@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   tools:context=".review.EditReviewFragment">
 
@@ -13,9 +14,155 @@
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
+    <TextView
+      android:id="@+id/edit_description_bar_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:layout_marginBottom="16dp"
+      android:layout_weight="1.0"
+      android:text="@string/description_bar_text"
+      android:textAlignment="center"
+      android:textSize="24sp"
+      app:autoSizeTextType="uniform"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/table_layout_edit_rev" />
 
+    <EditText
+      android:id="@+id/edit_description_bar_edittext"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="16dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginBottom="16dp"
+      android:background="@drawable/description_border"
+      android:ems="10"
+      android:gravity="start|top"
+      android:inputType="textMultiLine"
+      android:maxLength="255"
+      android:text="@={editReviewViewModel.description}"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/edit_description_bar_text" />
+
+    <TableLayout
+      android:id="@+id/table_layout_edit_rev"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="16dp"
+      android:layout_marginEnd="16dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/edit_bar_text">
+
+      <TableRow
+        android:id="@+id/edit_name_bar_row"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+          android:id="@+id/edit_name_bar_text"
+          android:layout_width="match_parent"
+          android:autoSizeTextType="uniform"
+          android:text="@string/name_bar_text"
+          android:textAlignment="center"
+          android:textSize="20sp" />
+
+        <EditText
+          android:id="@+id/edit_name_bar_edittext"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:autofillHints="name_bar"
+          android:singleLine="true"
+          android:text="@={editReviewViewModel.barName}"
+          android:textAlignment="center" />
+
+      </TableRow>
+
+      <TableRow
+        android:id="@+id/edit_rating_bar_row"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+        <TextView
+          android:id="@+id/edit_rating_bar_text"
+          android:layout_width="match_parent"
+          android:layout_gravity="center"
+          android:text="@string/rating_bar_text"
+          android:textAlignment="center"
+          android:textSize="20sp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_weight="1">
+
+          <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:numStars="5"
+            android:rating="@={editReviewViewModel.rating}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+      </TableRow>
+
+      <TableRow
+        android:id="@+id/edit_location_bar_row"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+          android:id="@+id/edit_location_bar_text"
+          android:layout_width="match_parent"
+          android:autoSizeTextType="uniform"
+          android:text="@string/location_bar_text"
+          android:textAlignment="center"
+          android:textSize="20sp" />
+
+        <EditText
+          android:id="@+id/edit_location_bar_edittext"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:autofillHints="name_bar"
+          android:clickable="false"
+          android:cursorVisible="false"
+          android:focusable="false"
+          android:text="@={editReviewViewModel.location}"
+          android:focusableInTouchMode="false"
+          android:textAlignment="center" />
+
+      </TableRow>
+
+    </TableLayout>
+
+    <TextView
+      android:id="@+id/edit_bar_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:autoSizeTextType="uniform"
+      android:text="@string/edit_establishment"
+      android:textAlignment="center"
+      android:textSize="34sp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
