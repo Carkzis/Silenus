@@ -10,6 +10,7 @@ import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.MapReason
 import com.carkzis.android.silenus.data.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentSingleReviewBinding
+import com.carkzis.android.silenus.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -47,6 +48,7 @@ class SingleReviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setUpReviewInformation()
+        setUpToast()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -83,6 +85,14 @@ class SingleReviewFragment : Fragment() {
             it.let {
                 Timber.e("Setting up review information.")
                 viewModel.setUpRev(it)
+            }
+        })
+    }
+
+    private fun setUpToast() {
+        sharedViewModel.toastText.observe(viewLifecycleOwner, {
+            it.getContextIfNotHandled()?.let { message ->
+                context?.showToast(message)
             }
         })
     }

@@ -75,6 +75,9 @@
       android:name="yourReviewsMapLocation"
       app:argType="string[]"
       app:nullable="true" />
+    <action
+      android:id="@+id/action_mapsFragment_to_editReviewFragment"
+      app:destination="@id/editReviewFragment" />
   </fragment>
   <fragment
     android:id="@+id/yourReviewsFragment"
@@ -119,6 +122,11 @@
     <action
       android:id="@+id/action_editReviewFragment_to_mapsFragment"
       app:destination="@id/mapsFragment" />
+    <action
+      android:id="@+id/action_editReviewFragment_to_singleReviewFragment"
+      app:destination="@id/singleReviewFragment"
+      app:popUpTo="@id/singleReviewFragment"
+      app:popUpToInclusive="true" />
   </fragment>
 
 </navigation>

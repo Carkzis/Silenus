@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentEditReviewBinding
@@ -24,7 +25,6 @@ class EditReviewFragment : Fragment() {
 
     private lateinit var viewDataBinding: FragmentEditReviewBinding
 
-    // TODO: This could be combined with the YourReviews fragment?
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,6 +61,10 @@ class EditReviewFragment : Fragment() {
             }
             R.id.edit_rev_quit_menu_button -> {
                 Timber.e("Quit edit screen.")
+                sharedViewModel.toastMe(getString(R.string.changes_aborted))
+                findNavController().navigate(
+                    EditReviewFragmentDirections.actionEditReviewFragmentToSingleReviewFragment()
+                )
                 true
             }
             else -> {
