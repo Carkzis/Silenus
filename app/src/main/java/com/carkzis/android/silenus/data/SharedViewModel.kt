@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.GeoPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hilt_aggregated_deps._com_carkzis_android_silenus_MainActivity_GeneratedInjector
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -113,6 +114,16 @@ class SharedViewModel @Inject constructor(
         _reviewBarName.value = name
         _reviewRating.value = rating
         _reviewDescription.value = description
+    }
+
+    /**
+     * This is for setting bar details from a ui model e.g. data obtained from firestore.
+     */
+    fun setBarDetailsFromModel() {
+        _reviewBarName.value = _singleReview.value?.establishment
+        _reviewRating.value = _singleReview.value?.rating
+        _reviewDescription.value = _singleReview.value?.description
+        _chosenGeopoint.value = _singleReview.value?.geo
     }
 
     fun resetReviewScreen() {

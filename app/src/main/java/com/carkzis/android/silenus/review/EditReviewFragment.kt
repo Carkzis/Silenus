@@ -4,6 +4,7 @@ import android.location.Geocoder
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.activityViewModels
@@ -49,6 +50,7 @@ class EditReviewFragment : Fragment() {
         setUpToast()
         setUpLocationButton()
         setUpEditCompleteNavigation()
+        handleOnBackPressed()
 
     }
 
@@ -84,12 +86,36 @@ class EditReviewFragment : Fragment() {
      * your fields are not emptied.
      */
     private fun setUpFieldEntries() {
-        sharedViewModel.singleReview.observe(viewLifecycleOwner, {
+        sharedViewModel.chosenGeopoint.observe(viewLifecycleOwner, {
             it?.let {
                 val geocoder = Geocoder(context, Locale.getDefault())
-                viewModel.setUpReviewInfo(it, geocoder)
+                viewModel.setUpLocationInfo(it, geocoder)
             }
         })
+        sharedViewModel.reviewBarName.observe(viewLifecycleOwner, {
+            it?.let {
+                viewModel.setUpBarName(it)
+            }
+        })
+        sharedViewModel.reviewRating.observe(viewLifecycleOwner, {
+            it?.let {
+                viewModel.setUpRating(it)
+            }
+        })
+        sharedViewModel.reviewDescription.observe(viewLifecycleOwner, {
+            it?.let {
+                viewModel.setUpDescription(it)
+            }
+        })
+    }
+
+    private fun handleOnBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            sharedViewModel.resetReviewScreen()
+            findNavController().navigate(
+                EditReviewFragmentDirections.actionEditReviewFragmentToSingleReviewFragment()
+            )
+        }
     }
 
     /**

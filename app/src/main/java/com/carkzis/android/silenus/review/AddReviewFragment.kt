@@ -44,7 +44,6 @@ class AddReviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        setUpSubmitButton()
         setUpLocationButton()
         setUpFieldEntries()
         handleOnBackPressed()

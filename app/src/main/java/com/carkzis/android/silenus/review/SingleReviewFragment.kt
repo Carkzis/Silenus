@@ -69,6 +69,9 @@ class SingleReviewFragment : Fragment() {
             }
             R.id.edit_rev_menu_button -> {
                 Timber.e("This will take me to the edit review fragment.")
+                // We are setting bar details from the model, as the edit fragment needs to go
+                // to a from the Mars Fragment.
+                sharedViewModel.setBarDetailsFromModel()
                 findNavController().navigate(
                     SingleReviewFragmentDirections.actionSingleReviewFragmentToEditReviewFragment()
                 )

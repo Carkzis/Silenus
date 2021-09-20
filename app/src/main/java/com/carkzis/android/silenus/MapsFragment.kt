@@ -61,11 +61,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         mapReasonListener(map)
     }
 
-    // TODO: This allows us to reuse the map depending on the source, may be a bad idea!
     private fun mapReasonListener(map: GoogleMap) {
         sharedViewModel.mapReason.observe(viewLifecycleOwner, {
             when (it) {
-                MapReason.ADDREV -> setUpLocationRequest(map) { navToAddRevFragment() }
+                MapReason.ADDREV -> {
+                    getCurrentLocation(15.0f)
+                    setUpLocationRequest(map) { navToAddRevFragment() }
+                }
                 MapReason.EDITREV -> {
                     setUpEditReviewLocation(map)
                     setUpLocationRequest(map) { navToEditRevFragment() }
@@ -113,7 +115,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
      * It has a listener to set a marker for where the reviewed establishment is.
      */
     private fun setUpLocationRequest(map: GoogleMap, navigateMe: () -> Unit) {
-        getCurrentLocation(15.0f)
         map.setOnMapLongClickListener { latitudeLongitude ->
             // Add a marker to the map.
             val marker = map.addMarker(MarkerOptions().position(latitudeLongitude))

@@ -94,6 +94,18 @@ class EditReviewViewModel @Inject constructor(
         Timber.e(address)
     }
 
+    fun setUpBarName(name: String) {
+        barName.value = name
+    }
+
+    fun setUpRating(barRating: Float) {
+        rating.value = barRating
+    }
+
+    fun setUpDescription(summary: String) {
+        description.value = summary
+    }
+
     fun setUpReviewInfo(review: YourReview, geoCoder: Geocoder) {
         setUpLocationInfo(review.geo!!, geoCoder)
         barName.value = review.establishment!!
