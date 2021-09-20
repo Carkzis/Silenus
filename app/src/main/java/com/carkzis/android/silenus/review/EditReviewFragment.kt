@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.carkzis.android.silenus.R
+import com.carkzis.android.silenus.data.MapReason
 import com.carkzis.android.silenus.data.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentEditReviewBinding
 import com.carkzis.android.silenus.showToast
@@ -46,7 +47,9 @@ class EditReviewFragment : Fragment() {
 
         setUpFieldEntries()
         setUpToast()
+        setUpLocationButton()
         setUpEditCompleteNavigation()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -87,6 +90,21 @@ class EditReviewFragment : Fragment() {
                 viewModel.setUpReviewInfo(it, geocoder)
             }
         })
+    }
+
+    /**
+     * This listens to clicks on the location EditText to bring up the map fragment.
+     */
+    private fun setUpLocationButton() {
+        viewDataBinding.editLocationBarEdittext.setOnClickListener {
+            sharedViewModel.setBarDetails(
+                viewModel.barName.value, viewModel.rating.value, viewModel.description.value)
+            // Set the reason for opening the map.
+            sharedViewModel.setMapOpenReason(MapReason.EDITREV)
+            findNavController().navigate(
+                EditReviewFragmentDirections.actionEditReviewFragmentToMapsFragment()
+            )
+        }
     }
 
     /**

@@ -84,6 +84,8 @@ class SingleReviewFragment : Fragment() {
         sharedViewModel.singleReview.observe(viewLifecycleOwner, {
             it.let {
                 Timber.e("Setting up review information.")
+                Timber.e(it.id.toString())
+                Timber.e(it.description.toString())
                 viewModel.setUpRev(it)
             }
         })

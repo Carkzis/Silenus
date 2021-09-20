@@ -144,4 +144,4 @@ class SharedViewModel @Inject constructor(
 
 }
 
-enum class MapReason { ADDREV, VIEWREV }
+enum class MapReason { ADDREV, VIEWREV, EDITREV }

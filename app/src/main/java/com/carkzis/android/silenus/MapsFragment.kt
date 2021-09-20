@@ -12,7 +12,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.carkzis.android.silenus.data.MapReason
@@ -44,7 +43,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // TODO: See if we should remove this or not, needs Fragment activity.
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
 
         return inflater.inflate(R.layout.fragment_maps, container, false)
@@ -66,11 +65,25 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private fun mapReasonListener(map: GoogleMap) {
         sharedViewModel.mapReason.observe(viewLifecycleOwner, {
             when (it) {
-                MapReason.ADDREV -> setUpLocationRequest(map)
+                MapReason.ADDREV -> setUpLocationRequest(map) { navToAddRevFragment() }
+                MapReason.EDITREV -> {
+                    setUpEditReviewLocation(map)
+                    setUpLocationRequest(map) { navToEditRevFragment() }
+                }
                 MapReason.VIEWREV -> setUpReviewLocation(map)
                 else -> Timber.e("No map reason supplied.")
             }
         })
+    }
+
+    private fun navToAddRevFragment() {
+        findNavController().navigate(
+            MapsFragmentDirections.actionMapsFragmentToAddReviewFragment())
+    }
+
+    private fun navToEditRevFragment() {
+        findNavController().navigate(
+            MapsFragmentDirections.actionMapsFragmentToEditReviewFragment())
     }
 
     /**
@@ -85,10 +98,21 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     /**
+     * Set up original bar location when using the Map to edit a review.
+     */
+    private fun setUpEditReviewLocation(map: GoogleMap) {
+        val lat = sharedViewModel.singleReview.value?.geo?.latitude
+        val lng = sharedViewModel.singleReview.value?.geo?.longitude
+        val latLng = LatLng(lat!!, lng!!)
+        val zoom = 10.0f
+        zoomMe(map, zoom, latLng)
+    }
+
+    /**
      * This sets up the map for when getting a location when adding a review.
      * It has a listener to set a marker for where the reviewed establishment is.
      */
-    private fun setUpLocationRequest(map: GoogleMap) {
+    private fun setUpLocationRequest(map: GoogleMap, navigateMe: () -> Unit) {
         getCurrentLocation(15.0f)
         map.setOnMapLongClickListener { latitudeLongitude ->
             // Add a marker to the map.
@@ -99,8 +123,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             builder.setMessage(R.string.this_place_query)
             builder.setPositiveButton(R.string.yes) {_, _ ->
                 sharedViewModel.setGeopoint(latitudeLongitude)
-                findNavController().navigate(
-                    MapsFragmentDirections.actionMapsFragmentToAddReviewFragment())
+                navigateMe()
                 marker?.remove()
             }
             builder.setNegativeButton(R.string.no) {_, _ ->

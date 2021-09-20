@@ -80,12 +80,6 @@ class AddReviewFragment : Fragment() {
         }
     }
 
-//    private fun setUpSubmitButton() {
-//        viewDataBinding.submitBarButton.setOnClickListener {
-//            viewModel.submissionPreChecks()
-//        }
-//    }
-
     /**
      * This listens to clicks on the location EditText to bring up the map fragment.
      */
