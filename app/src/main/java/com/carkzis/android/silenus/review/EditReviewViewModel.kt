@@ -6,19 +6,25 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.carkzis.android.silenus.Event
+import com.carkzis.android.silenus.LoadingState
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.MainRepository
-import com.carkzis.android.silenus.data.Review
+import com.carkzis.android.silenus.data.UserRepository
 import com.carkzis.android.silenus.data.YourReview
+import com.carkzis.android.silenus.data.toDataObject
 import com.google.firebase.firestore.GeoPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
-class EditReviewViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
+class EditReviewViewModel @Inject constructor(
+    private val repository: MainRepository,
+    private val userRepository: UserRepository
+) : ViewModel() {
 
     var barName = MutableLiveData<String>()
     var rating = MutableLiveData<Float>()
@@ -29,10 +35,14 @@ class EditReviewViewModel @Inject constructor(private val repository: MainReposi
     val geopoint: LiveData<GeoPoint>
         get() = _geopoint
 
-    // TODO: Remove this, we will change the fields into the DataObject Review.
+    // TODO: Remove this, we will change the fields into the DataObject NewReviewDO.
     private var _yourReview = MutableLiveData<YourReview>()
     val yourReview: LiveData<YourReview>
         get() = _yourReview
+
+    private var _navToSingleReview = MutableLiveData<Event<YourReview>>()
+    val navToSingleReview: LiveData<Event<YourReview>>
+        get() = _navToSingleReview
 
     fun submissionPreChecks() {
         if (barName.value == null) {
@@ -50,7 +60,23 @@ class EditReviewViewModel @Inject constructor(private val repository: MainReposi
     private fun progressToEditOfReview() {
         // TODO: This will edit the data in the database.
         viewModelScope.launch {
-            _yourReview.value?.let { repository.editYourReview(it) }
+            _yourReview.value?.let { repository.editYourReview(
+                it.toDataObject(userRepository.getUser().uid!!))
+                .collect { loadingState ->
+                    when (loadingState) {
+                        is LoadingState.Loading -> {
+                            Timber.e("Editing review...")
+                        }
+                        is LoadingState.Success -> {
+                            showToastMessage(loadingState.message)
+                            // Need to change the LiveData
+                            _navToSingleReview.value = Event(loadingState.data!!)
+                        }
+                        is LoadingState.Error ->
+                            showToastMessage(loadingState.message)
+                    }
+                }
+            }
         }
     }
 

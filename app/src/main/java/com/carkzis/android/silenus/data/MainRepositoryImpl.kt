@@ -4,19 +4,13 @@ import com.carkzis.android.silenus.Constants
 import com.carkzis.android.silenus.LoadingState
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.getCollectionName
-import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -25,7 +19,7 @@ class MainRepositoryImpl(private val firestore: FirebaseFirestore) : MainReposit
     /**
      * Add a review for a member into the database.
      */
-    override suspend fun addReview(review: Review) = flow {
+    override suspend fun addReview(review: NewReviewDO) = flow {
 
         val reviews = firestore.collection(getCollectionName(Constants.REVIEWS))
 
@@ -73,7 +67,7 @@ class MainRepositoryImpl(private val firestore: FirebaseFirestore) : MainReposit
     /**
      * This edits a review, by setting the review again using the same document id.
      */
-    override suspend fun editYourReview(review: Review) = flow {
+    override suspend fun editYourReview(review: ReviewDO) = flow {
         val reviews = firestore.collection(getCollectionName(Constants.REVIEWS))
 
         emit(LoadingState.Loading(R.string.loading)) // Loading!
@@ -81,13 +75,12 @@ class MainRepositoryImpl(private val firestore: FirebaseFirestore) : MainReposit
         // This ensures we await the result of the query before we emit again.
         // There is no returned object, just void.
         suspendCoroutine<Void> { cont ->
-            reviews.document(review.uid!!).set(review)
+            reviews.document(review.id.toString()).set(review)
                 .addOnSuccessListener { cont.resume(it) }
                 .addOnFailureListener { throw Exception() }
         }
 
-        // TODO: Need to change this so that Review is converted to YourReview on the way back.
-        emit(LoadingState.Success(R.string.review_added, review)) // Just emit the review!
+        emit(LoadingState.Success(R.string.review_added, review.toUIModel())) // Just emit the review!
 
     }
         .catch {

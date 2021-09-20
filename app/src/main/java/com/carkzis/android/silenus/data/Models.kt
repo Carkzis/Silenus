@@ -17,3 +17,18 @@ data class YourReview(
     val dateAdded: Timestamp? = null,
     val geo: GeoPoint? = null,
 )
+
+fun YourReview.toDataObject(userId: String) : ReviewDO {
+    return let {
+        ReviewDO(
+            id = it.id,
+            establishment = it.establishment,
+            rating = it.rating,
+            location = it.location,
+            description = it.description,
+            dateAdded = it.dateAdded,
+            geo = it.geo,
+            uid = userId
+        )
+    }
+}

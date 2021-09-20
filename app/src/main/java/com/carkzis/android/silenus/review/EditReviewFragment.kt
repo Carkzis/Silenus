@@ -46,6 +46,7 @@ class EditReviewFragment : Fragment() {
 
         setUpFieldEntries()
         setUpToast()
+        setUpEditCompleteNavigation()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -73,6 +74,8 @@ class EditReviewFragment : Fragment() {
         }
     }
 
+    // TODO: Set up location button. Remember, we need to return here after going to the map.
+
     /**
      * Set up the fields, so that when you return to the fragment from the MapFragment,
      * your fields are not emptied.
@@ -82,6 +85,22 @@ class EditReviewFragment : Fragment() {
             it?.let {
                 val geocoder = Geocoder(context, Locale.getDefault())
                 viewModel.setUpReviewInfo(it, geocoder)
+            }
+        })
+    }
+
+    /**
+     * Navigate back to the single review fragment after updating the shared viewmodel with the new
+     * information.
+     */
+    private fun setUpEditCompleteNavigation() {
+        viewModel.navToSingleReview.observe(viewLifecycleOwner, {
+            // TODO: SharedViewModel needs updating.
+            it.getContextIfNotHandled()?.let { editedReview ->
+                sharedViewModel.setSingleReview(editedReview)
+                findNavController().navigate(
+                    EditReviewFragmentDirections.actionEditReviewFragmentToSingleReviewFragment()
+                )
             }
         })
     }

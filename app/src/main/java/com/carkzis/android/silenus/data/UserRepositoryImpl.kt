@@ -50,11 +50,11 @@ class UserRepositoryImpl(private val firestore: FirebaseFirestore): UserReposito
         return Firebase.auth
     }
 
-    private fun getUserDetails() : Pair<UserModel, String> {
+    private fun getUserDetails() : Pair<UserObject, String> {
         val userProfile = Firebase.auth.currentUser
 
         // Note: may not be a new user.
-        val newUser = UserModel(
+        val newUser = UserObject(
                 name = userProfile?.displayName,
                 email = userProfile?.email,
                 isAdmin = false,

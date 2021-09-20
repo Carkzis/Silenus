@@ -9,7 +9,7 @@ import com.carkzis.android.silenus.Event
 import com.carkzis.android.silenus.LoadingState
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.MainRepository
-import com.carkzis.android.silenus.data.Review
+import com.carkzis.android.silenus.data.NewReviewDO
 import com.carkzis.android.silenus.data.UserRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
@@ -53,7 +53,7 @@ class AddReviewViewModel @Inject constructor(
     private fun progressToAddingReview() {
 
         viewModelScope.launch() {
-            repository.addReview(Review(
+            repository.addReview(NewReviewDO(
                 barName.value,
                 rating.value,
                 location.value,
