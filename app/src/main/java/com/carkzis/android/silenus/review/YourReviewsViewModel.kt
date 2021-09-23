@@ -26,10 +26,6 @@ class YourReviewsViewModel @Inject constructor(
     val yourReviews: LiveData<List<YourReview>>
         get() = _yourReviews
 
-//    init {
-//        getAndAttachReviews()
-//    }
-
     fun refreshReviews() {
         getAndAttachReviews()
     }
