@@ -20,8 +20,8 @@
 
     <TextView
       android:id="@+id/single_name_bar_text"
-      android:layout_width="142dp"
-      android:layout_height="47dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
       android:layout_marginStart="8dp"
       android:layout_marginEnd="8dp"
       android:gravity="center"

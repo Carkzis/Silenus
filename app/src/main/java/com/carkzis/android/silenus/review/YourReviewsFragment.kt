@@ -51,6 +51,8 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
         setUpSearchView()
     }
 
+    // TODO: Need to reset UI recyclerview when coming back from edit screen.
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.your_reviews_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
@@ -71,6 +73,14 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     /**
+     * This ensures the reviews are refreshed when either entering or returning to the fragment.
+     */
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshReviews()
+    }
+
+    /**
      * Helper method to set up the review adapters methods initiated on their associated
      * click listeners with the adapter class.
      */
@@ -86,7 +96,6 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun setUpMapClickListener(review: YourReview) {
         val geoPoint = review.geo
         sharedViewModel.setMapOpenReason(MapReason.VIEWREV)
-        // TODO: We are passing in the geoPoints as strings.
         this.findNavController().navigate(
             YourReviewsFragmentDirections.actionYourReviewsFragmentToMapsFragment(
                 arrayOf(geoPoint?.latitude.toString(), geoPoint?.longitude.toString()))
@@ -110,7 +119,7 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun setUpDataObserver() {
         viewModel.yourReviews.observe(viewLifecycleOwner, {
             yourReviewsAdapter.addItemsToAdapter(it)
-            // TODO: Can change this to use a viewModel that stores the query.
+            // This resubmits a blank query.
             onQueryTextSubmit("")
         })
     }
