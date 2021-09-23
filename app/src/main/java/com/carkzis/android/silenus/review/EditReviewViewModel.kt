@@ -8,10 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.carkzis.android.silenus.Event
 import com.carkzis.android.silenus.LoadingState
 import com.carkzis.android.silenus.R
-import com.carkzis.android.silenus.data.MainRepository
-import com.carkzis.android.silenus.data.UserRepository
-import com.carkzis.android.silenus.data.YourReview
-import com.carkzis.android.silenus.data.toDataObject
+import com.carkzis.android.silenus.data.*
 import com.google.firebase.firestore.GeoPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -35,16 +32,11 @@ class EditReviewViewModel @Inject constructor(
     val geopoint: LiveData<GeoPoint>
         get() = _geopoint
 
-    // TODO: Remove this, we will change the fields into the DataObject NewReviewDO.
-    private var _yourReview = MutableLiveData<YourReview>()
-    val yourReview: LiveData<YourReview>
-        get() = _yourReview
-
     private var _navToSingleReview = MutableLiveData<Event<YourReview>>()
     val navToSingleReview: LiveData<Event<YourReview>>
         get() = _navToSingleReview
 
-    fun submissionPreChecks() {
+    fun submissionPreChecks(review: YourReview) {
         if (barName.value == null) {
             showToastMessage(R.string.no_establishment)
             return
@@ -54,13 +46,25 @@ class EditReviewViewModel @Inject constructor(
         } else if (geopoint.value == null) {
             showToastMessage(R.string.error)
         }
-        progressToEditOfReview() // This means we can go ahead with this!
+        val editReviewObject = createAmendedReview(review)
+        progressToEditOfReview(editReviewObject)
     }
 
-    private fun progressToEditOfReview() {
-        // TODO: This will edit the data in the database.
+    private fun createAmendedReview(review: YourReview) : YourReview {
+        return YourReview(
+            review.documentId,
+            barName.value,
+            rating.value,
+            location.value,
+            description.value,
+            review.dateAdded,
+            _geopoint.value
+        )
+    }
+
+    private fun progressToEditOfReview(review: YourReview) {
         viewModelScope.launch {
-            _yourReview.value?.let { repository.editYourReview(
+            review.let { repository.editYourReview(
                 it.toDataObject(userRepository.getUser().uid!!))
                 .collect { loadingState ->
                     when (loadingState) {

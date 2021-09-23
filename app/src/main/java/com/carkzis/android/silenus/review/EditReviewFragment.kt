@@ -63,6 +63,7 @@ class EditReviewFragment : Fragment() {
         return when (item.itemId) {
             R.id.edit_rev_confirm_menu_button -> {
                 Timber.e("Confirm alterations.")
+                sharedViewModel.singleReview.value?.let { viewModel.submissionPreChecks(it) }
                 true
             }
             R.id.edit_rev_quit_menu_button -> {

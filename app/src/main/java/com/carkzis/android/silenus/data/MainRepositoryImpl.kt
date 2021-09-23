@@ -80,7 +80,7 @@ class MainRepositoryImpl(private val firestore: FirebaseFirestore) : MainReposit
                 .addOnFailureListener { throw Exception() }
         }
 
-        emit(LoadingState.Success(R.string.review_added, review.toUIModel())) // Just emit the review!
+        emit(LoadingState.Success(R.string.review_edited, review.toUIModel())) // Just emit the review!
 
     }
         .catch {

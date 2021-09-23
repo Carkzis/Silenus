@@ -24,7 +24,7 @@ class SharedViewModel @Inject constructor(
 ) : ViewModel() {
 
     /**
-     * These are for the add review screen, saving the data when we are taken to the map fragment.
+     * These are for the add and edit review screen, saving the data when we are taken to the map fragment.
      */
     private var _chosenGeopoint = MutableLiveData<GeoPoint?>()
     val chosenGeopoint: LiveData<GeoPoint?>
