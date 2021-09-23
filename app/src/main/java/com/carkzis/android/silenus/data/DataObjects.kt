@@ -24,7 +24,7 @@ data class NewReviewDO (
 )
 
 data class ReviewDO (
-    val id: DocumentId?,
+    val id: String?,
     val establishment: String?,
     val rating: Float?,
     val location: String?,
@@ -40,7 +40,7 @@ data class ReviewDO (
 fun ReviewDO.toUIModel() : YourReview {
     return let {
         YourReview(
-            id = it.id,
+            documentId = it.id,
             establishment = it.establishment,
             rating = it.rating,
             location = it.location,
