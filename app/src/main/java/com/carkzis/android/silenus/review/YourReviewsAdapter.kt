@@ -15,8 +15,8 @@ import com.carkzis.android.silenus.data.YourReview
 import com.carkzis.android.silenus.databinding.YourReviewItemBinding
 import timber.log.Timber
 
-class YourReviewsAdapter(private val onClickListener: OnClickListener) : ListAdapter<YourReview, YourReviewsAdapter.YourReviewsViewHolder>(YourReviewsDiffCallBack()),
-    Filterable {
+class YourReviewsAdapter(private val onClickListener: OnClickListener) : ListAdapter<YourReview,
+        YourReviewsAdapter.YourReviewsViewHolder>(YourReviewsDiffCallBack()), Filterable {
 
     // Create blank lists for the normal list, and the filtered version.
     var reviewList : ArrayList<YourReview> = ArrayList()
@@ -25,10 +25,10 @@ class YourReviewsAdapter(private val onClickListener: OnClickListener) : ListAda
     override fun onBindViewHolder(holder: YourReviewsViewHolder, position: Int) {
         val review = reviewListFiltered[position]
         // This actions an on click listener when the map icon is clicked.
-        // TODO: Need to set it up so multiple views can be clicked.
         holder.itemView.findViewById<View>(R.id.your_rev_map).setOnClickListener {
             onClickListener.onMapClick(review)
         }
+        // This actions an on click listener when the description icon is clicked.
         holder.itemView.findViewById<View>(R.id.your_rev_description).setOnClickListener {
             onClickListener.onDescriptionClick(review)
         }
