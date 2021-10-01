@@ -4,9 +4,11 @@ import com.carkzis.android.silenus.Constants
 import com.carkzis.android.silenus.LoadingState
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.getCollectionName
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -46,8 +48,9 @@ class MainRepositoryImpl(private val firestore: FirebaseFirestore) : MainReposit
 
         emit(LoadingState.Loading(R.string.loading)) // Loading!
 
+        // TODO: Use the uid obtained from the UserRepository instead of directly here.
         val yourReviewList = suspendCoroutine<QuerySnapshot> { cont ->
-            reviews.get()
+            reviews.whereEqualTo("uid", Firebase.auth.currentUser?.uid).get()
                 .addOnSuccessListener { cont.resume(it) } // This is successful.
                 .addOnFailureListener { throw Exception() }
         }.toObjects(YourReview::class.java) // This converts the snapshot into a list.
@@ -74,6 +77,7 @@ class MainRepositoryImpl(private val firestore: FirebaseFirestore) : MainReposit
 
         // This ensures we await the result of the query before we emit again.
         // There is no returned object, just void.
+        // TODO: May need to test here that we are who we say we are, or add to security rules.
         suspendCoroutine<Void> { cont ->
             reviews.document(review.id.toString()).set(review)
                 .addOnSuccessListener { cont.resume(it) }

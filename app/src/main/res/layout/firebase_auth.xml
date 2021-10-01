@@ -9,11 +9,12 @@
     android:id="@+id/google_signin"
     android:layout_width="50dp"
     android:layout_height="50dp"
-    app:layout_constraintBottom_toTopOf="@+id/email_signin"
-    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toStartOf="@+id/email_signin"
     app:layout_constraintHorizontal_bias="0.5"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.45"
     app:srcCompat="@drawable/googleg_standard_color_18" />
 
   <ImageView
@@ -23,8 +24,9 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.5"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/google_signin"
+    app:layout_constraintStart_toEndOf="@+id/google_signin"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.45"
     app:srcCompat="@android:drawable/ic_dialog_email"
     app:tint="?attr/colorPrimaryVariant" />
 
