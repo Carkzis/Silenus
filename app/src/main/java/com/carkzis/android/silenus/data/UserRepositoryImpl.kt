@@ -20,6 +20,9 @@ import kotlin.coroutines.suspendCoroutine
 class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFirestore,
     private val firebaseAuth: FirebaseAuth): UserRepository {
 
+    /**
+     * Add a user to the database, emits Loading and Success or Error states.
+     */
     override suspend fun addUser() = flow {
 
         emit(LoadingState.Loading(R.string.loading)) // Loading!
@@ -44,14 +47,25 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
 
     }.flowOn(Dispatchers.IO)
 
+    /**
+     * Retrieve the logging in username as a String.
+     */
     override fun getUsername() : String {
         return firebaseAuth.currentUser?.displayName ?: ""
     }
 
+    /**
+     * Retrieves a Firebase object, which stores information relating to the user.
+     */
     override fun getUser() : FirebaseAuth {
         return firebaseAuth
     }
 
+    /**
+     * Retrieve the user details as a Pair of a UserObject, which is an object that
+     * can be entered into the Firestore database, and a String, which stores the uid of the
+     * user which will be used as the document ID for said user.
+     */
     private fun getUserDetails() : Pair<UserObject, String> {
         val userProfile = firebaseAuth.currentUser
 

@@ -14,12 +14,16 @@ class FakeUserRepository @Inject constructor(): UserRepository {
 
     // Decides if the addUser() method will fail or not.
     var failure = false
-    // Want to check the loading works.
+    // This will decide if a request is loading or not.
     var loading = false
 
     @Mock
     private lateinit var mockAuth: FirebaseAuth
 
+    /**
+     * This will just emit the LoadingState, either as Loading, Success or Error according to
+     * the boolean variables above.
+     */
     override suspend fun addUser() = flow {
         emit(LoadingState.Loading(R.string.loading))
         // Skip if we are loading.
