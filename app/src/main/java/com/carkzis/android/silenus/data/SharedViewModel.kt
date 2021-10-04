@@ -19,8 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SharedViewModel @Inject constructor(
-    private val repository: UserRepository,
-    private val authorisation: FirebaseAuth
+    private val repository: UserRepository
 ) : ViewModel() {
 
     /*
@@ -71,6 +70,10 @@ class SharedViewModel @Inject constructor(
     val singleReview: LiveData<YourReview>
         get() = _singleReview
 
+    /**
+     * Adds a user to Firestore via the UserRepository.  The UserRepository gets
+     * access to the details via FirebaseAuth; the user details are not provided by the ViewModel.
+     */
     private fun addUser() {
         viewModelScope.launch() {
             repository.addUser().collect { loadingState ->
@@ -89,10 +92,16 @@ class SharedViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Sends an event with a log out message, to be used as a toast once observed by a fragment.
+     */
     fun chooseLogout() {
         _logout.value = Event(R.string.logged_out)
     }
 
+    /**
+     * Authorises the user based on some tests.
+     */
     fun authoriseUser() {
         val auth = repository.getUser()
         if (auth.currentUser == null) {
