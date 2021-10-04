@@ -23,7 +23,7 @@ class SharedViewModel @Inject constructor(
     private val authorisation: FirebaseAuth
 ) : ViewModel() {
 
-    /**
+    /*
      * These are for the add and edit review screen, saving the data when we are taken to the map fragment.
      */
     private var _chosenGeopoint = MutableLiveData<GeoPoint?>()
@@ -42,14 +42,14 @@ class SharedViewModel @Inject constructor(
     val reviewDescription: LiveData<String?>
         get() = _reviewDescription
 
-    /**
+    /*
      * This relates to maps, an enum that limits what the map fragment is used for.
      */
     private var _mapReason = MutableLiveData<MapReason?>()
     val mapReason: LiveData<MapReason?>
         get() = _mapReason
 
-    /**
+    /*
      * Shared user data across fragments
      */
     private var _logout = MutableLiveData<Event<Int>>()
@@ -64,7 +64,7 @@ class SharedViewModel @Inject constructor(
     val username: LiveData<String>
         get() = _username
 
-    /**
+    /*
      * This is for the individual review screen.
      */
     private val _singleReview = MutableLiveData<YourReview>()

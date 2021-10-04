@@ -25,8 +25,9 @@ class MainRepositoryTest {
     // We are using the FakeMainRepository for testing.
     private lateinit var mainRepository: FakeMainRepository
 
-    // Fake review for use in test, initialise in @Before to recreate it for each test.
+    // Fake reviews for use in tests, initialise in @Before to recreate it for each test.
     private lateinit var fakeReview: NewReviewDO
+    private lateinit var fakeEditingReview: ReviewDO
 
     @Before
     fun createRepository() {
@@ -37,6 +38,17 @@ class MainRepositoryTest {
             "Manchester",
             mock(GeoPoint::class.java),
             "They really do have real cheese, just wish they would put it on the pizza.",
+            Timestamp.now(),
+            "123"
+        )
+        // We will reuse this fakeReview but for editing.
+        fakeEditingReview = ReviewDO(
+            "321",
+            "Unreal Cheese Pizzeria",
+            5.0f,
+            "Manchester",
+            mock(GeoPoint::class.java),
+            "There is no cheese. There is no pizza, either.",
             Timestamp.now(),
             "123"
         )
@@ -61,9 +73,9 @@ class MainRepositoryTest {
 
     @Test
     fun addReview_success_receiveLoadingStateSuccess() = runBlockingTest {
-        // Set the failure of adding the review.
+        // Set the success of adding the review.
         mainRepository.failure = false
-        // Test the response, if we get LoadingState.Error, isSuccessful will be false.
+        // Test the response, if we get LoadingState.Success, isSuccessful will be true.
         var isSuccessful = false
         mainRepository.addReview(fakeReview).collect {
             isSuccessful = when (it) {
@@ -108,11 +120,12 @@ class MainRepositoryTest {
 
     @Test
     fun getYourReviews_success_receiveLoadingStateSuccessFiveReviews() = runBlockingTest {
-        // We want to check if the returned list of reviews is
+        // We want to check if the returned list of reviews has items.
         var yourReviews = mutableListOf<YourReview>()
         // Set the failure of adding the review.
         mainRepository.failure = false
-        // Test the response, if we get LoadingState.Error, isSuccessful will be false.
+        // Test the response, if we get LoadingState.Success, isSuccessful will be true and
+        // we will have five reviews in the list.
         var isSuccessful = false
         mainRepository.getYourReviews().collect {
             isSuccessful = when (it) {
@@ -135,6 +148,67 @@ class MainRepositoryTest {
         // Test the response, if we get LoadingState.Loading, isLoading with be true.
         var isLoading = false
         mainRepository.getYourReviews().collect {
+            isLoading = when (it) {
+                is LoadingState.Loading -> true
+                else -> false
+            }
+        }
+        assertThat(isLoading, `is`(true))
+    }
+
+    @Test
+    fun editYourReview_error_receiveLoadingStateError() = runBlockingTest {
+        // Set the failure of adding the review.
+        mainRepository.failure = true
+        // We add an "edited" review. Test the response, if we get LoadingState.Error,
+        // isSuccessful will be false.
+        var isSuccessful = true
+        mainRepository.editYourReview(fakeEditingReview).collect {
+            isSuccessful = when (it) {
+                is LoadingState.Error -> false
+                else -> true
+            }
+        }
+        // Assert that the addition of a review was not successful.
+        assertThat(isSuccessful, `is`(false))
+    }
+
+    @Test
+    fun editYourReview_success_receiveLoadingStateSuccessAndReviewAsUIModel() = runBlockingTest {
+        // Set the success of adding the review.
+        mainRepository.failure = false
+        // Test the response, if we get LoadingState.Success, isSuccessful will be true and
+        // we will have a UI YourReview object with the same data as the the ReviewDO.
+        var isSuccessful = false
+        var yourReview: YourReview? = null
+        mainRepository.editYourReview(fakeEditingReview).collect {
+            isSuccessful = when (it) {
+                is LoadingState.Success -> {
+                    yourReview = it.data!!
+                    true
+                }
+                else -> true
+            }
+        }
+        // Assert that the addition of a review was successful.
+        assertThat(isSuccessful, `is`(true))
+        // Assert that shared attributes between the input and output review objects are the same.
+        assertThat(fakeEditingReview.dateAdded, `is`(yourReview?.dateAdded))
+        assertThat(fakeEditingReview.description, `is`(yourReview?.description))
+        assertThat(fakeEditingReview.establishment, `is`(yourReview?.establishment))
+        assertThat(fakeEditingReview.location, `is`(yourReview?.location))
+        assertThat(fakeEditingReview.rating, `is`(yourReview?.rating))
+        assertThat(fakeEditingReview.id, `is`(yourReview?.documentId))
+        assertThat(fakeEditingReview.geo, `is`(yourReview?.geo))
+    }
+
+    @Test
+    fun editYourReview_loading_receiveLoadingStateLoading() = runBlockingTest {
+        // Set the loading variable to true.
+        mainRepository.loading = true
+        // Test the response, if we get LoadingState.Loading, isLoading with be true.
+        var isLoading = false
+        mainRepository.editYourReview(fakeEditingReview).collect {
             isLoading = when (it) {
                 is LoadingState.Loading -> true
                 else -> false
