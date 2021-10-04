@@ -2,13 +2,12 @@ package com.carkzis.android.silenus.data
 
 import com.carkzis.android.silenus.LoadingState
 import com.carkzis.android.silenus.R
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import org.mockito.Mock
-import java.lang.Exception
+import org.mockito.Mockito.mock
 import javax.inject.Inject
 
 class FakeUserRepository @Inject constructor(): UserRepository {
@@ -41,8 +40,19 @@ class FakeUserRepository @Inject constructor(): UserRepository {
     }
 
     override fun getUser(): FirebaseAuth {
-        mockAuth = Firebase.auth
+        mockAuth = mock(FirebaseAuth::class.java)
         return mockAuth
+    }
+
+    fun getUserDetails() : Pair<UserObject, String> {
+        val newUser = UserObject(
+            name = "David",
+            email = "david@david.com",
+            isAdmin = false,
+            ratings = 0,
+            joinDate = Timestamp.now()
+        )
+        return Pair(newUser, "anId")
     }
 
 }

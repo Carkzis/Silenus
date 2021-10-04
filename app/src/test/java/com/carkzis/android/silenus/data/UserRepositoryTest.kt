@@ -12,6 +12,11 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito.mock
+import org.mockito.MockitoAnnotations
+import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
 class UserRepositoryTest {
@@ -91,7 +96,7 @@ class UserRepositoryTest {
     }
 
     /*
-    What a useless test.
+    Test we are actually getting the object. Should always pass.
      */
     @Test
     fun getUser_getFirebaseAuthObject() {
@@ -100,4 +105,17 @@ class UserRepositoryTest {
         // Assert that this works, and we have the object.
         assertThat(user is FirebaseAuth, `is`(true))
     }
+
+    @Test
+    fun getUserDetails_returnCorrectUserObjectAndUid() {
+        // Get the user object and uid.
+        val user = userRepository.getUserDetails().first
+        val uid = userRepository.getUserDetails().second
+        // Assert that the name is "David", and the email address is "david@david.com".
+        assertThat(user.name, `is`("David"))
+        assertThat(user.email, `is`("david@david.com"))
+        // Assert that the uid is "anId".
+        assertThat(uid, `is`(uid))
+    }
+
 }
