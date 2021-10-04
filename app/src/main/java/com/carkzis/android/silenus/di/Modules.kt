@@ -15,10 +15,6 @@ import javax.inject.Singleton
 @Module
 object FirebaseModule {
 
-    @Qualifier
-    @Retention(AnnotationRetention.RUNTIME)
-    annotation class FirestoreProvider
-
     @Singleton
     @Provides
     fun providesFirestore() = FirebaseFirestore.getInstance()
@@ -29,8 +25,8 @@ object FirebaseModule {
 
     @Singleton
     @Provides
-    fun provideUserRepository(firestore: FirebaseFirestore) : UserRepository {
-        return UserRepositoryImpl(firestore)
+    fun provideUserRepository(firestore: FirebaseFirestore, firebaseAuth: FirebaseAuth) : UserRepository {
+        return UserRepositoryImpl(firestore, firebaseAuth)
     }
 
     @Singleton

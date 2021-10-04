@@ -13,10 +13,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class UserRepositoryImpl(private val firestore: FirebaseFirestore): UserRepository {
+class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFirestore,
+    private val firebaseAuth: FirebaseAuth): UserRepository {
 
     override suspend fun addUser() = flow {
 
@@ -43,15 +45,15 @@ class UserRepositoryImpl(private val firestore: FirebaseFirestore): UserReposito
     }.flowOn(Dispatchers.IO)
 
     override fun getUsername() : String {
-        return Firebase.auth.currentUser?.displayName ?: ""
+        return firebaseAuth.currentUser?.displayName ?: ""
     }
 
     override fun getUser() : FirebaseAuth {
-        return Firebase.auth
+        return firebaseAuth
     }
 
     private fun getUserDetails() : Pair<UserObject, String> {
-        val userProfile = Firebase.auth.currentUser
+        val userProfile = firebaseAuth.currentUser
 
         // Note: may not be a new user.
         val newUser = UserObject(
