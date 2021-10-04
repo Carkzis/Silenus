@@ -58,15 +58,14 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
 
         emit(LoadingState.Success(R.string.reviews_retrieved, yourReviewList))
 
-    }
-        .catch {
-            emit(
-                LoadingState.Error(
-                    R.string.error,
-                    Exception()
-                )
-            ) // Emit the error if we get here...
-        }.flowOn(Dispatchers.IO)
+    }.catch {
+        emit(
+            LoadingState.Error(
+                R.string.error,
+                Exception()
+            )
+        ) // Emit the error if we get here...
+    }.flowOn(Dispatchers.IO)
 
     /**
      * This edits a review, by setting the review again using the same document id.

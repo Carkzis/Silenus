@@ -60,7 +60,7 @@ class MainRepositoryTest {
     }
 
     @Test
-    fun addReview_success_receiveLoadingStateError() = runBlockingTest {
+    fun addReview_success_receiveLoadingStateSuccess() = runBlockingTest {
         // Set the failure of adding the review.
         mainRepository.failure = false
         // Test the response, if we get LoadingState.Error, isSuccessful will be false.
@@ -82,6 +82,59 @@ class MainRepositoryTest {
         // Test the response, if we get LoadingState.Loading, isLoading with be true.
         var isLoading = false
         mainRepository.addReview(fakeReview).collect {
+            isLoading = when (it) {
+                is LoadingState.Loading -> true
+                else -> false
+            }
+        }
+        assertThat(isLoading, `is`(true))
+    }
+
+    @Test
+    fun getYourReviews_error_receiveLoadingStateError() = runBlockingTest {
+        // Set the failure of adding the review.
+        mainRepository.failure = true
+        // Test the response, if we get LoadingState.Error, isSuccessful will be false.
+        var isSuccessful = true
+        mainRepository.getYourReviews().collect {
+            isSuccessful = when (it) {
+                is LoadingState.Error -> false
+                else -> true
+            }
+        }
+        // Assert that the addition of a review was not successful.
+        assertThat(isSuccessful, `is`(false))
+    }
+
+    @Test
+    fun getYourReviews_success_receiveLoadingStateSuccessFiveReviews() = runBlockingTest {
+        // We want to check if the returned list of reviews is
+        var yourReviews = mutableListOf<YourReview>()
+        // Set the failure of adding the review.
+        mainRepository.failure = false
+        // Test the response, if we get LoadingState.Error, isSuccessful will be false.
+        var isSuccessful = false
+        mainRepository.getYourReviews().collect {
+            isSuccessful = when (it) {
+                is LoadingState.Success -> {
+                    yourReviews = it.data as MutableList<YourReview>
+                    true
+                }
+                else -> false
+            }
+        }
+        // Assert that the addition of a review was not successful.
+        assertThat(isSuccessful, `is`(true))
+        assertThat(yourReviews.size, `is`(5))
+    }
+
+    @Test
+    fun getYourReviews_loading_receiveLoadingStateLoading() = runBlockingTest {
+        // Set the loading variable to true.
+        mainRepository.loading = true
+        // Test the response, if we get LoadingState.Loading, isLoading with be true.
+        var isLoading = false
+        mainRepository.getYourReviews().collect {
             isLoading = when (it) {
                 is LoadingState.Loading -> true
                 else -> false

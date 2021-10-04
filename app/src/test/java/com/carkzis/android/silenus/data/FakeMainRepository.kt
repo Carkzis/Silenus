@@ -35,13 +35,27 @@ class FakeMainRepository @Inject constructor() : MainRepository {
                 throw Exception()
             }
         }
-    }
-        .catch {
+    }.catch {
         emit(LoadingState.Error(R.string.error, Exception()))
     }
 
-    override suspend fun getYourReviews(): Flow<LoadingState<MutableList<YourReview>>> {
-        TODO("Not yet implemented")
+    override suspend fun getYourReviews() = flow {
+        emit(LoadingState.Loading(R.string.reviews_retrieved))
+        // Skip if we are loading.
+        if (!loading) {
+            // Do this if we are successful.
+            if (!failure) {
+                // Emit a list of (mock) reviews. Mock as their contents will not matter.
+                emit(LoadingState.Success(R.string.reviews_retrieved, MutableList(5) {
+                    mock(YourReview::class.java)
+                }))
+            } else {
+                throw Exception()
+            }
+        } // Emit the error if we get here...
+    }
+        .catch {
+        emit(LoadingState.Error(R.string.error, Exception()))
     }
 
     override suspend fun editYourReview(review: ReviewDO): Flow<LoadingState<YourReview>> {
