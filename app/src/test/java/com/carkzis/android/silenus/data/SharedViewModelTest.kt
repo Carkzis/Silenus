@@ -4,6 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.getOrAwaitValue
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -16,6 +18,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito
 
 @ExperimentalCoroutinesApi
 class SharedViewModelTest {
@@ -117,7 +120,7 @@ class SharedViewModelTest {
     }
 
     @Test
-    fun setGeopint_postGeopointToLiveData() {
+    fun setGeopoint_postGeopointToLiveData() {
         // Set up LatLng object.
         val latLng = LatLng(50.0, 100.0)
 
@@ -131,5 +134,227 @@ class SharedViewModelTest {
             `is`(100.0))
     }
 
+    @Test
+    fun setBarDetails_provideNonNullInputs_postInputsToLiveData() {
+        // Set up inputs.
+        val name = "Fancy Noodle Bar"
+        val rating = 5.0f
+        val description = "It is quite fancy, to be fair."
+
+        // Call method.
+        sharedViewModel.setBarDetails(name, rating, description)
+
+        // Ensure that the inputs are posted to the respective LiveData.
+        assertThat(sharedViewModel.reviewBarName.getOrAwaitValue(),
+            `is`(name))
+        assertThat(sharedViewModel.reviewRating.getOrAwaitValue().toString(),
+            `is`(rating.toString()))
+        assertThat(sharedViewModel.reviewDescription.getOrAwaitValue(),
+            `is`(description))
+    }
+
+    @Test
+    fun setBarDetails_provideNullInputs_postInputsToLiveData() {
+        // Set up inputs.
+        val name: String? = null
+        val rating: Float? = null
+        val description: String? = null
+
+        // Call method.
+        sharedViewModel.setBarDetails(name, rating, description)
+
+        // Ensure that the inputs are posted to the respective LiveData.
+        assertThat(sharedViewModel.reviewBarName.getOrAwaitValue(),
+            `is`(name))
+        assertThat(sharedViewModel.reviewRating.getOrAwaitValue().toString(),
+            `is`(rating.toString()))
+        assertThat(sharedViewModel.reviewDescription.getOrAwaitValue(),
+            `is`(description))
+    }
+
+    @Test
+    fun setBarDetails_provideEmptyInputs_postInputsToLiveData() {
+        // Set up inputs.
+        val name = ""
+        val rating = 0.0f
+        val description = ""
+
+        // Call method.
+        sharedViewModel.setBarDetails(name, rating, description)
+
+        // Ensure that the inputs are posted to the respective LiveData.
+        assertThat(sharedViewModel.reviewBarName.getOrAwaitValue(),
+            `is`(name))
+        assertThat(sharedViewModel.reviewRating.getOrAwaitValue().toString(),
+            `is`(rating.toString()))
+        assertThat(sharedViewModel.reviewDescription.getOrAwaitValue(),
+            `is`(description))
+    }
+
+    @Test
+    fun setSingleReview_postSingleReviewToLiveData() {
+        // Set up the input.
+        val singleReview = YourReview("123", "Testaurant", 5.0f,
+            "Mantester", "This is for a test.", Timestamp.now(),
+            Mockito.mock(GeoPoint::class.java))
+
+        // Call the method.
+        sharedViewModel.setSingleReview(singleReview)
+
+        // Ensure the review is posted to the LiveData.
+        assertThat(sharedViewModel.singleReview.getOrAwaitValue(),
+            `is`(singleReview))
+    }
+
+    @Test
+    fun setBarDetailsFromModel_provideNonNullInputs_postInputsToLiveData() {
+        // Set up the inputs.
+        val name = "Testaurant"
+        val rating = 5.0f
+        val description = "This is for a test."
+        val geoPoint = Mockito.mock(GeoPoint::class.java)
+        val singleReview = YourReview("123", name, rating,
+            "Mantester", description, Timestamp.now(),
+            geoPoint)
+
+        // Set the singleReview LiveData
+        sharedViewModel.setSingleReview(singleReview)
+
+        // Call the method.
+        sharedViewModel.setBarDetailsFromModel()
+
+        // Assert that the bar details are set to the LiveData, using data from singleReview.
+        assertThat(sharedViewModel.reviewBarName.getOrAwaitValue(),
+            `is`(name))
+        assertThat(sharedViewModel.reviewRating.getOrAwaitValue().toString(),
+            `is`(rating.toString()))
+        assertThat(sharedViewModel.reviewDescription.getOrAwaitValue(),
+            `is`(description))
+        assertThat(sharedViewModel.chosenGeopoint.getOrAwaitValue(),
+            `is`(geoPoint))
+    }
+
+    @Test
+    fun setBarDetailsFromModel_provideNullInputs_postInputsToLiveData() {
+        // Set up the inputs.
+        val name: String? = null
+        val rating: Float? = null
+        val description: String? = null
+        val geoPoint: GeoPoint? = null
+        val singleReview = YourReview("123", name, rating,
+            "Mantester", description, Timestamp.now(),
+            geoPoint)
+
+        // Set the singleReview LiveData
+        sharedViewModel.setSingleReview(singleReview)
+
+        // Call the method.
+        sharedViewModel.setBarDetailsFromModel()
+
+        // Assert that the bar details are set to the LiveData, using data from singleReview.
+        assertThat(sharedViewModel.reviewBarName.getOrAwaitValue(),
+            `is`(name))
+        assertThat(sharedViewModel.reviewRating.getOrAwaitValue().toString(),
+            `is`(rating.toString()))
+        assertThat(sharedViewModel.reviewDescription.getOrAwaitValue(),
+            `is`(description))
+        assertThat(sharedViewModel.chosenGeopoint.getOrAwaitValue(),
+            `is`(geoPoint))
+    }
+
+    @Test
+    fun setBarDetailsFromModel_provideEmptyInputs_postInputsToLiveData() {
+        // Set up the input.
+        val name = ""
+        val rating = 0.0f
+        val description = ""
+        val geoPoint = Mockito.mock(GeoPoint::class.java)
+        val singleReview = YourReview("123", name, rating,
+            "Mantester", description, Timestamp.now(),
+            geoPoint)
+
+        // Set the singleReview LiveData
+        sharedViewModel.setSingleReview(singleReview)
+
+        // Call the method.
+        sharedViewModel.setBarDetailsFromModel()
+
+        // Assert that the bar details are set to the LiveData, using data from singleReview.
+        assertThat(sharedViewModel.reviewBarName.getOrAwaitValue(),
+            `is`(name))
+        assertThat(sharedViewModel.reviewRating.getOrAwaitValue().toString(),
+            `is`(rating.toString()))
+        assertThat(sharedViewModel.reviewDescription.getOrAwaitValue(),
+            `is`(description))
+        assertThat(sharedViewModel.chosenGeopoint.getOrAwaitValue(),
+            `is`(geoPoint))
+    }
+
+    @Test
+    fun resetReviewScreen_resetsReviewInputLiveDataToNull() {
+        // Set up the review input LiveData, so we know if it is cleared.
+        val name = "Testaurant"
+        val rating = 5.0f
+        val description = "This is for a test."
+        val geoPoint = Mockito.mock(GeoPoint::class.java)
+        val singleReview = YourReview("123", name, rating,
+            "Mantester", description, Timestamp.now(),
+            geoPoint)
+        sharedViewModel.setSingleReview(singleReview)
+        sharedViewModel.setBarDetailsFromModel()
+
+        // Test that the review inputs have been set.
+        assertThat(sharedViewModel.reviewBarName.getOrAwaitValue(),
+            `is`(name))
+        assertThat(sharedViewModel.reviewRating.getOrAwaitValue().toString(),
+            `is`(rating.toString()))
+        assertThat(sharedViewModel.reviewDescription.getOrAwaitValue(),
+            `is`(description))
+        assertThat(sharedViewModel.chosenGeopoint.getOrAwaitValue(),
+            `is`(geoPoint))
+
+        // Call the method to test.
+        sharedViewModel.resetReviewScreen()
+
+        val nullString: String? = null
+        val nullFloat: Float? = null
+        val nullGeoPoint: GeoPoint? = null
+
+        // Test that the review inputs are now null.
+        assertThat(sharedViewModel.reviewBarName.getOrAwaitValue(),
+            `is`(nullString))
+        assertThat(sharedViewModel.reviewRating.getOrAwaitValue(),
+            `is`(nullFloat))
+        assertThat(sharedViewModel.reviewDescription.getOrAwaitValue(),
+            `is`(nullString))
+        assertThat(sharedViewModel.chosenGeopoint.getOrAwaitValue(),
+            `is`(nullGeoPoint))
+    }
+
+    @Test
+    fun setMapOpenReason_postMapReasonToLiveData() {
+        // Set up MapReason..
+        val mapReason = MapReason.EDITREV
+
+        // Call method.
+        sharedViewModel.setMapOpenReason(mapReason)
+
+        // Ensure that the latLng object is posted to the LiveData.
+        assertThat(sharedViewModel.mapReason.getOrAwaitValue(),
+            `is`(MapReason.EDITREV))
+    }
+
+    @Test
+    fun toastMe_postEventToLiveData() {
+        // Set up string to be Toast(ed).
+        val toastString = "Toasty."
+
+        // Call method.
+        sharedViewModel.toastMe(toastString)
+
+        // Ensure that the Toast message is added to the LiveData (within an Event wrapper).
+        assertThat(sharedViewModel.toastText.getOrAwaitValue().getContextIfNotHandled().toString(),
+            `is`(toastString))
+    }
 
 }

@@ -116,12 +116,17 @@ class SharedViewModel @Inject constructor(
     }
 
     /**
-     * Sets the chosen geopoint, using the input LatLng object.
+     * Sets the chosen geopoint, using the input LatLng object, obtained from the Maps API.
+     * This allows the input to be stored whilst the user goes to the Map fragment and back.
      */
     fun setGeopoint(latLng: LatLng) {
         _chosenGeopoint.value = GeoPoint(latLng.latitude, latLng.longitude)
     }
 
+    /**
+     * Set bar details with the exception of the geopoint, obtained from user inputs.
+     * This allows the inputs to be stored whilst the user goes to the Map fragment and back.
+     */
     fun setBarDetails(name: String?, rating: Float?, description: String?) {
         _reviewBarName.value = name
         _reviewRating.value = rating
@@ -129,7 +134,7 @@ class SharedViewModel @Inject constructor(
     }
 
     /**
-     * This is for setting bar details from a ui model e.g. data obtained from firestore.
+     * This is for setting bar details from a UI model e.g. data obtained from Firestore.
      */
     fun setBarDetailsFromModel() {
         _reviewBarName.value = _singleReview.value?.establishment
@@ -138,6 +143,9 @@ class SharedViewModel @Inject constructor(
         _chosenGeopoint.value = _singleReview.value?.geo
     }
 
+    /**
+     * Clears the LiveData associated with the review inputs.
+     */
     fun resetReviewScreen() {
         _chosenGeopoint.value = null
         _reviewBarName.value = null
@@ -145,10 +153,19 @@ class SharedViewModel @Inject constructor(
         _reviewDescription.value = null
     }
 
+    /**
+     * Sets a single YourReview object to the _singleReview LiveData.
+     */
     fun setSingleReview(review: YourReview) {
         _singleReview.value = review
     }
 
+    /**
+     * Sets the reason as to why we are visiting the MapFragment.
+     * ADDREV: Visiting from AddReviewFragment.
+     * VIEWREV: Visiting from YourReviewsFragment.
+     * EDITREV: Visiting from EditReviewFragment.
+     */
     fun setMapOpenReason(reason: MapReason) {
         _mapReason.value = reason
     }
@@ -157,10 +174,18 @@ class SharedViewModel @Inject constructor(
     val toastText: LiveData<Event<String>>
         get() = _toastText
 
+    /**
+     * This allows for a Toast to be generated even when switching between Fragments,
+     * by adding the string to a one-off Event LiveData.
+     */
     fun toastMe(message: String) {
         showToastMessage(message)
     }
 
+    /**
+     * Adds a message in an Event wrapper, which will result in a Toast being generated
+     * by the observing Fragment.
+     */
     private fun showToastMessage(message: String) {
         _toastText.value = Event(message)
     }
