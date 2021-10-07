@@ -115,6 +115,9 @@ class SharedViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Sets the chosen geopoint, using the input LatLng object.
+     */
     fun setGeopoint(latLng: LatLng) {
         _chosenGeopoint.value = GeoPoint(latLng.latitude, latLng.longitude)
     }
