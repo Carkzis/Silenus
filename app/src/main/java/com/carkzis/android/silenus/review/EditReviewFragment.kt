@@ -140,7 +140,7 @@ class EditReviewFragment : Fragment() {
      */
     private fun setUpEditCompleteNavigation() {
         viewModel.navToSingleReview.observe(viewLifecycleOwner, {
-            // TODO: SharedViewModel needs updating.
+            sharedViewModel.resetReviewScreen()
             it.getContextIfNotHandled()?.let { editedReview ->
                 sharedViewModel.setSingleReview(editedReview)
                 findNavController().navigate(

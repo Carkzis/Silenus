@@ -65,7 +65,7 @@ class AddReviewViewModelTest() {
          is called.
          */
         val addressObject = Mockito.mock(Address::class.java)
-        // We need to set the stub for the returned list to prevent and out of bounds error.
+        // We need to set the stub for the returned list to prevent an out of bounds error.
         `when`(geoCoder.getFromLocation(1.0, 1.0, 1))
             .thenReturn(listOf(addressObject))
         // When getAddressLine(0) is called, it will return the location we set instead.

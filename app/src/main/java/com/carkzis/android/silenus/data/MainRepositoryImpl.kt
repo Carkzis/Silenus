@@ -13,11 +13,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFirestore) : MainRepository {
+
+    /*
+    TODO: If you are logged in, but you have no account in the remote database, these fall down.
+          This can be avoided by logging a user out if they are not in the remote database.
+     */
 
     /**
      * Add a review for a member into the database.
@@ -72,17 +78,22 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
      */
     override suspend fun editYourReview(review: ReviewDO) = flow {
         val reviews = firestore.collection(getCollectionName(Constants.REVIEWS))
+        Timber.e("Come on?")
 
         emit(LoadingState.Loading(R.string.loading)) // Loading!
 
-        // This ensures we await the result of the query before we emit again.
-        // There is no returned object, just void.
+        /*
+        This ensures we await the result of the query before we emit again.
+        There is no returned object, just void.
+         */
         // TODO: May need to test here that we are who we say we are, or add to security rules.
         suspendCoroutine<Void> { cont ->
             reviews.document(review.id.toString()).set(review)
                 .addOnSuccessListener { cont.resume(it) }
                 .addOnFailureListener { throw Exception() }
         }
+
+        Timber.e("Come on?")
 
         emit(LoadingState.Success(R.string.review_edited, review.toUIModel())) // Just emit the review!
 
