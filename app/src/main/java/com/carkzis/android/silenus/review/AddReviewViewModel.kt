@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.lang.Exception
 import javax.inject.Inject
+import kotlin.IllegalArgumentException
 
 @HiltViewModel
 class AddReviewViewModel @Inject constructor(
@@ -77,6 +78,13 @@ class AddReviewViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Sets up the up the LiveData for the location of the establishment being reviewed,
+     * using the input geoPoint, which gives the latitude and longitude, and the geoCoder, which
+     * uses these values to return the first line of the address for the resulting location.
+     * The value "Nowhere Land" is posted if the address is null (this can happen when the location
+     * is out at sea.  Restaurant on the waves!)
+     */
     fun setUpLocationInfo(geoPoint: GeoPoint, geoCoder: Geocoder) {
         _geopoint.value = geoPoint
         var address = ""
@@ -91,14 +99,25 @@ class AddReviewViewModel @Inject constructor(
         Timber.e(address)
     }
 
+    /**
+     * Posts the provided barName to the associated LiveData.
+     */
     fun setUpBarName(name: String) {
         barName.value = name
     }
 
+    /**
+     * Posts the provided barRating to the associated LiveData. Throws an
+     * IllegalArgumentException if the rating exceeds 5.0f or 0.0f.
+     */
     fun setUpRating(barRating: Float) {
+        if (barRating > 5.0f || barRating < 0.0f) throw IllegalArgumentException()
         rating.value = barRating
     }
 
+    /**
+     * Posts the provided description to the associated LiveData.
+     */
     fun setUpDescription(summary: String) {
         description.value = summary
     }

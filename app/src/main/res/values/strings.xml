@@ -39,4 +39,5 @@
   <string name="edit_establishment">Edit Establishment</string>
   <string name="changes_aborted">Changes Aborted</string>
   <string name="review_edited">Review Edited!</string>
+  <string name="test">Testing.</string>
 </resources>
