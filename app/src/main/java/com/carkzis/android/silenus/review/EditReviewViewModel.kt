@@ -23,6 +23,10 @@ class EditReviewViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
+    /*
+    TODO: Consider merging this with AddReviewViewModel with the use of higher-order functions.
+     */
+
     var barName = MutableLiveData<String>()
     var rating = MutableLiveData<Float>()
     var location = MutableLiveData<String>()
@@ -84,6 +88,13 @@ class EditReviewViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Sets up the up the LiveData for the location of the establishment being reviewed,
+     * using the input geoPoint, which gives the latitude and longitude, and the geoCoder, which
+     * uses these values to return the first line of the address for the resulting location.
+     * The value "Nowhere Land" is posted if the address is null (this can happen when the location
+     * is out at sea.  Restaurant on the waves!)
+     */
     fun setUpLocationInfo(geoPoint: GeoPoint, geoCoder: Geocoder) {
         _geopoint.value = geoPoint
         var address = ""
@@ -98,18 +109,40 @@ class EditReviewViewModel @Inject constructor(
         Timber.e(address)
     }
 
+    /**
+     * Posts the provided barName to the associated LiveData.
+     */
     fun setUpBarName(name: String) {
         barName.value = name
     }
 
+    /**
+     * Posts the provided barRating to the associated LiveData. Throws an
+     * IllegalArgumentException if the rating exceeds 5.0f or 0.0f.
+     */
     fun setUpRating(barRating: Float) {
+        if (barRating > 5.0f || barRating < 0.0f) throw IllegalArgumentException()
         rating.value = barRating
     }
 
+    /**
+     * Posts the provided description to the associated LiveData.
+     */
     fun setUpDescription(summary: String) {
         description.value = summary
     }
 
+    /**
+     * Posts a location to the associated LiveData, for testing purposes.
+     */
+    fun setUpLocation(loc: String) {
+        location.value = loc
+    }
+
+    /**
+     * Sets up individual LiveData information using individual fields
+     * from a YourReview object and a Geocoder.
+     */
     fun setUpReviewInfo(review: YourReview, geoCoder: Geocoder) {
         setUpLocationInfo(review.geo!!, geoCoder)
         barName.value = review.establishment!!
@@ -121,6 +154,9 @@ class EditReviewViewModel @Inject constructor(
     val toastText: LiveData<Event<Int>>
         get() = _toastText
 
+    /**
+     * Post a string value in an Event wrapper to the associated LiveData.
+     */
     private fun showToastMessage(message: Int) {
         _toastText.value = Event(message)
     }

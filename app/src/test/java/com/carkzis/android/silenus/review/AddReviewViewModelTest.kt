@@ -93,9 +93,6 @@ class AddReviewViewModelTest() {
         // Set up the successful posting of values to the LiveData.
         setUpSuccessfulGeoPointAndLocationValueToLiveData()
 
-        // Call method.
-        addReviewViewModel.setUpLocationInfo(geoPoint, geoCoder)
-
         // Assert that we get the correct values posted to the LiveData.
         assertThat(addReviewViewModel.geopoint.getOrAwaitValue(), `is`(geoPoint))
         assertThat(addReviewViewModel.location.getOrAwaitValue(), `is`(location))
