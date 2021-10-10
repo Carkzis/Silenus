@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
@@ -288,6 +289,58 @@ class AddReviewViewModelTest() {
         assertThat(addReviewViewModel.description.getOrAwaitValue(), `is`(location))
     }
 
+    @Test
+    fun progressToAddingReview_success_postSuccessEventToLiveDataAndShowToast() = runBlockingTest {
+        // Given that all values required for adding a review are posted to the LiveData.
+        val barName = "Town Bar"
+        val rating = 5.0f
+        val description = "It is in town, and a bar"
+        // These set the LiveData.
+        addReviewViewModel.setUpBarName(barName)
+        addReviewViewModel.setUpRating(rating)
+        addReviewViewModel.setUpDescription(description)
+        setUpSuccessfulGeoPointAndLocationValueToLiveData()
 
+        // Call the method.
+        addReviewViewModel.submissionPreChecks()
+
+        /*
+        Assert that the addition of a review was successful, and so the navToYourReviews
+        LiveData has a true Event posted to it.
+         */
+        assertThat(addReviewViewModel.navToYourReviews.getOrAwaitValue()
+            .getContextIfNotHandled(), `is`(true))
+        // Should also be a message collected by Flow, to be added to toastText via helper method.
+        assertThat(addReviewViewModel.toastText.getOrAwaitValue().getContextIfNotHandled(),
+            `is`(R.string.review_added))
+    }
+
+    @Test
+    fun progressToAddingReview_failure_postFailureMessageToToastLiveData() = runBlockingTest {
+        // Given that all values required for adding a review are posted to the LiveData.
+        val barName = "Town Bar"
+        val rating = 5.0f
+        val description = "It is in town, and a bar"
+        // These set the LiveData.
+        addReviewViewModel.setUpBarName(barName)
+        addReviewViewModel.setUpRating(rating)
+        addReviewViewModel.setUpDescription(description)
+        setUpSuccessfulGeoPointAndLocationValueToLiveData()
+
+        // Set the repository to fail the request to add a review to the database.
+        mainRepository.failure = true
+
+        // Call the method.
+        addReviewViewModel.submissionPreChecks()
+
+        // Should be a message collected by Flow, to be added to toastText via helper method.
+        assertThat(addReviewViewModel.toastText.getOrAwaitValue().getContextIfNotHandled(),
+            `is`(R.string.error))
+    }
+
+    /*
+    TODO: We need to add tests for the responses to LoadingState.Loading emissions,
+        which have not yet been fully implemented, currently only logging a message to Logcat.
+     */
 
 }

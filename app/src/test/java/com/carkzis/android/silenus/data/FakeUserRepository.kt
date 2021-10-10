@@ -60,8 +60,10 @@ class FakeUserRepository @Inject constructor(): UserRepository {
     }
 
     override fun getUser(): FirebaseAuth {
+        val mockId = "MOCKID"
         mockAuth = mock(FirebaseAuth::class.java)
         `when`(mockAuth.currentUser).thenReturn(mockFirebaseUser)
+        `when`(mockAuth.uid).thenReturn(mockId)
         mockFirebaseUser?.let {
             `when`(mockAuth.currentUser!!.displayName).thenReturn(stubDisplayName)
         }

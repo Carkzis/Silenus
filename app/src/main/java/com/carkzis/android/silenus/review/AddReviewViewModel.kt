@@ -39,7 +39,8 @@ class AddReviewViewModel @Inject constructor(
     var submitDate = MutableLiveData<Timestamp>()
 
     /**
-     * This checks that the minimum requirement for adding a review are available,
+     * This checks that the minimum requirement for adding a review are available
+     * (being the name and the location),
      * and provides feedback to the user accordingly via a Toast.  If all checks pass,
      * progressToAddingReview() is called to proceed with adding the review to the database.
      */
