@@ -60,13 +60,11 @@ class AddReviewViewModelTest() {
         Dispatchers.resetMain()
     }
 
-    @Test
-    fun setUpLocationInfo_success_postGeoPointAndLocationValuesToLiveData() {
-        /*
-         The given mocked GeoPoint and Geocoder, that will return a specific location, are
-         set up in the setUp() method.
-         */
-
+    /**
+     * This sets up a successful geoPoint and location value posting to the LiveData, as this
+     * is often reused.
+     */
+    fun setUpSuccessfulGeoPointAndLocationValueToLiveData() {
         /*
          Mock an address object, to be returned in a list from geoCoder when getFromLocation()
          is called.
@@ -79,6 +77,20 @@ class AddReviewViewModelTest() {
         `when`(geoCoder.getFromLocation(1.0,1.0,1)[0]
             .getAddressLine(0))
             .thenReturn(location)
+
+        // Call method.
+        addReviewViewModel.setUpLocationInfo(geoPoint, geoCoder)
+    }
+
+    @Test
+    fun setUpLocationInfo_success_postGeoPointAndLocationValuesToLiveData() {
+        /*
+         The given mocked GeoPoint and Geocoder, that will return a specific location, are
+         set up in the setUp() method.
+         */
+
+        // Set up the successful posting of values to the LiveData.
+        setUpSuccessfulGeoPointAndLocationValueToLiveData()
 
         // Call method.
         addReviewViewModel.setUpLocationInfo(geoPoint, geoCoder)
@@ -212,6 +224,70 @@ class AddReviewViewModelTest() {
         // Assert that we get the blank input is still posted to the LiveData.
         assertThat(addReviewViewModel.description.getOrAwaitValue(), `is`(description))
     }
+
+    @Test
+    fun submissionPreChecks_barNameNull_showToastAndReturn() {
+        // Given a barValue of null (not set), but values set to the location and geoPoint
+        // (latter being set up in setUp()).
+        setUpSuccessfulGeoPointAndLocationValueToLiveData()
+
+        // Call method.
+        addReviewViewModel.submissionPreChecks()
+
+        // Assert that the toast is set to the correct value.
+        assertThat(addReviewViewModel.toastText.getOrAwaitValue().getContextIfNotHandled(),
+            `is`(R.string.no_establishment))
+    }
+
+    @Test
+    fun submissionPreChecks_barLocationNull_showToastAndReturn() {
+        // Given a location of null (not set), but value set for the name.
+        val barName = "Town"
+
+        // And subsequently LiveData for the two values.
+        addReviewViewModel.setUpBarName(barName)
+
+        // Call method.
+        addReviewViewModel.submissionPreChecks()
+        setUpSuccessfulGeoPointAndLocationValueToLiveData()
+
+        // Assert that the toast is set to the correct value.
+        assertThat(addReviewViewModel.toastText.getOrAwaitValue().getContextIfNotHandled(),
+            `is`(R.string.no_location))
+    }
+
+    @Test
+    fun submissionPreChecks_barGeoPointNull_showToastAndReturn() {
+        // Given a barName and location but a geoPoint of null.
+        val barName = "Town"
+        val location = "Funchester"
+
+        // And subsequently LiveData for the two values.
+        addReviewViewModel.setUpBarName(barName)
+        addReviewViewModel.setUpLocation(location)
+
+        // Call method.
+        addReviewViewModel.submissionPreChecks()
+
+        // Assert that the toast is set to the correct value.
+        assertThat(addReviewViewModel.toastText.getOrAwaitValue().getContextIfNotHandled(),
+            `is`(R.string.error))
+    }
+
+    @Test
+    fun setUpLocation_provideInput_postInputToLiveData() {
+        // Note: This is a test of a test-only method. Remove in production.
+
+        // Given a description as a String.
+        val location = "Rockport" // Sorry...
+
+        // Call method.
+        addReviewViewModel.setUpDescription(location)
+
+        // Assert that we get the correct value posted to the LiveData.
+        assertThat(addReviewViewModel.description.getOrAwaitValue(), `is`(location))
+    }
+
 
 
 }

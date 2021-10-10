@@ -38,6 +38,11 @@ class AddReviewViewModel @Inject constructor(
 
     var submitDate = MutableLiveData<Timestamp>()
 
+    /**
+     * This checks that the minimum requirement for adding a review are available,
+     * and provides feedback to the user accordingly via a Toast.  If all checks pass,
+     * progressToAddingReview() is called to proceed with adding the review to the database.
+     */
     fun submissionPreChecks() {
         if (barName.value == null) {
             showToastMessage(R.string.no_establishment)
@@ -46,7 +51,8 @@ class AddReviewViewModel @Inject constructor(
             showToastMessage(R.string.no_location)
             return
         } else if (geopoint.value == null) {
-            showToastMessage(R.string.error)
+            showToastMessage(R.string.error) // We shouldn't get this at all.
+            return
         }
         progressToAddingReview() // This means we can go ahead with this!
     }
@@ -122,6 +128,13 @@ class AddReviewViewModel @Inject constructor(
         description.value = summary
     }
 
+    /**
+     * Posts a location to the associated LiveData, for testing purposes.
+     */
+    fun setUpLocation(loc: String) {
+        location.value = loc
+    }
+
     private var _navToYourReviews = MutableLiveData<Event<Boolean>>()
     val navToYourReviews: LiveData<Event<Boolean>>
         get() = _navToYourReviews
@@ -130,6 +143,9 @@ class AddReviewViewModel @Inject constructor(
     val toastText: LiveData<Event<Int>>
         get() = _toastText
 
+    /**
+     * Post a string value in an Event wrapper to the associated LiveData.
+     */
     private fun showToastMessage(message: Int) {
         _toastText.value = Event(message)
     }
