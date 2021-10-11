@@ -58,8 +58,10 @@ class AddReviewViewModel @Inject constructor(
         progressToAddingReview() // This means we can go ahead with this!
     }
 
+    /**
+     * Attempts to add a review to Firestore database.  Feedback is provided via a Toast.
+     */
     private fun progressToAddingReview() {
-
         viewModelScope.launch() {
             repository.addReview(NewReviewDO(
                 barName.value,

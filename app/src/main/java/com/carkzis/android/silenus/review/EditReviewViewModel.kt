@@ -40,6 +40,13 @@ class EditReviewViewModel @Inject constructor(
     val navToSingleReview: LiveData<Event<YourReview>>
         get() = _navToSingleReview
 
+    /**
+     * This checks that the minimum requirements for editing a review are available in the LiveData
+     * (being the name and the location) and provides feedback to the user accordingly via a Toast.
+     * If all checks pass, a new YourReview object is created using createAmendedReview(), which
+     * takes in the review provided as an argument. This is subsequently passed into the
+     * progressToEditOfReview() method, which attempts to edit the requested review in the database.
+     */
     fun submissionPreChecks(review: YourReview) {
         if (barName.value == null) {
             showToastMessage(R.string.no_establishment)
@@ -49,11 +56,16 @@ class EditReviewViewModel @Inject constructor(
             return
         } else if (geopoint.value == null) {
             showToastMessage(R.string.error)
+            return
         }
         val editReviewObject = createAmendedReview(review)
         progressToEditOfReview(editReviewObject)
     }
 
+    /**
+     * Returns a new YourReview object, that keeps the documentId and dateAdded attributes of the
+     * provided review, but takes updated values for the remaining attributes.
+     */
     private fun createAmendedReview(review: YourReview) : YourReview {
         return YourReview(
             review.documentId,

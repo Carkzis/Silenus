@@ -3,6 +3,7 @@ package com.carkzis.android.silenus.review
 import android.location.Address
 import android.location.Geocoder
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.FakeMainRepository
 import com.carkzis.android.silenus.data.FakeUserRepository
 import com.carkzis.android.silenus.data.YourReview
@@ -411,8 +412,139 @@ class EditReviewViewModelTest {
     }
 
     @Test
-    fun submissionPreChecks() {
-        // TODO: Do all the checks, including progressToEditOfReview().
+    fun submissionPreChecks_barNameNull_showToastAndReturn() {
+        // Given a barValue of null (not set), but values set to the location and geoPoint
+        // (latter being set up in setUp()).
+        setUpSuccessfulGeoPointAndLocationValueToLiveData()
+        val review = YourReview() // Can use an empty review with null values.
+
+        // Call method.
+        editReviewViewModel.submissionPreChecks(review)
+
+        // Assert that the toast is set to the correct value.
+        assertThat(editReviewViewModel.toastText.getOrAwaitValue().getContextIfNotHandled(),
+            `is`(R.string.no_establishment))
     }
+
+    @Test
+    fun submissionPreChecks_barLocationNull_showToastAndReturn() {
+        // Given a location of null (not set), but value set for the name.
+        val barName = "Town"
+        val review = YourReview() // Can use an empty review with null values.
+
+        // And subsequently LiveData for the two values.
+        editReviewViewModel.setUpBarName(barName)
+
+        // Call method.
+        editReviewViewModel.submissionPreChecks(review)
+        setUpSuccessfulGeoPointAndLocationValueToLiveData()
+
+        // Assert that the toast is set to the correct value.
+        assertThat(editReviewViewModel.toastText.getOrAwaitValue().getContextIfNotHandled(),
+            `is`(R.string.no_location))
+    }
+
+    @Test
+    fun submissionPreChecks_barGeoPointNull_showToastAndReturn() {
+        // Given a barName and location but a geoPoint of null.
+        val barName = "Town"
+        val location = "Funchester"
+        val review = YourReview() // Can use an empty review with null values.
+
+        // And subsequently LiveData for the two values.
+        editReviewViewModel.setUpBarName(barName)
+        editReviewViewModel.setUpLocation(location)
+
+        // Call method.
+        editReviewViewModel.submissionPreChecks(review)
+
+        // Assert that the toast is set to the correct value.
+        assertThat(editReviewViewModel.toastText.getOrAwaitValue().getContextIfNotHandled(),
+            `is`(R.string.error))
+    }
+
+    @Test
+    fun progressToEditingReview_success_postEditedReviewToLiveDataAndShowToast() = runBlockingTest {
+        // Given that all values required for editing a review are posted to the LiveData.
+        val newBarName = "Town Bar Too"
+        val newRating = 5.0f
+        val newDescription = "It is in town, and a bar"
+
+        // These set the LiveData.
+        editReviewViewModel.setUpBarName(newBarName)
+        editReviewViewModel.setUpRating(newRating)
+        editReviewViewModel.setUpDescription(newDescription)
+        setUpSuccessfulGeoPointAndLocationValueToLiveData()
+
+        // Also given the "old" review.
+        val oldBarName = "Old Bar Won"
+        val oldRating = 2.5f
+        val oldDescription = "It was supposed to be in town. And be a bar."
+        val documentId = "123"
+        val dateAdded = Timestamp.now()
+        val oldReview = YourReview(
+            documentId,
+            oldBarName,
+            oldRating,
+            location,
+            oldDescription,
+            dateAdded,
+            geoPoint
+        )
+
+        // Call the method.
+        editReviewViewModel.submissionPreChecks(oldReview)
+
+        /*
+        Assert that the edit of a review was successful, and so the navToYourReviews
+        LiveData has a YourReview object, with all the same information as oldReview except
+        for the attributes we edited; establishment, rating and description.
+         */
+        val returnedReview = editReviewViewModel.navToSingleReview.getOrAwaitValue()
+            .getContextIfNotHandled()
+        assertThat(returnedReview?.documentId, `is`(documentId))
+        assertThat(returnedReview?.establishment, `is`(newBarName))
+        assertThat(returnedReview?.rating, `is`(newRating))
+        assertThat(returnedReview?.location, `is`(location))
+        assertThat(returnedReview?.description, `is`(newDescription))
+        assertThat(returnedReview?.dateAdded, `is`(dateAdded))
+        assertThat(returnedReview?.geo, `is`(geoPoint))
+
+        // Should also be a message collected by Flow, to be added to toastText via helper method.
+        assertThat(editReviewViewModel.toastText.getOrAwaitValue().getContextIfNotHandled(),
+            `is`(R.string.review_edited))
+    }
+
+    @Test
+    fun progressToEditingReview_failure_postFailureMessageToToastLiveData() = runBlockingTest {
+        // Given that all values required for editing a review are posted to the LiveData.
+        val newBarName = "Town Bar Too"
+        val newRating = 5.0f
+        val newDescription = "It is in town, and a bar"
+
+        // These set the LiveData.
+        editReviewViewModel.setUpBarName(newBarName)
+        editReviewViewModel.setUpRating(newRating)
+        editReviewViewModel.setUpDescription(newDescription)
+        setUpSuccessfulGeoPointAndLocationValueToLiveData()
+
+        // Mock a review (default attributes are null).
+        val oldReview = YourReview()
+
+        // Set the repository to fail the request to edit a review to the database.
+        mainRepository.failure = true
+
+        // Call the method.
+        editReviewViewModel.submissionPreChecks(oldReview)
+
+        // Should also be a message collected by Flow, to be added to toastText via helper method.
+        assertThat(editReviewViewModel.toastText.getOrAwaitValue().getContextIfNotHandled(),
+            `is`(R.string.error))
+    }
+
+    /*
+    TODO: We need to add tests for the responses to LoadingState.Loading emissions,
+        which have not yet been fully implemented, currently only logging a message to Logcat.
+     */
 
 }
