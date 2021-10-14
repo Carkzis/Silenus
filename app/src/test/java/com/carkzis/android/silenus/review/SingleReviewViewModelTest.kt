@@ -74,7 +74,7 @@ class SingleReviewViewModelTest {
     }
 
     @Test
-    fun getGeo_yourReviewHoldsValidPoint_returnArrayOfCorrectLatitudeAndLongitude() {
+    fun getGeo_yourReviewHoldsValidGeoPoint_returnArrayOfCorrectLatitudeAndLongitude() {
         // Given a mock GeoPoint that returns specified latitude and longitude values.
         val geoPoint = Mockito.mock(GeoPoint::class.java)
         Mockito.`when`(geoPoint.latitude).thenReturn(10.0)
@@ -102,5 +102,40 @@ class SingleReviewViewModelTest {
          */
         assertThat(latLngArray.first(), `is`("10.0"))
         assertThat(latLngArray.last(), `is`("50.0"))
+    }
+
+    @Test
+    fun getGeo_noGeoPointInYourReview_returnArrayOfNullValues() {
+        // Given a review with a null GeoPoint parameter.
+        val yourReview = YourReview( // Only geoPoint being tested.
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null)
+
+        // Post the review to the LiveData.
+        singleReviewViewModel.setUpRev(yourReview)
+
+        // Call the method to return an array.
+        val latLngArray = singleReviewViewModel.getGeo()
+
+        // Assert that array holds null values (as Strings).
+        assertThat(latLngArray.first(), `is`("null"))
+        assertThat(latLngArray.last(), `is`("null"))
+    }
+
+    @Test
+    fun getGeo_noYourReviewInLiveData_returnArrayOfNullValues() {
+        // Given no values set to yourReview LiveData.
+
+        // Call the method to return an array.
+        val latLngArray = singleReviewViewModel.getGeo()
+
+        // Assert that array holds null values (as Strings).
+        assertThat(latLngArray.first(), `is`("null"))
+        assertThat(latLngArray.last(), `is`("null"))
     }
 }
