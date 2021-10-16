@@ -1,9 +1,9 @@
 package com.carkzis.android.silenus.data
 
-import com.carkzis.android.silenus.Constants
-import com.carkzis.android.silenus.LoadingState
+import com.carkzis.android.silenus.utils.LoadingState
 import com.carkzis.android.silenus.R
-import com.carkzis.android.silenus.getCollectionName
+import com.carkzis.android.silenus.utils.Constants
+import com.carkzis.android.silenus.utils.getCollectionName
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore

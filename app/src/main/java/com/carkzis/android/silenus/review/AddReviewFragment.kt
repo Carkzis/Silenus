@@ -12,7 +12,7 @@ import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.MapReason
 import com.carkzis.android.silenus.data.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentAddReviewBinding
-import com.carkzis.android.silenus.showToast
+import com.carkzis.android.silenus.utils.showToast
 import com.firebase.ui.auth.AuthUI
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*

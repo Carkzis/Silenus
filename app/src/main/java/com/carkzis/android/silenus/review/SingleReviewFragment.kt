@@ -10,7 +10,7 @@ import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.MapReason
 import com.carkzis.android.silenus.data.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentSingleReviewBinding
-import com.carkzis.android.silenus.showToast
+import com.carkzis.android.silenus.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 

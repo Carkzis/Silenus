@@ -1,14 +1,11 @@
 package com.carkzis.android.silenus.data
 
-import com.carkzis.android.silenus.LoadingState
+import com.carkzis.android.silenus.utils.LoadingState
 import com.carkzis.android.silenus.R
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import javax.inject.Inject
 

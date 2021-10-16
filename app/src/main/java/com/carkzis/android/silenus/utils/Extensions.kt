@@ -1,4 +1,4 @@
-package com.carkzis.android.silenus
+package com.carkzis.android.silenus.utils
 
 import android.content.Context
 import android.view.View

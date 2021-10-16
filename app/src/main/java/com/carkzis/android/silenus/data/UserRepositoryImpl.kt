@@ -1,14 +1,12 @@
 package com.carkzis.android.silenus.data
 
-import com.carkzis.android.silenus.Constants
-import com.carkzis.android.silenus.LoadingState
+import com.carkzis.android.silenus.utils.LoadingState
 import com.carkzis.android.silenus.R
-import com.carkzis.android.silenus.getCollectionName
+import com.carkzis.android.silenus.utils.Constants
+import com.carkzis.android.silenus.utils.getCollectionName
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow

@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentLoginBinding
-import com.carkzis.android.silenus.showToast
+import com.carkzis.android.silenus.utils.showToast
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract

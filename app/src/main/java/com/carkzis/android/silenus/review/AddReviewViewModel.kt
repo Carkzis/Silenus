@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.carkzis.android.silenus.Event
-import com.carkzis.android.silenus.LoadingState
+import com.carkzis.android.silenus.utils.Event
+import com.carkzis.android.silenus.utils.LoadingState
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.MainRepository
 import com.carkzis.android.silenus.data.NewReviewDO

@@ -1,7 +1,7 @@
 package com.carkzis.android.silenus.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.carkzis.android.silenus.LoadingState
+import com.carkzis.android.silenus.utils.LoadingState
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -12,7 +12,6 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 
 @ExperimentalCoroutinesApi

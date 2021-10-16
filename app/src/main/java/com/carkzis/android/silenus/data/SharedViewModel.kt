@@ -4,14 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.carkzis.android.silenus.Event
-import com.carkzis.android.silenus.LoadingState
+import com.carkzis.android.silenus.utils.Event
+import com.carkzis.android.silenus.utils.LoadingState
 import com.carkzis.android.silenus.R
 import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.GeoPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hilt_aggregated_deps._com_carkzis_android_silenus_MainActivity_GeneratedInjector
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber

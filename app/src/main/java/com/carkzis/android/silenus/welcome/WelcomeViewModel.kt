@@ -3,13 +3,10 @@ package com.carkzis.android.silenus.welcome
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.carkzis.android.silenus.Event
+import com.carkzis.android.silenus.utils.Event
 import com.carkzis.android.silenus.data.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import timber.log.Timber
 
 @HiltViewModel
 class WelcomeViewModel @Inject constructor(

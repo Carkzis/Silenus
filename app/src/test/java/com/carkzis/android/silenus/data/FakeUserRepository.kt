@@ -1,6 +1,6 @@
 package com.carkzis.android.silenus.data
 
-import com.carkzis.android.silenus.LoadingState
+import com.carkzis.android.silenus.utils.LoadingState
 import com.carkzis.android.silenus.R
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth

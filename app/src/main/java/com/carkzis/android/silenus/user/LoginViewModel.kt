@@ -1,18 +1,13 @@
 package com.carkzis.android.silenus.user
 
 import android.app.Activity
-import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.fragment.findNavController
-import com.carkzis.android.silenus.Event
+import com.carkzis.android.silenus.utils.Event
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.UserRepository
-import com.firebase.ui.auth.AuthMethodPickerLayout
-import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

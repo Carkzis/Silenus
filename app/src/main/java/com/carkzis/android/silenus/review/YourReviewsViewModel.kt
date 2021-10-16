@@ -1,15 +1,13 @@
 package com.carkzis.android.silenus.review
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.carkzis.android.silenus.Event
-import com.carkzis.android.silenus.LoadingState
+import com.carkzis.android.silenus.utils.Event
+import com.carkzis.android.silenus.utils.LoadingState
 import com.carkzis.android.silenus.data.MainRepository
 import com.carkzis.android.silenus.data.YourReview
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

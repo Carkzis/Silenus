@@ -1,7 +1,7 @@
 package com.carkzis.android.silenus.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.carkzis.android.silenus.LoadingState
+import com.carkzis.android.silenus.utils.LoadingState
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -12,11 +12,6 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.Mockito.mock
-import org.mockito.MockitoAnnotations
-import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
 class UserRepositoryTest {
