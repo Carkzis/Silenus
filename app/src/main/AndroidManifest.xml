@@ -42,6 +42,9 @@
       </intent-filter>
     </activity>
 
+    <activity
+        android:name="com.carkzis.android.silenus.di.HiltTestActivity" />
+
     <meta-data
       android:name="preloaded_fonts"
       android:resource="@array/preloaded_fonts" />
