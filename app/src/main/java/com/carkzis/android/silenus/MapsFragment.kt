@@ -179,9 +179,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
      */
     private fun locationPermissionsApproved() : Boolean {
         val fineLocationApproved = ContextCompat.checkSelfPermission(requireContext(),
-            android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
         val coarseLocationApproved = ContextCompat.checkSelfPermission(requireContext(),
-            android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
         return fineLocationApproved && coarseLocationApproved
     }
 }

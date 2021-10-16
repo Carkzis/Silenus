@@ -18,8 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class YourReviewsViewModel @Inject constructor(
-    val repository: MainRepository,
-    val authorisation: FirebaseAuth
+    val repository: MainRepository
 ) : ViewModel() {
 
     private var _yourReviews = MutableLiveData<List<YourReview>>()
@@ -46,11 +45,24 @@ class YourReviewsViewModel @Inject constructor(
                             _yourReviews.value = loadingState.data!!
                             Timber.e("Reviews loaded!")
                         }
-                        is LoadingState.Error ->
-                            Timber.e("Error loading reviews...")
+                        is LoadingState.Error -> {
+                            Timber.e("Error loading reviews: ${loadingState.exception}")
+                            showToastMessage(loadingState.message)
+                        }
                     }
                 }
         }
+    }
+
+    private var _toastText = MutableLiveData<Event<Int>>()
+    val toastText: LiveData<Event<Int>>
+        get() = _toastText
+
+    /**
+     * Post a string value in an Event wrapper to the associated LiveData.
+     */
+    private fun showToastMessage(message: Int) {
+        _toastText.value = Event(message)
     }
 }
 
