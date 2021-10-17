@@ -16,9 +16,6 @@
       app:popUpTo="@id/navigation"
       app:popUpToInclusive="true" />
     <action
-      android:id="@+id/action_welcomeFragment_to_addReviewFragment"
-      app:destination="@id/addReviewFragment" />
-    <action
       android:id="@+id/action_welcomeFragment_to_yourReviewsFragment"
       app:destination="@id/yourReviewsFragment" />
   </fragment>

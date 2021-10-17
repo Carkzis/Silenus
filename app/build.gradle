@@ -64,6 +64,7 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.3.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
+    androidTestImplementation 'androidx.test:rules:1.4.0-alpha05'
     kapt 'androidx.room:room-compiler:2.3.0'
     kapt 'androidx.databinding:databinding-compiler-common:4.2.2'
 
@@ -105,8 +106,9 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.6.0'
 
     // AndroidX Test - Instrumented testing
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0'
+    // Note: Espresso needs to be 3.3.0 for the Navigation tests to work.
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-alpha03'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0-alpha03'
     androidTestImplementation('com.schibsted.spain:barista:3.9.0') {
         exclude group: 'org.jetbrains.kotlin' // Only if you already use Kotlin in your project
     }

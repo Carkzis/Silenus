@@ -62,9 +62,6 @@ class WelcomeFragment : Fragment() {
 
     private fun setUpReviewsFab() {
         viewDataBinding.reviewsFab.setOnClickListener {
-//            findNavController().navigate(
-//                WelcomeFragmentDirections.actionWelcomeFragmentToAddReviewFragment()
-//            )
             findNavController().navigate(
                 WelcomeFragmentDirections.actionWelcomeFragmentToYourReviewsFragment()
             )
