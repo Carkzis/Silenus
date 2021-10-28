@@ -110,7 +110,6 @@
         android:background="@drawable/your_rev_desc_border"
         android:text="@{yourReview.description}"
         android:ellipsize="marquee"
-        android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/your_rev_bar"
         app:layout_constraintEnd_toEndOf="parent"

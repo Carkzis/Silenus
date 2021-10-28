@@ -16,12 +16,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val localIp = "192.168.0.14"
+        // Standard Android Emulator IP: "10.0.2.2"
+
         if (BuildConfig.DEBUG) {
-            Firebase.database.useEmulator("10.0.2.2", 9000)
-            Firebase.auth.useEmulator("10.0.2.2", 9099)
-            Firebase.storage.useEmulator("10.0.2.2", 9199)
-            FirebaseFirestore.getInstance().useEmulator("10.0.2.2", 8080)
-            FirebaseFunctions.getInstance().useEmulator("10.0.2.2", 5001)
+            Firebase.database.useEmulator(localIp, 9000)
+            Firebase.auth.useEmulator(localIp, 9099)
+            Firebase.storage.useEmulator(localIp, 9199)
+            FirebaseFirestore.getInstance().useEmulator(localIp, 8080)
+            FirebaseFunctions.getInstance().useEmulator(localIp, 5001)
         }
     }
 }

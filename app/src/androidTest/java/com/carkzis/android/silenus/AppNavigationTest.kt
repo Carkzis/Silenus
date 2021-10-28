@@ -1,17 +1,28 @@
 package com.carkzis.android.silenus
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.testing.TestNavHostController
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.ActivityTestRule
 import com.carkzis.android.silenus.welcome.WelcomeFragment
 import com.carkzis.android.silenus.welcome.WelcomeFragmentDirections
+import com.schibsted.spain.barista.interaction.BaristaSleepInteractions
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -38,12 +49,16 @@ class AppNavigationTest {
     fun init() {
         hiltRule.inject()
     }
+    @After
+    fun closeActivityScenerio() = runBlockingTest {
+        activityScenario.close()
+    }
 
     private val dataBindingIdlingResource = DataBindingIdlingResource()
+    private lateinit var activityScenario: ActivityScenario<MainActivity>
 
-    // TODO: Move this to its own "LoginTest" class.
 //    @Test
-//    fun welcomeScreen_navigateToLoginScreen() {
+//    fun welcomeFragment_navigateToLoginScreen() {
 //        // On the welcome screen.
 //        val navController = mock(NavController::class.java)
 //        launchFragmentInHiltContainer<WelcomeFragment>(Bundle()) {
@@ -61,15 +76,20 @@ class AppNavigationTest {
 //    }
 
     @Test
-    fun welcomeScreen_navigateToYourReviewsFragment() {
-        // On the welcome screen.
+    fun welcomeScreen_navigateToYourReviewsFragment() = runBlockingTest {
+
+        // Start on the WelcomeFragment (first screen if logged in).
+        activityScenario = ActivityScenario.launch(MainActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(activityScenario)
+
+        // Mock a navController.
         val navController = mock(NavController::class.java)
         launchFragmentInHiltContainer<WelcomeFragment>(Bundle()) {
             navController.setGraph(R.navigation.navigation)
             Navigation.setViewNavController(requireView(), navController)
         }
 
-        // Click on the reviews fab.
+        // Click the reviews fab.
         onView(withId(R.id.reviews_fab)).perform(click())
 
         // Verify that we navigate to the YourReviews Fragment.
