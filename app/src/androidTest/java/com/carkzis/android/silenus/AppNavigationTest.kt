@@ -37,10 +37,9 @@ import java.lang.Exception
 class AppNavigationTest {
 
     /*
-     TODO: Log in before running these tests. The logout functionality will be tested in
-        a separate testing class.
+     Log in before running these tests. The logout functionality will be tested in
+     a separate testing class.
      */
-
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
@@ -49,31 +48,14 @@ class AppNavigationTest {
     fun init() {
         hiltRule.inject()
     }
+
     @After
-    fun closeActivityScenerio() = runBlockingTest {
+    fun closeActivityScenerio() {
         activityScenario.close()
     }
 
     private val dataBindingIdlingResource = DataBindingIdlingResource()
     private lateinit var activityScenario: ActivityScenario<MainActivity>
-
-//    @Test
-//    fun welcomeFragment_navigateToLoginScreen() {
-//        // On the welcome screen.
-//        val navController = mock(NavController::class.java)
-//        launchFragmentInHiltContainer<WelcomeFragment>(Bundle()) {
-//            navController.setGraph(R.navigation.navigation)
-//            Navigation.setViewNavController(requireView(), navController)
-//        }
-//
-//        // Click the logout fab.
-//        onView(withId(R.id.logout_fab)).perform(click())
-//
-//        // Verify that we navigate to the Login screen.
-//        verify(navController).navigate(
-//            WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
-//        )
-//    }
 
     @Test
     fun welcomeScreen_navigateToYourReviewsFragment() = runBlockingTest {

@@ -19,12 +19,16 @@ class MainActivity : AppCompatActivity() {
         val localIp = "192.168.0.14"
         // Standard Android Emulator IP: "10.0.2.2"
 
-        if (BuildConfig.DEBUG) {
-            Firebase.database.useEmulator(localIp, 9000)
-            Firebase.auth.useEmulator(localIp, 9099)
-            Firebase.storage.useEmulator(localIp, 9199)
-            FirebaseFirestore.getInstance().useEmulator(localIp, 8080)
-            FirebaseFunctions.getInstance().useEmulator(localIp, 5001)
+        try {
+            if (BuildConfig.DEBUG) {
+                Firebase.database.useEmulator(localIp, 9000)
+                Firebase.auth.useEmulator(localIp, 9099)
+                Firebase.storage.useEmulator(localIp, 9199)
+                FirebaseFirestore.getInstance().useEmulator(localIp, 8080)
+                FirebaseFunctions.getInstance().useEmulator(localIp, 5001)
+            }
+        } catch (e: IllegalStateException) {
+            // Do nothing.
         }
     }
 }
