@@ -28,9 +28,8 @@ import org.mockito.Mockito.verify
 class LogoutNavigationTest {
 
     /*
-    TODO: Log in before running this test.
+    Log in before running this test.
     */
-
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
