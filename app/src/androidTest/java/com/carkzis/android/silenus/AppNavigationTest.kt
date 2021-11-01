@@ -125,10 +125,12 @@ class AppNavigationTest {
     fun yourReviewsFragment_navigateToMapFragment() = runBlockingTest {
 
         // Mock a navController.
-        val navController = mock(NavController::class.java)
+        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
         launchFragmentInHiltContainer<YourReviewsFragment>(Bundle()) {
             navController.setGraph(R.navigation.navigation)
-            Navigation.setViewNavController(requireView(), navController)
+            Navigation.setViewNavController(this.requireView(), navController)
+            // Use the following with TestNavHostController.
+            navController.setCurrentDestination(R.id.yourReviewsFragment)
         }
 
         // Sleep so we know the "network" call loads.
@@ -139,11 +141,10 @@ class AppNavigationTest {
             .perform(RecyclerViewActions.actionOnItemAtPosition<YourReviewsAdapter
             .YourReviewsViewHolder>(0, clickRecyclerViewChildView(R.id.your_rev_map)))
 
-        // TODO: Sort this out, may be the safeArgs.
-        // Verify that we navigate to the MapFragment.
-        verify(navController).navigate(
-            YourReviewsFragmentDirections.actionYourReviewsFragmentToMapsFragment(arrayOf("N/A")
-        ))
+        assertThat(navController.currentDestination?.id, `is`(R.id.mapsFragment))
+
     }
+
+
 
 }

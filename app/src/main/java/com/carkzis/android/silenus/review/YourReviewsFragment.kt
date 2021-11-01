@@ -15,6 +15,7 @@ import com.carkzis.android.silenus.data.SharedViewModel
 import com.carkzis.android.silenus.data.YourReview
 import com.carkzis.android.silenus.databinding.FragmentYourReviewsBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
@@ -96,6 +97,8 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun setUpMapClickListener(review: YourReview) {
         val geoPoint = review.geo
         sharedViewModel.setMapOpenReason(MapReason.VIEWREV)
+        Timber.e(geoPoint?.latitude.toString())
+        Timber.e(geoPoint?.longitude.toString())
         this.findNavController().navigate(
             YourReviewsFragmentDirections.actionYourReviewsFragmentToMapsFragment(
                 arrayOf(geoPoint?.latitude.toString(), geoPoint?.longitude.toString()))
