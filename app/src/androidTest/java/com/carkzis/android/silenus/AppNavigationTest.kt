@@ -21,7 +21,9 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.ActivityTestRule
+import androidx.test.uiautomator.UiDevice
 import com.carkzis.android.silenus.review.*
 import com.carkzis.android.silenus.welcome.WelcomeFragment
 import com.carkzis.android.silenus.welcome.WelcomeFragmentDirections
@@ -248,25 +250,11 @@ class AppNavigationTest {
         assertThat(navController.currentDestination?.id, `is`(R.id.mapsFragment))
     }
 
-    @Test
-    fun mapFragment_navigateToAddReviewFragment() = runBlockingTest {
-        // Mock a navController.
-        val navController = mock(NavController::class.java)
-        launchFragmentInHiltContainer<AddReviewFragment>(Bundle()) {
-            navController.setGraph(R.navigation.navigation)
-            Navigation.setViewNavController(requireView(), navController)
-        }
+    /*
+    The MapFragment will be testing as part of the AddReviewFragment and EditReviewFragments
+    as it's use is tightly coupled with them.
+     */
 
-        // Sleep to allow map to load.
-        BaristaSleepInteractions.sleep(1000)
-
-        // Click the edit review menu button.
-        onView(withId(R.id.edit_rev_menu_button)).perform(longClick())
-
-        // Verify that we navigate to the EditReviewFragment.
-        verify(navController).navigate(
-            SingleReviewFragmentDirections.actionSingleReviewFragmentToEditReviewFragment()
-        )
-    }
+    // TODO: The back buttons!
 
 }
