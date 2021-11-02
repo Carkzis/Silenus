@@ -149,6 +149,10 @@ class AddReviewFragment : Fragment() {
     private fun setUpNavigateToYourReviews() {
         viewModel.navToYourReviews.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let {
+                    /*
+                    We want to reset the add/edit review screens, as we are submitted the
+                    additions/changes.
+                     */
                     sharedViewModel.resetReviewScreen()
                     findNavController().navigate(
                         AddReviewFragmentDirections.actionAddReviewFragmentToYourReviewsFragment()

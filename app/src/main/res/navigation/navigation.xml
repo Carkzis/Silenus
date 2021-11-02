@@ -50,11 +50,6 @@
         app:nullable="true" />
     </action>
     <action
-      android:id="@+id/action_addReviewFragment_to_welcomeFragment"
-      app:destination="@id/welcomeFragment"
-      app:popUpTo="@id/welcomeFragment"
-      app:popUpToInclusive="true" />
-    <action
       android:id="@+id/action_addReviewFragment_to_yourReviewsFragment"
       app:destination="@id/yourReviewsFragment"
       app:popUpTo="@id/yourReviewsFragment"

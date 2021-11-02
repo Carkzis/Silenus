@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.testing.TestNavHostController
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -14,6 +16,9 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.carkzis.android.silenus.review.AddReviewFragment
+import com.carkzis.android.silenus.review.AddReviewFragmentDirections
+import com.carkzis.android.silenus.review.YourReviewsFragment
 import com.carkzis.android.silenus.user.LoginFragment
 import com.carkzis.android.silenus.welcome.WelcomeFragment
 import com.carkzis.android.silenus.welcome.WelcomeFragmentDirections
@@ -31,6 +36,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
+import java.lang.RuntimeException
+import kotlin.IllegalStateException
 
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
@@ -71,5 +78,21 @@ class LoginNavigationTest {
         // Verify that we have navigated to the screen for choosing type of login.
         onView(withId(R.id.google_signin)).check(matches(isDisplayed()))
         onView(withId(R.id.email_signin)).check(matches(isDisplayed()))
+    }
+
+    @Test(expected = RuntimeException::class)
+    fun addReviewFragment_navigateToLoginFragment() {
+        /*
+        As we are automatically redirected to the login screen,
+        a runtime exception should be thrown when trying to create launch the fragment in
+        the container..
+         */
+        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
+        launchFragmentInHiltContainer<AddReviewFragment>(Bundle()) {
+            navController.setGraph(R.navigation.navigation)
+            Navigation.setViewNavController(this.requireView(), navController)
+            // Use the following with TestNavHostController.
+            navController.setCurrentDestination(R.id.addReviewFragment)
+        }
     }
 }
