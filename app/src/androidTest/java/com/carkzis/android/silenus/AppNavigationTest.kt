@@ -10,15 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
-import androidx.test.espresso.Espresso.onData
-import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.longClick
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
@@ -250,11 +249,244 @@ class AppNavigationTest {
         assertThat(navController.currentDestination?.id, `is`(R.id.mapsFragment))
     }
 
+    @Test
+    fun editReviewFragment_navigateToSingleReviewFragment() = runBlockingTest {
+        // Mock a navController.
+        val navController = mock(NavController::class.java)
+        launchFragmentInHiltContainer<EditReviewFragment>(Bundle()) {
+            navController.setGraph(R.navigation.navigation)
+            Navigation.setViewNavController(requireView(), navController)
+        }
+
+        // Click the quit button.
+        onView(withId(R.id.edit_rev_quit_menu_button)).perform(click())
+
+        verify(navController).navigate(
+            EditReviewFragmentDirections.actionEditReviewFragmentToSingleReviewFragment()
+        )
+    }
+
     /*
     The MapFragment will be testing as part of the AddReviewFragment and EditReviewFragments
     as it's use is tightly coupled with them.
      */
 
-    // TODO: The back buttons!
+    @Test
+    fun yourReviewsFragment_backButton() = runBlockingTest {
+        // Start on the WelcomeFragment (first screen if logged in).
+        activityScenario = ActivityScenario.launch(MainActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(activityScenario)
+
+        // Click the reviews fab.
+        onView(withId(R.id.reviews_fab))
+            .perform(click())
+
+        // Click the back button.
+        pressBack()
+
+        // Confirm we end up back at the WelcomeFragment.
+        onView(withId(R.id.welcome_user)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun singleReviewFragment_backButton() = runBlockingTest {
+        /*
+         Given the description for the review we want to visit.
+         Ensure it is first item in Firestore.
+         */
+        val description = "Best location."
+
+        // Start on the WelcomeFragment (first screen if logged in).
+        activityScenario = ActivityScenario.launch(MainActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(activityScenario)
+
+        // Click the reviews fab.
+        onView(withId(R.id.reviews_fab))
+            .perform(click())
+
+        // Sleep so we know the "network" call loads.
+        BaristaSleepInteractions.sleep(1000)
+
+        // Click the description.
+        onView(withText(description)).perform(click())
+
+        // Click the back button.
+        pressBack()
+
+        // Confirm we end up back at the YourReviewsFragment.
+        onView(withId(R.id.your_reviews_recylerview)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun addReviewFragment_backButton() = runBlockingTest {
+        // Start on the WelcomeFragment (first screen if logged in).
+        activityScenario = ActivityScenario.launch(MainActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(activityScenario)
+
+        // Click the reviews fab.
+        onView(withId(R.id.reviews_fab))
+            .perform(click())
+
+        // Click the add review menu button.
+        onView(withId(R.id.add_rev_menu_button))
+            .perform(click())
+
+        // Click the back button.
+        pressBack()
+
+        // Confirm we end up back at the YourReviewsFragment.
+        onView(withId(R.id.your_reviews_recylerview)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun editReviewFragment_backButton() = runBlockingTest {
+        /*
+         Given the description for the review we want to visit.
+         Ensure it is first item in Firestore.
+         */
+        val description = "Best location."
+
+        // Start on the WelcomeFragment (first screen if logged in).
+        activityScenario = ActivityScenario.launch(MainActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(activityScenario)
+
+        // Click the reviews fab.
+        onView(withId(R.id.reviews_fab))
+            .perform(click())
+
+        // Sleep so we know the "network" call loads.
+        BaristaSleepInteractions.sleep(1000)
+
+        // Click the description.
+        onView(withText(description)).perform(click())
+
+        // Click the edit review menu button.
+        onView(withId(R.id.edit_rev_menu_button))
+            .perform(click())
+
+        // Click the back button.
+        pressBack()
+
+        // Confirm we end up back at the YourReviewsFragment.
+        onView(withId(R.id.edit_rev_menu_button)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun mapFragment_backButtonFromYourReviewsFragment() = runBlockingTest {
+        // Start on the WelcomeFragment (first screen if logged in).
+        activityScenario = ActivityScenario.launch(MainActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(activityScenario)
+
+        // Click the reviews fab.
+        onView(withId(R.id.reviews_fab))
+            .perform(click())
+
+        // Click the map.
+        onView(withId(R.id.your_reviews_recylerview))
+            .perform(RecyclerViewActions.actionOnItemAtPosition<YourReviewsAdapter
+            .YourReviewsViewHolder>(0, clickRecyclerViewChildView(R.id.your_rev_map)))
+
+        // Click the back button.
+        pressBack()
+
+        // Confirm we end up back at the WelcomeFragment.
+        onView(withId(R.id.your_reviews_recylerview)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun mapFragment_backButtonFromAddReviewFragment() = runBlockingTest {
+        // Start on the WelcomeFragment (first screen if logged in).
+        activityScenario = ActivityScenario.launch(MainActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(activityScenario)
+
+        // Click the reviews fab.
+        onView(withId(R.id.reviews_fab))
+            .perform(click())
+
+        // Click the add review menu button.
+        onView(withId(R.id.add_rev_menu_button))
+            .perform(click())
+
+        // Click on the description edittext.
+        onView(withId(R.id.location_bar_edittext))
+            .perform(click())
+
+        // Click the back button.
+        pressBack()
+
+        // Confirm we end up back at the YourReviewsFragment.
+        onView(withId(R.id.description_bar_edittext)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun mapFragment_backButtonFromSingleReviewFragment() = runBlockingTest {
+        /*
+         Given the description for the review we want to visit.
+         Ensure it is first item in Firestore.
+         */
+        val description = "Best location."
+
+        // Start on the WelcomeFragment (first screen if logged in).
+        activityScenario = ActivityScenario.launch(MainActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(activityScenario)
+
+        // Click the reviews fab.
+        onView(withId(R.id.reviews_fab))
+            .perform(click())
+
+        // Sleep so we know the "network" call loads.
+        BaristaSleepInteractions.sleep(1000)
+
+        // Click the description.
+        onView(withText(description)).perform(click())
+
+        // Click the map icon.
+        onView(withId(R.id.view_location_menu_button))
+            .perform(click())
+
+        // Click the back button.
+        pressBack()
+
+        // Confirm we end up back at the YourReviewsFragment.
+        onView(withId(R.id.single_name_bar_text)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun mapFragment_backButtonFromEditReviewFragment() = runBlockingTest {
+        /*
+         Given the description for the review we want to visit.
+         Ensure it is first item in Firestore.
+         */
+        val description = "Best location."
+
+        // Start on the WelcomeFragment (first screen if logged in).
+        activityScenario = ActivityScenario.launch(MainActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(activityScenario)
+
+        // Click the reviews fab.
+        onView(withId(R.id.reviews_fab))
+            .perform(click())
+
+        // Sleep so we know the "network" call loads.
+        BaristaSleepInteractions.sleep(1000)
+
+        // Click the description.
+        onView(withText(description)).perform(click())
+
+        // Click the edit review menu button.
+        onView(withId(R.id.edit_rev_menu_button))
+            .perform(click())
+
+        // Click the map icon.
+        onView(withId(R.id.edit_location_bar_edittext))
+            .perform(click())
+
+        // Click the back button.
+        pressBack()
+
+        // Confirm we end up back at the YourReviewsFragment.
+        onView(withId(R.id.edit_name_bar_row)).check(matches(isDisplayed()))
+    }
+
 
 }

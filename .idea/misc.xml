@@ -32,6 +32,7 @@
         <entry key="app/src/main/res/layout/fragment_your_reviews.xml" value="0.190625" />
         <entry key="app/src/main/res/layout/your_review_item.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/menu/add_review_menu.xml" value="0.35572916666666665" />
+        <entry key="app/src/main/res/menu/edit_review_menu.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/menu/single_review_menu.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/menu/your_reviews_menu.xml" value="0.35572916666666665" />
       </map>
