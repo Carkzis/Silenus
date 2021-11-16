@@ -5,8 +5,7 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -19,9 +18,7 @@ import com.schibsted.spain.barista.interaction.BaristaSleepInteractions
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runBlockingTest
-import org.hamcrest.CoreMatchers.not
+import org.hamcrest.CoreMatchers.containsString
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -31,11 +28,7 @@ import org.junit.runner.RunWith
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-class YourReviewsFragmentTest {
-
-    /*
-    Note: As navigation is tested in AppNavigationTest, this is just testing the search bar.
-     */
+class SingleReviewFragmentTest {
 
     /*
      Log in before running these tests. The logout functionality will be tested in
@@ -55,13 +48,17 @@ class YourReviewsFragmentTest {
     }
 
     @After
-    fun closeActivityScenerio() {
+    fun closeActivityScenario() {
         activityScenario.close()
     }
 
     @Test
-    fun searchBar_searchTermForExistingReview_reviewDisplays() = runBlockingTest {
-        val searchText = "Actua"
+    fun singleReviewFragment_correctItemsDisplayed() {
+        /*
+         Given the description for the review we want to visit.
+         Ensure it is first item in Firestore.
+         */
+        val description = "Best location."
 
         // Start on the WelcomeFragment (first screen if logged in).
         activityScenario = ActivityScenario.launch(MainActivity::class.java)
@@ -74,41 +71,12 @@ class YourReviewsFragmentTest {
         // Sleep so we know the "network" call loads.
         BaristaSleepInteractions.sleep(1000)
 
-        // Click on the search bar.
-        onView(withId(R.id.searchview))
-            .perform(typeText(searchText))
+        // Click the description.
+        onView(withText(description)).perform(click())
 
-        // Sleep so we know the search completes.
-        BaristaSleepInteractions.sleep(1000)
-
-        // Confirm that the test review is not there.
-        onView(withText("Actual Bar")).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun searchBar_searchTermForNonExistentReview_noReviewDisplays() = runBlockingTest {
-        val searchText = "Actua1"
-
-        // Start on the WelcomeFragment (first screen if logged in).
-        activityScenario = ActivityScenario.launch(MainActivity::class.java)
-        dataBindingIdlingResource.monitorActivity(activityScenario)
-
-        // Click the reviews fab.
-        onView(withId(R.id.reviews_fab))
-            .perform(click())
-
-        // Sleep so we know the "network" call loads.
-        BaristaSleepInteractions.sleep(1000)
-
-        // Click on the search bar.
-        onView(withId(R.id.searchview))
-            .perform(typeText(searchText))
-
-        // Sleep so we know the search completes.
-        BaristaSleepInteractions.sleep(1000)
-
-        // Confirm that the test review is not there.
-        onView(withText("Actual Bar")).check(doesNotExist())
+        onView(withId(R.id.single_name_bar_text)).check(matches(withText(containsString("Actual Bar"))))
+        onView(withId(R.id.single_location_text)).check(matches(withText(containsString("54 Wissey Way"))))
+        onView(withId(R.id.single_description_text)).check(matches(withText(containsString("Best location."))))
     }
 
 }
