@@ -1,4 +1,4 @@
-package com.carkzis.android.silenus
+package com.carkzis.android.silenus.navigation
 
 import android.os.Bundle
 import androidx.navigation.NavController
@@ -8,6 +8,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.carkzis.android.silenus.*
 import com.carkzis.android.silenus.welcome.WelcomeFragment
 import com.carkzis.android.silenus.welcome.WelcomeFragmentDirections
 import dagger.hilt.android.testing.HiltAndroidRule

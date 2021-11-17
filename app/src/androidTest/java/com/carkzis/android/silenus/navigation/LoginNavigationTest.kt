@@ -1,10 +1,8 @@
-package com.carkzis.android.silenus
+package com.carkzis.android.silenus.navigation
 
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
@@ -16,28 +14,20 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.carkzis.android.silenus.MainActivity
+import com.carkzis.android.silenus.R
+import com.carkzis.android.silenus.launchFragmentInHiltContainer
 import com.carkzis.android.silenus.review.AddReviewFragment
-import com.carkzis.android.silenus.review.AddReviewFragmentDirections
-import com.carkzis.android.silenus.review.YourReviewsFragment
 import com.carkzis.android.silenus.user.LoginFragment
-import com.carkzis.android.silenus.welcome.WelcomeFragment
-import com.carkzis.android.silenus.welcome.WelcomeFragmentDirections
-import com.schibsted.spain.barista.interaction.BaristaSleepInteractions
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.hamcrest.Description
-import org.hamcrest.Matcher
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.TypeSafeMatcher
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
 import java.lang.RuntimeException
-import kotlin.IllegalStateException
 
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
