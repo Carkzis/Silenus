@@ -170,11 +170,6 @@ class AppNavigationTest {
 
     }
 
-    /*
-    "addReviewFragment_navigateToYourReviewsFragment" will be tested in the AddReviewFragment
-    instrumented test, as it requires data entry.
-     */
-
     @Test
     fun singleReviewFragment_navigateToEditReviewFragment() = runBlockingTest {
         // Mock a navController.

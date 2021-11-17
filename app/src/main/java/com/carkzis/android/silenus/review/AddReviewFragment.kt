@@ -69,7 +69,7 @@ class AddReviewFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.add_rev_menu_button -> {
+            R.id.add_rev_frag_menu_button -> {
                 viewModel.submissionPreChecks()
                 true
             }

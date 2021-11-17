@@ -16,12 +16,6 @@ import org.junit.runner.RunWith
 @HiltAndroidTest
 class EditReviewFragmentTest {
 
-    // TODO: Note the following useful code, it simulates a long press.
-    fun usefulCode() {
-        val device : UiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.swipe(10,10,10,10,400)
-    }
-
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
@@ -32,6 +26,6 @@ class EditReviewFragmentTest {
 
     private val dataBindingIdlingResource = DataBindingIdlingResource()
 
-    // TODO: This.
+    // TODO: This. We can do more than with adding a new one, as we already have a location.
 
 }
