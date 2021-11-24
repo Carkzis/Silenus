@@ -48,7 +48,7 @@ class EditReviewViewModel @Inject constructor(
      * progressToEditOfReview() method, which attempts to edit the requested review in the database.
      */
     fun submissionPreChecks(review: YourReview) {
-        if (barName.value == null) {
+        if (barName.value == null || barName.value == "") {
             showToastMessage(R.string.no_establishment)
             return
         } else if (location.value == null) {
@@ -88,6 +88,7 @@ class EditReviewViewModel @Inject constructor(
                             Timber.e("Editing review...")
                         }
                         is LoadingState.Success -> {
+                            Timber.e("Is this happened2?")
                             showToastMessage(loadingState.message)
                             // Need to change the LiveData
                             _navToSingleReview.value = Event(loadingState.data!!)
