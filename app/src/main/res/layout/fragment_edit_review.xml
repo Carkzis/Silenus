@@ -107,6 +107,7 @@
           android:layout_weight="1">
 
           <RatingBar
+            android:id="@+id/edit_bar_rating_bar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"

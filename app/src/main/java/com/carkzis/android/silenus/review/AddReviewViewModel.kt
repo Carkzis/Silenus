@@ -45,7 +45,7 @@ class AddReviewViewModel @Inject constructor(
      * progressToAddingReview() is called to proceed with adding the review to the database.
      */
     fun submissionPreChecks() {
-        if (barName.value == null) {
+        if (barName.value == null || barName.value == "") {
             showToastMessage(R.string.no_establishment)
             return
         } else if (location.value == null) {

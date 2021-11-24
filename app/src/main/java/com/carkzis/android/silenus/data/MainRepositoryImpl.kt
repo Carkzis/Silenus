@@ -78,7 +78,6 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
      */
     override suspend fun editYourReview(review: ReviewDO) = flow {
         val reviews = firestore.collection(getCollectionName(Constants.REVIEWS))
-        Timber.e("Come on?")
 
         emit(LoadingState.Loading(R.string.loading)) // Loading!
 
@@ -92,8 +91,6 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
                 .addOnSuccessListener { cont.resume(it) }
                 .addOnFailureListener { throw Exception() }
         }
-
-        Timber.e("Come on?")
 
         emit(LoadingState.Success(R.string.review_edited, review.toUIModel())) // Just emit the review!
 

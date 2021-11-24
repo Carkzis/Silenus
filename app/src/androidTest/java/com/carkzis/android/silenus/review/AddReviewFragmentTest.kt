@@ -123,7 +123,7 @@ class AddReviewFragmentTest {
         // The add establishment title should display.
         onView(withId(R.id.add_bar_text)).check(matches(isDisplayed()))
 
-        //
+        // Add a rating.
         onView(withId(R.id.add_rev_rating_bar))
             .perform(
                 RatingBarActions.setRatingBarRatingTo(3.0f))

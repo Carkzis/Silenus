@@ -238,6 +238,26 @@ class AddReviewViewModelTest() {
     }
 
     @Test
+    fun submissionPreChecks_barNameEmpty_showToastAndReturn() {
+        // Given values set to the location and geoPoint
+        // (latter being set up in setUp()).
+        setUpSuccessfulGeoPointAndLocationValueToLiveData()
+
+        // And an empty value set for the name.
+        val barName = ""
+
+        // And subsequently LiveData for the two values.
+        addReviewViewModel.setUpBarName(barName)
+
+        // Call method.
+        addReviewViewModel.submissionPreChecks()
+
+        // Assert that the toast is set to the correct value.
+        assertThat(addReviewViewModel.toastText.getOrAwaitValue().getContextIfNotHandled(),
+            `is`(R.string.no_establishment))
+    }
+
+    @Test
     fun submissionPreChecks_barLocationNull_showToastAndReturn() {
         // Given a location of null (not set), but value set for the name.
         val barName = "Town"
