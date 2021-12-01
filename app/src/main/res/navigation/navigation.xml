@@ -109,6 +109,11 @@
     <action
       android:id="@+id/action_singleReviewFragment_to_editReviewFragment"
       app:destination="@id/editReviewFragment" />
+    <action
+        android:id="@+id/action_singleReviewFragment_to_yourReviewsFragment"
+        app:destination="@id/yourReviewsFragment"
+        app:popUpTo="@id/yourReviewsFragment"
+        app:popUpToInclusive="true" />
   </fragment>
   <fragment
     android:id="@+id/editReviewFragment"

@@ -49,6 +49,7 @@ class SingleReviewFragment : Fragment() {
 
         setUpReviewInformation()
         setUpToast()
+        setUpDeletionCompleteNavigation()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -77,10 +78,30 @@ class SingleReviewFragment : Fragment() {
                 )
                 true
             }
+            R.id.delete_rev_button -> {
+                Timber.e("This will attempt the deletion of a Review.")
+                sharedViewModel.singleReview.value?.let { viewModel.progressToDeletingReview(it)}
+                true
+            }
             else -> {
                 super.onOptionsItemSelected(item)
             }
         }
+    }
+
+    /**
+     * Navigate back to the single review fragment after deleting the Review with the new
+     * information.
+     */
+    private fun setUpDeletionCompleteNavigation() {
+        viewModel.navToYourReviews.observe(viewLifecycleOwner, {
+            sharedViewModel.resetReviewScreen()
+            it.getContextIfNotHandled()?.let {
+                findNavController().navigate(
+                    EditReviewFragmentDirections.actionEditReviewFragmentToSingleReviewFragment()
+                )
+            }
+        })
     }
 
     private fun setUpReviewInformation() {
