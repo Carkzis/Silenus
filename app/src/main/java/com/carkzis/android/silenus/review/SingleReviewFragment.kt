@@ -98,11 +98,13 @@ class SingleReviewFragment : Fragment() {
             sharedViewModel.resetReviewScreen()
             it.getContextIfNotHandled()?.let {
                 findNavController().navigate(
-                    EditReviewFragmentDirections.actionEditReviewFragmentToSingleReviewFragment()
+                    SingleReviewFragmentDirections.actionSingleReviewFragmentToYourReviewsFragment()
                 )
             }
         })
     }
+
+    // TODO: Add a dialogue bog to ask the user if they are sure they want to delete the review.
 
     private fun setUpReviewInformation() {
         sharedViewModel.singleReview.observe(viewLifecycleOwner, {

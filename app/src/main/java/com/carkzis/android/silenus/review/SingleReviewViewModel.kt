@@ -9,6 +9,7 @@ import com.carkzis.android.silenus.data.YourReview
 import com.carkzis.android.silenus.utils.Event
 import com.carkzis.android.silenus.utils.LoadingState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -49,6 +50,7 @@ class SingleReviewViewModel @Inject constructor(
                     }
                     is LoadingState.Success -> {
                         showToastMessage(loadingState.message)
+                        delay(500) // Delays the return to the YourReviewsFragment.
                         _deletedReviewId.value = loadingState.data!!
                         _navToYourReviews.value = Event(true)
                     }
