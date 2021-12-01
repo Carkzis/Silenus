@@ -174,7 +174,7 @@ class MainRepositoryTest {
 
     @Test
     fun editYourReview_success_receiveLoadingStateSuccessAndReviewAsUIModel() = runBlockingTest {
-        // Set the success of adding the review.
+        // Set the success of editing the review.
         mainRepository.failure = false
         // Test the response, if we get LoadingState.Success, isSuccessful will be true and
         // we will have a UI YourReview object with the same data as the the ReviewDO.
@@ -214,6 +214,45 @@ class MainRepositoryTest {
             }
         }
         assertThat(isLoading, `is`(true))
+    }
+
+    @Test
+    fun deleteReview_error_receiveLoadingStateError() = runBlockingTest {
+        // Set the failure of deleting the review.
+        mainRepository.failure = true
+        // We "delete" a review. Test the response, if we get LoadingState.Error,
+        // isSuccessful will be false.
+        var isSuccessful = true
+        mainRepository.deleteReview(fakeEditingReview).collect {
+            isSuccessful = when (it) {
+                is LoadingState.Error -> false
+                else -> true
+            }
+        }
+        // Assert that the deletion of a review was not successful.
+        assertThat(isSuccessful, `is`(false))
+    }
+
+    @Test
+    fun delete_success_receiveDeletedReviewId() = runBlockingTest {
+        // Set the success of deleting the review.
+        mainRepository.failure = false
+        // Test the response, if we get LoadingState.Success, isSuccessful will be true and
+        // we will have a String with the same value as the ReviewDO ID.
+        var isSuccessful = false
+        var deletedStringId: String? = null
+        mainRepository.deleteReview(fakeEditingReview).collect {
+            isSuccessful = when (it) {
+                is LoadingState.Success -> {
+                    deletedStringId = it.data!!
+                    true
+                }
+                else -> true
+            }
+        }
+        // Assert that the addition of a review was successful.
+        assertThat(isSuccessful, `is`(true))
+        assertThat(fakeEditingReview.id, `is`(deletedStringId))
     }
 
 }

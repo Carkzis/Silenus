@@ -20,7 +20,8 @@ data class NewReviewDO (
     val geo: GeoPoint?,
     val description: String?,
     val dateAdded: Timestamp?,
-    val uid: String?
+    val uid: String?,
+    val deleted: Boolean = false
 )
 
 data class ReviewDO (

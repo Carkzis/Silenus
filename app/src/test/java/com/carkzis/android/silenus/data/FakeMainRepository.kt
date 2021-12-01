@@ -73,4 +73,21 @@ class FakeMainRepository @Inject constructor() : MainRepository {
             emit(LoadingState.Error(R.string.error, Exception()))
         }
 
+    override suspend fun deleteReview(review: ReviewDO) = flow {
+        emit(LoadingState.Loading(R.string.reviews_retrieved))
+        // Skip if we are loading.
+        if (!loading) {
+            // Do this if we are successful.
+            if (!failure) {
+                // Return the id of the deleted review if successful.
+                emit(LoadingState.Success(R.string.review_edited, review.id.toString()))
+            } else {
+                throw Exception()
+            }
+        }
+    }
+        .catch {
+            emit(LoadingState.Error(R.string.error, Exception()))
+        }
+
 }

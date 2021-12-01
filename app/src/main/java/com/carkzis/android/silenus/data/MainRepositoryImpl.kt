@@ -5,11 +5,10 @@ import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.utils.Constants
 import com.carkzis.android.silenus.utils.getCollectionName
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.*
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -57,7 +56,10 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
 
         // TODO: Use the uid obtained from the UserRepository instead of directly here.
         val yourReviewList = suspendCoroutine<QuerySnapshot> { cont ->
-            reviews.whereEqualTo("uid", Firebase.auth.currentUser?.uid).get()
+            reviews
+                .whereEqualTo("uid", Firebase.auth.currentUser?.uid)
+                .whereEqualTo("deleted", false) // We don't want deleted items.
+                .get()
                 .addOnSuccessListener { cont.resume(it) } // This is successful.
                 .addOnFailureListener { throw Exception() }
         }.toObjects(YourReview::class.java) // This converts the snapshot into a list.
@@ -103,4 +105,36 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
                 )
             ) // Emit the error if we get here...
         }.flowOn(Dispatchers.IO)
+
+    /**
+     * This deletes a review, by setting the deleted flag to true.
+     */
+    override suspend fun deleteReview(review: ReviewDO) = flow {
+        val reviews = firestore.collection((getCollectionName(Constants.REVIEWS)))
+
+        emit(LoadingState.Loading(R.string.loading)) // Loading!
+
+        reviews.document(review.id.toString())
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Timber.e(error.localizedMessage)
+                    throw error
+                } else {
+                    // Delete the reference.
+                    snapshot?.reference?.update("deleted", true)
+                }
+            }
+
+        // Return the review.
+        emit(LoadingState.Success(R.string.review_deleted, review.id.toString()))
+    }
+        .catch {
+        emit(
+            LoadingState.Error(
+                R.string.error,
+                Exception("Error deleting ${review.id}")
+            )
+        ) // Emit the error if we get here...
+    }.flowOn(Dispatchers.IO)
+
 }

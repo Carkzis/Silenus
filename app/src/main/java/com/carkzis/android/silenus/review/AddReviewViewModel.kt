@@ -70,7 +70,8 @@ class AddReviewViewModel @Inject constructor(
                 geopoint.value,
                 description.value,
                 Timestamp.now(),
-                userRepository.getUser().uid
+                userRepository.getUser().uid,
+                deleted = false
             )).collect { loadingState ->
                 when (loadingState) {
                     is LoadingState.Loading -> {
