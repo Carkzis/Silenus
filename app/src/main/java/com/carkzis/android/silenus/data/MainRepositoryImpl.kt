@@ -109,12 +109,12 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
     /**
      * This deletes a review, by setting the deleted flag to true.
      */
-    override suspend fun deleteReview(review: ReviewDO) = flow {
+    override suspend fun deleteReview(reviewId: String) = flow {
         val reviews = firestore.collection((getCollectionName(Constants.REVIEWS)))
 
         emit(LoadingState.Loading(R.string.loading)) // Loading!
 
-        reviews.document(review.id.toString())
+        reviews.document(reviewId)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     Timber.e(error.localizedMessage)
@@ -126,13 +126,13 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
             }
 
         // Return the review.
-        emit(LoadingState.Success(R.string.review_deleted, review.id.toString()))
+        emit(LoadingState.Success(R.string.review_deleted, reviewId))
     }
         .catch {
         emit(
             LoadingState.Error(
                 R.string.error,
-                Exception("Error deleting ${review.id}")
+                Exception("Error deleting $reviewId.")
             )
         ) // Emit the error if we get here...
     }.flowOn(Dispatchers.IO)

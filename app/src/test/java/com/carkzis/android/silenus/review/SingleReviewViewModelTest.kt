@@ -1,13 +1,16 @@
 package com.carkzis.android.silenus.review
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.FakeMainRepository
 import com.carkzis.android.silenus.data.YourReview
 import com.carkzis.android.silenus.getOrAwaitValue
 import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
@@ -19,6 +22,7 @@ import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 
+@ExperimentalCoroutinesApi
 class SingleReviewViewModelTest {
 
     private lateinit var singleReviewViewModel: SingleReviewViewModel
@@ -137,5 +141,53 @@ class SingleReviewViewModelTest {
         // Assert that array holds null values (as Strings).
         assertThat(latLngArray.first(), `is`("null"))
         assertThat(latLngArray.last(), `is`("null"))
+    }
+
+    @Test
+    fun progressToDeletingReview_failure_postFailureMessageToToastLiveData() = runBlockingTest {
+        // Given a YourReview object.
+        val yourReview = YourReview( // Does not need any entries, as entries not being tested.
+            "123", // To differentiate from "notYourReview".
+            null,
+            null,
+            null,
+            null,
+            null,
+            null)
+
+        // Set the repository to fail the request to add a review to the database.
+        mainRepository.failure = true
+
+        // Call the method.
+        singleReviewViewModel.progressToDeletingReview(yourReview)
+
+        // Should be a message collected by Flow, to be added to toastText via helper method.
+        assertThat(singleReviewViewModel.toastText.getOrAwaitValue().getContextIfNotHandled(),
+            `is`(R.string.error))
+    }
+
+    @Test
+    fun progressToDeletingReview_success_postSuccessMessageAndIdToLiveData() = runBlockingTest {
+        // Given a YourReview object.
+        val yourReview = YourReview( // Does not need any entries, as entries not being tested.
+            "123", // To differentiate from "notYourReview".
+            null,
+            null,
+            null,
+            null,
+            null,
+            null)
+
+        // Set the repository to fail the request to add a review to the database.
+        mainRepository.failure = false
+
+        // Call the method.
+        singleReviewViewModel.progressToDeletingReview(yourReview)
+
+        // Should be a message collected by Flow, to be added to toastText via helper method.
+        assertThat(singleReviewViewModel.toastText.getOrAwaitValue().getContextIfNotHandled(),
+            `is`(R.string.review_deleted))
+        assertThat(singleReviewViewModel.deletedReviewId.getOrAwaitValue(),
+            `is`(yourReview.documentId))
     }
 }

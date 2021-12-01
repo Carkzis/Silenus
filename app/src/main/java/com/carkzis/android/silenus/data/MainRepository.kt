@@ -8,5 +8,5 @@ interface MainRepository {
     suspend fun addReview(review: NewReviewDO): Flow<LoadingState<DocumentReference>>
     suspend fun getYourReviews(): Flow<LoadingState<MutableList<YourReview>>>
     suspend fun editYourReview(review: ReviewDO): Flow<LoadingState<YourReview>>
-    suspend fun deleteReview(review: ReviewDO): Flow<LoadingState<String>>
+    suspend fun deleteReview(reviewId: String): Flow<LoadingState<String>>
 }

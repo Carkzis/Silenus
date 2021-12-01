@@ -3,9 +3,15 @@ package com.carkzis.android.silenus.review
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.carkzis.android.silenus.data.MainRepository
 import com.carkzis.android.silenus.data.YourReview
+import com.carkzis.android.silenus.utils.Event
+import com.carkzis.android.silenus.utils.LoadingState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,6 +26,10 @@ class SingleReviewViewModel @Inject constructor(
     val yourReview: LiveData<YourReview>
         get() = _yourReview
 
+    private val _deletedReviewId = MutableLiveData<String>()
+    val deletedReviewId: LiveData<String>
+        get() = _deletedReviewId
+
     fun setUpRev(review: YourReview) {
         _yourReview.value = review
     }
@@ -27,6 +37,41 @@ class SingleReviewViewModel @Inject constructor(
     fun getGeo() : Array<String> {
         return arrayOf(_yourReview.value?.geo?.latitude.toString(),
         _yourReview.value?.geo?.longitude.toString())
+    }
+
+    fun progressToDeletingReview(review: YourReview) {
+        viewModelScope.launch {
+            repository.deleteReview(review.documentId!!)
+                .collect { loadingState ->
+                when (loadingState) {
+                    is LoadingState.Loading -> {
+                        Timber.e("Posting review...")
+                    }
+                    is LoadingState.Success -> {
+                        showToastMessage(loadingState.message)
+                        _deletedReviewId.value = loadingState.data!!
+                        _navToYourReviews.value = Event(true)
+                    }
+                    is LoadingState.Error ->
+                        showToastMessage(loadingState.message)
+                }
+            }
+        }
+    }
+
+    private var _navToYourReviews = MutableLiveData<Event<Boolean>>()
+    val navToYourReviews: LiveData<Event<Boolean>>
+        get() = _navToYourReviews
+
+    private var _toastText = MutableLiveData<Event<Int>>()
+    val toastText: LiveData<Event<Int>>
+        get() = _toastText
+
+    /**
+     * Post a string value in an Event wrapper to the associated LiveData.
+     */
+    private fun showToastMessage(message: Int) {
+        _toastText.value = Event(message)
     }
 
 }

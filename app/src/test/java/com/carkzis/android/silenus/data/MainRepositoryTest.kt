@@ -223,7 +223,7 @@ class MainRepositoryTest {
         // We "delete" a review. Test the response, if we get LoadingState.Error,
         // isSuccessful will be false.
         var isSuccessful = true
-        mainRepository.deleteReview(fakeEditingReview).collect {
+        mainRepository.deleteReview(fakeEditingReview.id!!).collect {
             isSuccessful = when (it) {
                 is LoadingState.Error -> false
                 else -> true
@@ -241,7 +241,7 @@ class MainRepositoryTest {
         // we will have a String with the same value as the ReviewDO ID.
         var isSuccessful = false
         var deletedStringId: String? = null
-        mainRepository.deleteReview(fakeEditingReview).collect {
+        mainRepository.deleteReview(fakeEditingReview.id!!).collect {
             isSuccessful = when (it) {
                 is LoadingState.Success -> {
                     deletedStringId = it.data!!
