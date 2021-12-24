@@ -1,14 +1,17 @@
 package com.carkzis.android.silenus.data
 
-import com.carkzis.android.silenus.utils.LoadingState
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.utils.Constants
+import com.carkzis.android.silenus.utils.LoadingState
 import com.carkzis.android.silenus.utils.getCollectionName
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -16,9 +19,8 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
-class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFirestore) : MainRepository {
+class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFirestore, private val firebaseAuth: FirebaseAuth) : MainRepository {
 
     /**
      * Add a review for a member into the database.
@@ -34,8 +36,8 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
 
         emit(LoadingState.Success(R.string.review_added, null)) // Emit the result!
 
-//    }.catch {
-//        emit(LoadingState.Error(R.string.error, Exception())) // Emit the error if we get here...
+    }.catch {
+        emit(LoadingState.Error(R.string.error, Exception())) // Emit the error if we get here...
     }.flowOn(Dispatchers.IO)
 
     /**
@@ -46,9 +48,12 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
 
         emit(LoadingState.Loading(R.string.loading)) // Loading!
 
+        // Need to use a listener, so that we can remove it to prevent weird bugs.
+        lateinit var query: ListenerRegistration
+
         val yourReviewList = suspendCancellableCoroutine<QuerySnapshot> { cont ->
-            reviews
-                .whereEqualTo("uid", Firebase.auth.currentUser?.uid)
+            query = reviews
+                .whereEqualTo("uid", firebaseAuth.currentUser?.uid)
                 .whereEqualTo("deleted", false) // We don't want deleted items.
                 .addSnapshotListener { snapshot, error ->
                     if (error != null) {
@@ -62,6 +67,9 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
                     }
                 }
         }.toObjects(YourReview::class.java)
+
+        // Remove the listener after we have performed our query.
+        query.remove()
 
         emit(LoadingState.Success(R.string.reviews_retrieved, yourReviewList))
 

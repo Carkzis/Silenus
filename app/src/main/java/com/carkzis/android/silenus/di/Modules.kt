@@ -1,4 +1,4 @@
-package com.carkzis.android.silenus
+package com.carkzis.android.silenus.di
 
 import com.carkzis.android.silenus.data.*
 import com.google.firebase.auth.FirebaseAuth
@@ -31,8 +31,8 @@ object FirebaseModule {
 
     @Singleton
     @Provides
-    fun provideMainRepository(firestore: FirebaseFirestore) : MainRepository {
-        return MainRepositoryImpl(firestore)
+    fun provideMainRepository(firestore: FirebaseFirestore, firebaseAuth: FirebaseAuth) : MainRepository {
+        return MainRepositoryImpl(firestore, firebaseAuth)
     }
 
 }

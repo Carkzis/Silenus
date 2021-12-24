@@ -52,8 +52,6 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
         setUpSearchView()
     }
 
-    // TODO: Need to reset UI recyclerview when coming back from edit screen.
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.your_reviews_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)

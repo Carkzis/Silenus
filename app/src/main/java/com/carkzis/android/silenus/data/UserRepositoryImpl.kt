@@ -1,8 +1,8 @@
 package com.carkzis.android.silenus.data
 
-import com.carkzis.android.silenus.utils.LoadingState
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.utils.Constants
+import com.carkzis.android.silenus.utils.LoadingState
 import com.carkzis.android.silenus.utils.getCollectionName
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -12,8 +12,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFirestore,
     private val firebaseAuth: FirebaseAuth): UserRepository {

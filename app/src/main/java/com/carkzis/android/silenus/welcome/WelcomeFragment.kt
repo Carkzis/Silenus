@@ -11,13 +11,20 @@ import androidx.navigation.fragment.findNavController
 import com.carkzis.android.silenus.data.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentWelcomeBinding
 import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
+import java.lang.Exception
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class WelcomeFragment : Fragment() {
 
     private val viewModel by viewModels<WelcomeViewModel>()
     private val sharedViewModel by activityViewModels<SharedViewModel>()
+
+    @Inject
+    lateinit var firebaseAuth : FirebaseAuth
 
     private lateinit var viewDataBinding : FragmentWelcomeBinding
 
@@ -69,9 +76,9 @@ class WelcomeFragment : Fragment() {
     }
 
     private fun setUpNavigateToLogin() {
-        sharedViewModel.navToLogin.observe(viewLifecycleOwner, {
-            it.getContextIfNotHandled()?.let {
-                if (it) {
+        sharedViewModel.navToLogin.observe(viewLifecycleOwner, { it ->
+            it.getContextIfNotHandled()?.let { reason ->
+                if (reason) {
                     findNavController().navigate(
                         WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
                     )
@@ -89,16 +96,14 @@ class WelcomeFragment : Fragment() {
     private fun setUpLogout() {
         sharedViewModel.logout.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let { reason ->
-                AuthUI.getInstance().signOut(requireContext())
-                    .addOnCompleteListener {
-                        sharedViewModel.toastMe(getString(reason))
-                        findNavController().navigate(
-                            WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
-                        )
-                    }
-            }
-        })
-    }
+                   firebaseAuth.signOut()
+                    sharedViewModel.toastMe(getString(reason))
+                    findNavController().navigate(
+                        WelcomeFragmentDirections.actionWelcomeFragmentToLoginFragment()
+                    )
+                }
+            })
+        }
 
 
 }
