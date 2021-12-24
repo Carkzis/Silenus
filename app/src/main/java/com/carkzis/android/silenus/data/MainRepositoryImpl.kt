@@ -12,17 +12,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFirestore) : MainRepository {
-
-    /*
-    TODO: If you are logged in, but you have no account in the remote database, these fall down.
-          This can be avoided by logging a user out if they are not in the remote database.
-     */
 
     /**
      * Add a review for a member into the database.
@@ -34,11 +30,7 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
         emit(LoadingState.Loading(R.string.loading)) // Loading!
 
         // This ensures we await the result of the query before we emit again.
-        val reviewReference = suspendCoroutine<DocumentReference> { cont ->
-            reviews.add(review)
-                .addOnSuccessListener { cont.resume(it) }
-                .addOnFailureListener { throw Exception() }
-        }
+        val reviewReference = reviews.add(review).result
 
         emit(LoadingState.Success(R.string.review_added, reviewReference)) // Emit the result!
 
@@ -54,7 +46,7 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
 
         emit(LoadingState.Loading(R.string.loading)) // Loading!
 
-        val yourReviewList = suspendCoroutine<QuerySnapshot> { cont ->
+        val yourReviewList = suspendCancellableCoroutine<QuerySnapshot> { cont ->
             reviews
                 .whereEqualTo("uid", Firebase.auth.currentUser?.uid)
                 .whereEqualTo("deleted", false) // We don't want deleted items.
@@ -63,7 +55,10 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
                         Timber.e(error.localizedMessage)
                         throw error
                     } else {
-                        cont.resume(snapshot!!)
+                        // Need to ensure that the coroutine has not already been resumed.
+                        if (cont.isActive) {
+                            cont.resume(snapshot!!)
+                        }
                     }
                 }
         }.toObjects(YourReview::class.java)
@@ -91,11 +86,13 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
         This ensures we await the result of the query before we emit again.
         There is no returned object, just void.
          */
-        suspendCoroutine<Void> { cont ->
-            reviews.document(review.id.toString()).set(review)
-                .addOnSuccessListener { cont.resume(it) }
-                .addOnFailureListener { throw Exception() }
-        }
+//        suspendCoroutine<Void> { cont ->
+//            reviews.document(review.id.toString()).set(review)
+//                .addOnSuccessListener { cont.resume(it) }
+//                .addOnFailureListener { throw Exception() }
+//        }
+
+        reviews.document(review.id.toString()).set(review)
 
         emit(LoadingState.Success(R.string.review_edited, review.toUIModel())) // Just emit the review!
 
@@ -117,16 +114,19 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
 
         emit(LoadingState.Loading(R.string.loading)) // Loading!
 
-        reviews.document(reviewId)
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    Timber.e(error.localizedMessage)
-                    throw error
-                } else {
-                    // Delete the reference.
-                    snapshot?.reference?.update("deleted", true)
+        suspendCoroutine<DocumentSnapshot> { cont ->
+            reviews.document(reviewId)
+                .addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        Timber.e(error.localizedMessage)
+                        throw error
+                    } else {
+                        // Delete the reference.
+                        snapshot?.reference?.update("deleted", true)
+                        cont.resume(snapshot!!)
+                    }
                 }
-            }
+        }
 
         // Return the review.
         emit(LoadingState.Success(R.string.review_deleted, reviewId))

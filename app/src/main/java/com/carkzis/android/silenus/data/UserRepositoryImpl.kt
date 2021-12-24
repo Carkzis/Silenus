@@ -29,15 +29,10 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
         val uId = getUserDetails().second
         val users = firestore.collection(getCollectionName(Constants.USERS))
 
-        // This ensures we await the result of the query before we emit again.
-        val result = suspendCoroutine<Int> { cont ->
+        // Set the new user to the database.
+        users.document(uId).set(newUser)
 
-            users.document(uId).set(newUser)
-                .addOnSuccessListener { cont.resume(R.string.user_added)}
-                .addOnFailureListener { throw Exception() }
-        }
-
-        emit(LoadingState.Success<Int>(result))
+        emit(LoadingState.Success<Int>(R.string.user_added))
 
     }.catch {
 
