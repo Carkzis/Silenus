@@ -54,15 +54,19 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
 
         emit(LoadingState.Loading(R.string.loading)) // Loading!
 
-        // TODO: Use the uid obtained from the UserRepository instead of directly here.
         val yourReviewList = suspendCoroutine<QuerySnapshot> { cont ->
             reviews
                 .whereEqualTo("uid", Firebase.auth.currentUser?.uid)
                 .whereEqualTo("deleted", false) // We don't want deleted items.
-                .get()
-                .addOnSuccessListener { cont.resume(it) } // This is successful.
-                .addOnFailureListener { throw Exception() }
-        }.toObjects(YourReview::class.java) // This converts the snapshot into a list.
+                .addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        Timber.e(error.localizedMessage)
+                        throw error
+                    } else {
+                        cont.resume(snapshot!!)
+                    }
+                }
+        }.toObjects(YourReview::class.java)
 
         emit(LoadingState.Success(R.string.reviews_retrieved, yourReviewList))
 
@@ -87,7 +91,6 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
         This ensures we await the result of the query before we emit again.
         There is no returned object, just void.
          */
-        // TODO: May need to test here that we are who we say we are, or add to security rules.
         suspendCoroutine<Void> { cont ->
             reviews.document(review.id.toString()).set(review)
                 .addOnSuccessListener { cont.resume(it) }

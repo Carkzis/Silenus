@@ -16,7 +16,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val localIp = "192.168.0.14"
+//        val localIp = "192.168.0.14" // SK
+        val localIp = "192.168.1.136" // RH
         // Standard Android Emulator IP: "10.0.2.2"
 
         try {
