@@ -104,7 +104,7 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
 
         emit(LoadingState.Loading(R.string.loading)) // Loading!
 
-        suspendCoroutine<DocumentSnapshot> { cont ->
+        suspendCancellableCoroutine<DocumentSnapshot> { cont ->
             reviews.document(reviewId)
                 .addSnapshotListener { snapshot, error ->
                     if (error != null) {
@@ -113,7 +113,9 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
                     } else {
                         // Delete the reference.
                         snapshot?.reference?.update("deleted", true)
-                        cont.resume(snapshot!!)
+                        if (cont.isActive) {
+                            cont.resume(snapshot!!)
+                        }
                     }
                 }
         }

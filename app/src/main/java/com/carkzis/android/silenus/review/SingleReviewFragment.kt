@@ -1,5 +1,6 @@
 package com.carkzis.android.silenus.review
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -80,13 +81,30 @@ class SingleReviewFragment : Fragment() {
             }
             R.id.delete_rev_button -> {
                 Timber.e("This will attempt the deletion of a Review.")
-                sharedViewModel.singleReview.value?.let { viewModel.progressToDeletingReview(it)}
+                openDeleteDialogue()
                 true
             }
             else -> {
                 super.onOptionsItemSelected(item)
             }
         }
+    }
+
+    /**
+     * Opens a dialogue to ask the user to confirm that they do indeed want to delete the
+     * current opened review.
+     */
+    private fun openDeleteDialogue() {
+        val builder = AlertDialog.Builder(view?.context)
+        builder.setTitle("Review Deletion")
+            .setMessage("Are you sure you want to delete this review?")
+            .setPositiveButton(R.string.yes) { _, _ ->
+                sharedViewModel.singleReview.value?.let { viewModel.progressToDeletingReview(it) }
+            }
+            .setNegativeButton(R.string.no) { _, _ ->
+                // Do nothing.
+            }
+        builder.show()
     }
 
     /**
@@ -103,8 +121,6 @@ class SingleReviewFragment : Fragment() {
             }
         })
     }
-
-    // TODO: Add a dialogue bog to ask the user if they are sure they want to delete the review.
 
     private fun setUpReviewInformation() {
         sharedViewModel.singleReview.observe(viewLifecycleOwner, {
