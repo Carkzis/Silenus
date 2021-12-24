@@ -30,12 +30,12 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
         emit(LoadingState.Loading(R.string.loading)) // Loading!
 
         // This ensures we await the result of the query before we emit again.
-        val reviewReference = reviews.add(review).result
+        reviews.add(review)
 
-        emit(LoadingState.Success(R.string.review_added, reviewReference)) // Emit the result!
+        emit(LoadingState.Success(R.string.review_added, null)) // Emit the result!
 
-    }.catch {
-        emit(LoadingState.Error(R.string.error, Exception())) // Emit the error if we get here...
+//    }.catch {
+//        emit(LoadingState.Error(R.string.error, Exception())) // Emit the error if we get here...
     }.flowOn(Dispatchers.IO)
 
     /**
@@ -81,16 +81,6 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
         val reviews = firestore.collection(getCollectionName(Constants.REVIEWS))
 
         emit(LoadingState.Loading(R.string.loading)) // Loading!
-
-        /*
-        This ensures we await the result of the query before we emit again.
-        There is no returned object, just void.
-         */
-//        suspendCoroutine<Void> { cont ->
-//            reviews.document(review.id.toString()).set(review)
-//                .addOnSuccessListener { cont.resume(it) }
-//                .addOnFailureListener { throw Exception() }
-//        }
 
         reviews.document(review.id.toString()).set(review)
 
