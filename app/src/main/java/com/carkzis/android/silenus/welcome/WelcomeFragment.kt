@@ -49,6 +49,10 @@ class WelcomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        /*
+         We request an authorisation of the user; if this fails, the user is directed
+         to the LoginFragment.
+         */
         sharedViewModel.authoriseUser()
 
     }
