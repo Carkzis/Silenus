@@ -1,9 +1,11 @@
 package com.carkzis.android.silenus.data
 
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.GeoPoint
 
+/**
+ * Object for transferring data relating to member details to and from the Firestore database.
+ */
 data class UserObject(
     val name: String?,
     val email: String?,
@@ -13,6 +15,9 @@ data class UserObject(
     val joinDate: Timestamp
 )
 
+/**
+ * Object for transferring data relating to a newly added member review to the Firestore database.
+ */
 data class NewReviewDO (
     val establishment: String?,
     val rating: Float?,
@@ -24,6 +29,9 @@ data class NewReviewDO (
     val deleted: Boolean = false
 )
 
+/**
+ * Object for transferring data relating to an existing review to and from the Firestore database.
+ */
 data class ReviewDO (
     val id: String?,
     val establishment: String?,
@@ -37,7 +45,7 @@ data class ReviewDO (
 )
 
 /**
- * Converts data object for NewReviewDO from Firebase to UI model.
+ * Converts the data object from Firebase (ReviewDO) to its respective UI model (YourReview).
  */
 fun ReviewDO.toUIModel() : YourReview {
     return let {

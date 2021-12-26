@@ -15,13 +15,17 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * Shared ViewModel to share data between all Fragments.
+ */
 @HiltViewModel
 class SharedViewModel @Inject constructor(
     private val repository: UserRepository
 ) : ViewModel() {
 
     /*
-     * These are for the add and edit review screen, saving the data when we are taken to the map fragment.
+     * These are for the add and edit review screen, saving the data
+     * when we are taken to the map fragment.
      */
     private var _chosenGeopoint = MutableLiveData<GeoPoint?>()
     val chosenGeopoint: LiveData<GeoPoint?>
@@ -47,7 +51,7 @@ class SharedViewModel @Inject constructor(
         get() = _mapReason
 
     /*
-     * Shared user data across fragments
+     * Shared user data across fragments.
      */
     private var _logout = MutableLiveData<Event<Int>>()
     val logout: LiveData<Event<Int>>

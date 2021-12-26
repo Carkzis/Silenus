@@ -5,12 +5,10 @@ import com.carkzis.android.silenus.utils.Constants
 import com.carkzis.android.silenus.utils.LoadingState
 import com.carkzis.android.silenus.utils.getCollectionName
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -20,10 +18,15 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
-class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFirestore, private val firebaseAuth: FirebaseAuth) : MainRepository {
+/**
+ * Interface for the Main Repository, which is used to abstract access to non-User data
+ * between the Firestore database, and the UI.
+ */
+class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFirestore,
+                                             private val firebaseAuth: FirebaseAuth) : MainRepository {
 
     /**
-     * Add a review for a member into the database.
+     * Adds a new review for a member into the database.
      */
     override suspend fun addReview(review: NewReviewDO) = flow {
 
@@ -41,7 +44,7 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
     }.flowOn(Dispatchers.IO)
 
     /**
-     * Get the member's reviews, to put into the database.
+     * Get the member's reviews from the Firestore database.
      */
     override suspend fun getYourReviews() = flow {
         val reviews = firestore.collection(getCollectionName(Constants.REVIEWS))
@@ -83,7 +86,7 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
     }.flowOn(Dispatchers.IO)
 
     /**
-     * This edits a review, by setting the review again using the same document id.
+     * This edits a review by setting the review again using the same document id.
      */
     override suspend fun editYourReview(review: ReviewDO) = flow {
         val reviews = firestore.collection(getCollectionName(Constants.REVIEWS))
@@ -112,8 +115,11 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
 
         emit(LoadingState.Loading(R.string.loading)) // Loading!
 
+        // Need to use a listener, so that we can remove it to prevent weird bugs.
+        lateinit var query: ListenerRegistration
+
         suspendCancellableCoroutine<DocumentSnapshot> { cont ->
-            reviews.document(reviewId)
+            query = reviews.document(reviewId)
                 .addSnapshotListener { snapshot, error ->
                     if (error != null) {
                         Timber.e(error.localizedMessage)
@@ -127,6 +133,9 @@ class MainRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
                     }
                 }
         }
+
+        // Remove the listener after we have deleted the review.
+        query.remove()
 
         // Return the review.
         emit(LoadingState.Success(R.string.review_deleted, reviewId))

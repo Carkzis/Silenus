@@ -18,6 +18,9 @@ data class YourReview(
     val geo: GeoPoint? = null,
 )
 
+/**
+ * Converts the UI model (YourReview) to its respective data object for Firebase (ReviewDO).
+ */
 fun YourReview.toDataObject(userId: String) : ReviewDO {
     return let {
         ReviewDO(

@@ -13,6 +13,10 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
+/**
+ * Interface for the User Repository, which is used to abstract access to user data
+ * between the Firestore database, and the UI.
+ */
 class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFirestore,
     private val firebaseAuth: FirebaseAuth): UserRepository {
 
