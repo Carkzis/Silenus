@@ -12,13 +12,14 @@ import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.MapReason
 import com.carkzis.android.silenus.data.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentAddReviewBinding
+import com.carkzis.android.silenus.user.AuthCheck
 import com.carkzis.android.silenus.utils.showToast
 import com.firebase.ui.auth.AuthUI
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class AddReviewFragment : Fragment() {
+class AddReviewFragment : Fragment(), AuthCheck {
 
     private val viewModel by viewModels<AddReviewViewModel>()
     private val sharedViewModel by activityViewModels<SharedViewModel>()
@@ -136,7 +137,7 @@ class AddReviewFragment : Fragment() {
     /**
      * This observes when the user should be logged out, and directed to the LoginFragment.
      */
-    private fun setUpLogout() {
+    override fun setUpLogout() {
         sharedViewModel.logout.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let { reason ->
                 AuthUI.getInstance().signOut(requireContext())
@@ -153,7 +154,7 @@ class AddReviewFragment : Fragment() {
     /**
      * Navigates the user to the login if directed to do so.
      */
-    private fun setUpNavigateToLogin() {
+    override fun setUpNavigateToLogin() {
         sharedViewModel.navToLogin.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let {
                     findNavController().navigate(

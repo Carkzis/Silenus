@@ -11,12 +11,14 @@ import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.MapReason
 import com.carkzis.android.silenus.data.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentSingleReviewBinding
+import com.carkzis.android.silenus.user.AuthCheck
 import com.carkzis.android.silenus.utils.showToast
+import com.firebase.ui.auth.AuthUI
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class SingleReviewFragment : Fragment() {
+class SingleReviewFragment : Fragment(), AuthCheck {
 
     private val viewModel by viewModels<SingleReviewViewModel>()
     private val sharedViewModel by activityViewModels<SharedViewModel>()
@@ -157,6 +159,30 @@ class SingleReviewFragment : Fragment() {
         sharedViewModel.toastText.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let { message ->
                 context?.showToast(message)
+            }
+        })
+    }
+
+    override fun setUpLogout() {
+        sharedViewModel.logout.observe(viewLifecycleOwner, {
+            it.getContextIfNotHandled()?.let { reason ->
+                AuthUI.getInstance().signOut(requireContext())
+                    .addOnCompleteListener {
+                        sharedViewModel.toastMe(getString(reason))
+                        findNavController().navigate(
+                            SingleReviewFragmentDirections.actionSingleReviewFragmentToLoginFragment()
+                        )
+                    }
+            }
+        })
+    }
+
+    override fun setUpNavigateToLogin() {
+        sharedViewModel.navToLogin.observe(viewLifecycleOwner, {
+            it.getContextIfNotHandled()?.let {
+                findNavController().navigate(
+                    SingleReviewFragmentDirections.actionSingleReviewFragmentToLoginFragment()
+                )
             }
         })
     }

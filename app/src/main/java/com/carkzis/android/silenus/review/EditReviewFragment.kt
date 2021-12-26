@@ -12,13 +12,15 @@ import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.MapReason
 import com.carkzis.android.silenus.data.SharedViewModel
 import com.carkzis.android.silenus.databinding.FragmentEditReviewBinding
+import com.carkzis.android.silenus.user.AuthCheck
 import com.carkzis.android.silenus.utils.showToast
+import com.firebase.ui.auth.AuthUI
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.util.*
 
 @AndroidEntryPoint
-class EditReviewFragment : Fragment() {
+class EditReviewFragment : Fragment(), AuthCheck {
 
     private val viewModel by viewModels<EditReviewViewModel>()
     private val sharedViewModel by activityViewModels<SharedViewModel>()
@@ -56,6 +58,17 @@ class EditReviewFragment : Fragment() {
         setUpLocationButton()
         setUpEditCompleteNavigation()
         handleOnBackPressed()
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        /*
+         We request an authorisation of the user; if this fails, the user is directed
+         to the LoginFragment.
+         */
+        sharedViewModel.authoriseUser()
 
     }
 
@@ -160,6 +173,30 @@ class EditReviewFragment : Fragment() {
         viewModel.toastText.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let { message ->
                 context?.showToast(requireContext().getString(message))
+            }
+        })
+    }
+
+    override fun setUpLogout() {
+        sharedViewModel.logout.observe(viewLifecycleOwner, {
+            it.getContextIfNotHandled()?.let { reason ->
+                AuthUI.getInstance().signOut(requireContext())
+                    .addOnCompleteListener {
+                        sharedViewModel.toastMe(getString(reason))
+                        findNavController().navigate(
+                            EditReviewFragmentDirections.actionEditReviewFragmentToLoginFragment()
+                        )
+                    }
+            }
+        })
+    }
+
+    override fun setUpNavigateToLogin() {
+        sharedViewModel.navToLogin.observe(viewLifecycleOwner, {
+            it.getContextIfNotHandled()?.let {
+                findNavController().navigate(
+                    EditReviewFragmentDirections.actionEditReviewFragmentToLoginFragment()
+                )
             }
         })
     }

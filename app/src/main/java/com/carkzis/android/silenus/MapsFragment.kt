@@ -16,6 +16,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.carkzis.android.silenus.data.MapReason
 import com.carkzis.android.silenus.data.SharedViewModel
+import com.carkzis.android.silenus.user.AuthCheck
+import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -28,7 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class MapsFragment : Fragment(), OnMapReadyCallback {
+class MapsFragment : Fragment(), OnMapReadyCallback, AuthCheck {
 
     private lateinit var map: GoogleMap
 
@@ -53,6 +55,17 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        /*
+         We request an authorisation of the user; if this fails, the user is directed
+         to the LoginFragment.
+         */
+        sharedViewModel.authoriseUser()
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -195,5 +208,29 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         val coarseLocationApproved = ContextCompat.checkSelfPermission(requireContext(),
             Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
         return fineLocationApproved && coarseLocationApproved
+    }
+
+    override fun setUpLogout() {
+        sharedViewModel.logout.observe(viewLifecycleOwner, {
+            it.getContextIfNotHandled()?.let { reason ->
+                AuthUI.getInstance().signOut(requireContext())
+                    .addOnCompleteListener {
+                        sharedViewModel.toastMe(getString(reason))
+                        findNavController().navigate(
+                            MapsFragmentDirections.actionMapsFragmentToLoginFragment()
+                        )
+                    }
+            }
+        })
+    }
+
+    override fun setUpNavigateToLogin() {
+        sharedViewModel.navToLogin.observe(viewLifecycleOwner, {
+            it.getContextIfNotHandled()?.let {
+                findNavController().navigate(
+                    MapsFragmentDirections.actionMapsFragmentToLoginFragment()
+                )
+            }
+        })
     }
 }

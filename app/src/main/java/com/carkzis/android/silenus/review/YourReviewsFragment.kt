@@ -12,11 +12,13 @@ import com.carkzis.android.silenus.data.MapReason
 import com.carkzis.android.silenus.data.SharedViewModel
 import com.carkzis.android.silenus.data.YourReview
 import com.carkzis.android.silenus.databinding.FragmentYourReviewsBinding
+import com.carkzis.android.silenus.user.AuthCheck
+import com.firebase.ui.auth.AuthUI
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
+class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener, AuthCheck {
 
     private val viewModel by viewModels<YourReviewsViewModel>()
     private val sharedViewModel by activityViewModels<SharedViewModel>()
@@ -56,6 +58,17 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
         super.onViewCreated(view, savedInstanceState)
         setUpDataObserver()
         setUpSearchView()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        /*
+         We request an authorisation of the user; if this fails, the user is directed
+         to the LoginFragment.
+         */
+        sharedViewModel.authoriseUser()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -147,6 +160,30 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
     override fun onQueryTextChange(newText: String?) : Boolean {
         yourReviewsAdapter.filter.filter(newText)
         return false
+    }
+
+    override fun setUpLogout() {
+        sharedViewModel.logout.observe(viewLifecycleOwner, {
+            it.getContextIfNotHandled()?.let { reason ->
+                AuthUI.getInstance().signOut(requireContext())
+                    .addOnCompleteListener {
+                        sharedViewModel.toastMe(getString(reason))
+                        findNavController().navigate(
+                            YourReviewsFragmentDirections.actionYourReviewsFragmentToLoginFragment()
+                        )
+                    }
+            }
+        })
+    }
+
+    override fun setUpNavigateToLogin() {
+        sharedViewModel.navToLogin.observe(viewLifecycleOwner, {
+            it.getContextIfNotHandled()?.let {
+                findNavController().navigate(
+                    YourReviewsFragmentDirections.actionYourReviewsFragmentToLoginFragment()
+                )
+            }
+        })
     }
 
 }
