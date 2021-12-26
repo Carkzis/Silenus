@@ -33,6 +33,10 @@ class WelcomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+        /*
+         Set up data binding between the fragment and the layout. The lifecycleOwner observes
+         the changes in LiveData in this databinding.
+         */
         viewDataBinding = FragmentWelcomeBinding.inflate(inflater, container, false).apply {
             welcomeViewModel = viewModel
             lifecycleOwner = viewLifecycleOwner
@@ -49,6 +53,9 @@ class WelcomeFragment : Fragment() {
 
     }
 
+    /*
+     * Used here to set up various observers/listeners.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -60,13 +67,18 @@ class WelcomeFragment : Fragment() {
 
     }
 
+    /**
+     * Sets up the fab for logging out the user.
+     */
     private fun setUpLogoutFab() {
         viewDataBinding.logoutFab.setOnClickListener {
             sharedViewModel.chooseLogout()
         }
     }
 
-
+    /**
+     * Sets up the fab for directing the user to the YourReviewsFragment.
+     */
     private fun setUpReviewsFab() {
         viewDataBinding.reviewsFab.setOnClickListener {
             findNavController().navigate(
@@ -75,6 +87,9 @@ class WelcomeFragment : Fragment() {
         }
     }
 
+    /**
+     * Sets up the navigation to the LoginFragment.
+     */
     private fun setUpNavigateToLogin() {
         sharedViewModel.navToLogin.observe(viewLifecycleOwner, { it ->
             it.getContextIfNotHandled()?.let { reason ->
@@ -87,12 +102,19 @@ class WelcomeFragment : Fragment() {
         })
     }
 
+    /**
+     * Applies the current username observed in the SharedViewModel to the username
+     * LiveData in the WelcomeViewModel.
+     */
     private fun setUpUserDetails() {
         sharedViewModel.username.observe(viewLifecycleOwner, {
             viewModel.setUsername()
         })
     }
 
+    /**
+     * This observes when the user should be logged out, and directed to the LoginFragment.
+     */
     private fun setUpLogout() {
         sharedViewModel.logout.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let { reason ->
@@ -104,6 +126,5 @@ class WelcomeFragment : Fragment() {
                 }
             })
         }
-
 
 }

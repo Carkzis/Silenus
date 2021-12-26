@@ -16,10 +16,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        val localIp = "192.168.0.14" // SK
+        /*
+        Use your local IP when using the Firebase Emulator.
+         */
+        // val localIp = "192.168.0.14" // SK
         val localIp = "192.168.1.136" // RH
+
         // Standard Android Emulator IP: "10.0.2.2"
 
+        /*
+        Here, we are setting up the usage of the various Firebase emulators using different ports.
+         */
         try {
             if (BuildConfig.DEBUG) {
                 Firebase.database.useEmulator(localIp, 9000)

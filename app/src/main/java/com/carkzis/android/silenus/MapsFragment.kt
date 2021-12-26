@@ -61,6 +61,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         mapReasonListener(map)
     }
 
+    /**
+     * This sets up the reasons we have navigated to the MapFragment (e.g. add a review (ADDREV)
+     * or edit a review (EDITREV). If this alters where we navigate to after selecting a location,
+     * the relevant navigation method is provided as an argument in the setUpLocationRequest()
+     * method.
+     */
     private fun mapReasonListener(map: GoogleMap) {
         sharedViewModel.mapReason.observe(viewLifecycleOwner, {
             when (it) {
@@ -78,11 +84,17 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         })
     }
 
+    /**
+     * Navigates the user to the AddReviewFragment.
+     */
     private fun navToAddRevFragment() {
         findNavController().navigate(
             MapsFragmentDirections.actionMapsFragmentToAddReviewFragment())
     }
 
+    /**
+     * Navigates the user to the EditReviewFragment.
+     */
     private fun navToEditRevFragment() {
         findNavController().navigate(
             MapsFragmentDirections.actionMapsFragmentToEditReviewFragment())

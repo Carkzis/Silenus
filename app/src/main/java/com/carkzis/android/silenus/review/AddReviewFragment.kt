@@ -134,7 +134,7 @@ class AddReviewFragment : Fragment() {
     }
 
     /**
-     * This observes where the user should be logged out, and directed to the LoginFragment.
+     * This observes when the user should be logged out, and directed to the LoginFragment.
      */
     private fun setUpLogout() {
         sharedViewModel.logout.observe(viewLifecycleOwner, {
