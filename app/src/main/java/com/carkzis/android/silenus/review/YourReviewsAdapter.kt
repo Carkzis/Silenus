@@ -82,9 +82,8 @@ class YourReviewsAdapter(private val onClickListener: OnClickListener) : ListAda
             } else {
                 Timber.e(reviewList[0].toString())
                 val filteredList = ArrayList<YourReview>()
-                // Checking date, establishment and location currently.
+                // Checking establishment currently.
                 reviewList.filter {
-                    // TODO: Only searching by establishment works, doesn't like locations!
                        it.establishment!!.lowercase().contains(constraint.toString().lowercase())
                 }.forEach {
                     filteredList.add(it)
