@@ -30,6 +30,10 @@ class EditReviewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+        /*
+         Set up data binding between the fragment and the layout. The lifecycleOwner observes
+         the changes in LiveData in this databinding.
+         */
         viewDataBinding = FragmentEditReviewBinding.inflate(inflater, container, false)
             .apply {
             editReviewViewModel = viewModel
@@ -41,6 +45,9 @@ class EditReviewFragment : Fragment() {
         return viewDataBinding.root
     }
 
+    /*
+     * Used here to set up various observers/listeners.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -77,8 +84,6 @@ class EditReviewFragment : Fragment() {
             }
         }
     }
-
-    // TODO: Set up location button. Remember, we need to return here after going to the map.
 
     /**
      * Set up the fields, so that when you return to the fragment from the MapFragment,
@@ -148,6 +153,9 @@ class EditReviewFragment : Fragment() {
         })
     }
 
+    /**
+     * Sets up the ability to show a toast once by observing the LiveData in the ViewModel.
+     */
     private fun setUpToast() {
         viewModel.toastText.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let { message ->

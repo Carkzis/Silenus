@@ -27,16 +27,35 @@ class AddReviewViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
+    /*
+    LiveData for bar/restaurant details from the UI.
+     */
     var barName = MutableLiveData<String>()
     var rating = MutableLiveData<Float>()
     var location = MutableLiveData<String>()
     var description = MutableLiveData<String>()
 
+    /*
+    Holds data generated from the inputs/submission.
+     */
     private var _geopoint = MutableLiveData<GeoPoint>()
     val geopoint: LiveData<GeoPoint>
         get() = _geopoint
-
     var submitDate = MutableLiveData<Timestamp>()
+
+    /*
+     Navigation LiveData, for taking the user back to the SingleReviewFragment.
+     */
+    private var _navToYourReviews = MutableLiveData<Event<Boolean>>()
+    val navToYourReviews: LiveData<Event<Boolean>>
+        get() = _navToYourReviews
+
+    /*
+    LiveData for feedback e.g. Toast.
+     */
+    private var _toastText = MutableLiveData<Event<Int>>()
+    val toastText: LiveData<Event<Int>>
+        get() = _toastText
 
     /**
      * This checks that the minimum requirement for adding a review are available
@@ -138,14 +157,6 @@ class AddReviewViewModel @Inject constructor(
     fun setUpLocation(loc: String) {
         location.value = loc
     }
-
-    private var _navToYourReviews = MutableLiveData<Event<Boolean>>()
-    val navToYourReviews: LiveData<Event<Boolean>>
-        get() = _navToYourReviews
-
-    private var _toastText = MutableLiveData<Event<Int>>()
-    val toastText: LiveData<Event<Int>>
-        get() = _toastText
 
     /**
      * Post a string value in an Event wrapper to the associated LiveData.

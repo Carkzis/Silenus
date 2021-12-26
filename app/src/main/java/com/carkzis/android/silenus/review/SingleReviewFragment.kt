@@ -27,6 +27,11 @@ class SingleReviewFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        /*
+         Set up data binding between the fragment and the layout. The lifecycleOwner observes
+         the changes in LiveData in this databinding.
+         */
         viewDataBinding = FragmentSingleReviewBinding.inflate(inflater, container, false).apply {
             singleReviewViewModel = viewModel
             lifecycleOwner = viewLifecycleOwner
@@ -41,10 +46,17 @@ class SingleReviewFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        /*
+         We request an authorisation of the user; if this fails, the user is directed
+         to the LoginFragment.
+         */
         sharedViewModel.authoriseUser()
 
     }
 
+    /*
+     * Used here to set up various observers/listeners.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -61,6 +73,7 @@ class SingleReviewFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.view_location_menu_button -> {
+                // Navigate to the MapFragment using the GeoPoint for the current review.
                 sharedViewModel.setMapOpenReason(MapReason.VIEWREV)
                 findNavController().navigate(
                     SingleReviewFragmentDirections.actionSingleReviewFragmentToMapsFragment(
@@ -70,9 +83,11 @@ class SingleReviewFragment : Fragment() {
                 true
             }
             R.id.edit_rev_menu_button -> {
-                Timber.e("This will take me to the edit review fragment.")
-                // We are setting bar details from the model, as the edit fragment needs to go
-                // to a from the Mars Fragment.
+                /*
+                This will take me to the edit review fragment.
+                 We are setting bar details from the model, as the edit fragment needs to go
+                 to a from the Mars Fragment.
+                 */
                 sharedViewModel.setBarDetailsFromModel()
                 findNavController().navigate(
                     SingleReviewFragmentDirections.actionSingleReviewFragmentToEditReviewFragment()
@@ -80,7 +95,7 @@ class SingleReviewFragment : Fragment() {
                 true
             }
             R.id.delete_rev_button -> {
-                Timber.e("This will attempt the deletion of a Review.")
+                // This will attempt the deletion of a Review.
                 openDeleteDialogue()
                 true
             }
@@ -122,6 +137,10 @@ class SingleReviewFragment : Fragment() {
         })
     }
 
+    /**
+     * This retrieves the current review information from the shared viewmodel and sends it to
+     * the current viewmodel.
+     */
     private fun setUpReviewInformation() {
         sharedViewModel.singleReview.observe(viewLifecycleOwner, {
             it.let {
@@ -131,6 +150,9 @@ class SingleReviewFragment : Fragment() {
         })
     }
 
+    /**
+     * Sets up the ability to show a toast once by observing the LiveData in the ViewModel.
+     */
     private fun setUpToast() {
         sharedViewModel.toastText.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let { message ->

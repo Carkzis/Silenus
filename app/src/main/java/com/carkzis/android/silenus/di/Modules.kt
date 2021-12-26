@@ -11,6 +11,9 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
+/**
+ * This is for providing the Repository and Firebase objects for Hilt dependency injections.
+ */
 @InstallIn(SingletonComponent::class)
 @Module
 object FirebaseModule {

@@ -19,10 +19,23 @@ class YourReviewsViewModel @Inject constructor(
     val repository: MainRepository
 ) : ViewModel() {
 
+    /*
+    LiveData for bar/restaurant details for the UI.
+     */
     private var _yourReviews = MutableLiveData<List<YourReview>>()
     val yourReviews: LiveData<List<YourReview>>
         get() = _yourReviews
 
+    /*
+    LiveData for feedback e.g. Toast.
+     */
+    private var _toastText = MutableLiveData<Event<Int>>()
+    val toastText: LiveData<Event<Int>>
+        get() = _toastText
+
+    /**
+     * Public method to attempt to refresh reviews.
+     */
     fun refreshReviews() {
         getAndAttachReviews()
     }
@@ -52,10 +65,6 @@ class YourReviewsViewModel @Inject constructor(
                 }
         }
     }
-
-    private var _toastText = MutableLiveData<Event<Int>>()
-    val toastText: LiveData<Event<Int>>
-        get() = _toastText
 
     /**
      * Post a string value in an Event wrapper to the associated LiveData.

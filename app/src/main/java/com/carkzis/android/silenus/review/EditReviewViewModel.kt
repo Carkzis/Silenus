@@ -24,21 +24,33 @@ class EditReviewViewModel @Inject constructor(
 ) : ViewModel() {
 
     /*
-    TODO: Consider merging this with AddReviewViewModel with the use of higher-order functions.
+    LiveData for bar/restaurant details from the UI.
      */
-
     var barName = MutableLiveData<String>()
     var rating = MutableLiveData<Float>()
     var location = MutableLiveData<String>()
     var description = MutableLiveData<String?>()
 
+    /*
+    Holds the GeoPoint object data.
+     */
     private var _geopoint = MutableLiveData<GeoPoint>()
     val geopoint: LiveData<GeoPoint>
         get() = _geopoint
 
+    /*
+     Navigation LiveData, for taking the user back to the SingleReviewFragment.
+     */
     private var _navToSingleReview = MutableLiveData<Event<YourReview>>()
     val navToSingleReview: LiveData<Event<YourReview>>
         get() = _navToSingleReview
+
+    /*
+    LiveData for feedback e.g. Toast.
+     */
+    private var _toastText = MutableLiveData<Event<Int>>()
+    val toastText: LiveData<Event<Int>>
+        get() = _toastText
 
     /**
      * This checks that the minimum requirements for editing a review are available in the LiveData
@@ -78,6 +90,9 @@ class EditReviewViewModel @Inject constructor(
         )
     }
 
+    /**
+     * Attempts to edit a review in the Firestore database.  Feedback is provided via a Toast.
+     */
     private fun progressToEditOfReview(review: YourReview) {
         viewModelScope.launch {
             review.let { repository.editYourReview(
@@ -162,10 +177,6 @@ class EditReviewViewModel @Inject constructor(
         rating.value = review.rating!!
         review.description?.let { description.value = review.description }
     }
-
-    private var _toastText = MutableLiveData<Event<Int>>()
-    val toastText: LiveData<Event<Int>>
-        get() = _toastText
 
     /**
      * Post a string value in an Event wrapper to the associated LiveData.

@@ -30,6 +30,10 @@ class AddReviewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+        /*
+         Set up data binding between the fragment and the layout. The lifecycleOwner observes
+         the changes in LiveData in this databinding.
+         */
         viewDataBinding = FragmentAddReviewBinding.inflate(inflater, container, false).apply {
             addReviewViewModel = viewModel
             lifecycleOwner = viewLifecycleOwner
@@ -41,6 +45,9 @@ class AddReviewFragment : Fragment() {
         return viewDataBinding.root
     }
 
+    /*
+     * Used here to set up various observers/listeners.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -58,6 +65,10 @@ class AddReviewFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        /*
+         We request an authorisation of the user; if this fails, the user is directed
+         to the LoginFragment.
+         */
         sharedViewModel.authoriseUser()
 
     }
@@ -122,6 +133,9 @@ class AddReviewFragment : Fragment() {
         })
     }
 
+    /**
+     * This observes where the user should be logged out, and directed to the LoginFragment.
+     */
     private fun setUpLogout() {
         sharedViewModel.logout.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let { reason ->
@@ -136,6 +150,9 @@ class AddReviewFragment : Fragment() {
         })
     }
 
+    /**
+     * Navigates the user to the login if directed to do so.
+     */
     private fun setUpNavigateToLogin() {
         sharedViewModel.navToLogin.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let {
@@ -146,6 +163,9 @@ class AddReviewFragment : Fragment() {
         })
     }
 
+    /**
+     * Sets up the navigation to the list of the users reviews.
+     */
     private fun setUpNavigateToYourReviews() {
         viewModel.navToYourReviews.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let {
@@ -175,6 +195,9 @@ class AddReviewFragment : Fragment() {
         }
     }
 
+    /**
+     * Sets up the ability to show a toast once by observing the LiveData in the ViewModel.
+     */
     private fun setUpToast() {
         viewModel.toastText.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let { message ->

@@ -15,6 +15,10 @@ import com.carkzis.android.silenus.data.YourReview
 import com.carkzis.android.silenus.databinding.YourReviewItemBinding
 import timber.log.Timber
 
+/**
+ * This is a RecyclerView adapter for binding user review data,
+ * and allowing the data to be searched.
+ */
 class YourReviewsAdapter(private val onClickListener: OnClickListener) : ListAdapter<YourReview,
         YourReviewsAdapter.YourReviewsViewHolder>(YourReviewsDiffCallBack()), Filterable {
 
@@ -41,6 +45,9 @@ class YourReviewsAdapter(private val onClickListener: OnClickListener) : ListAda
 
     override fun getItemCount(): Int = reviewListFiltered.size
 
+    /**
+     * This adds the data to the two lists, which will initially be the same.
+     */
     @SuppressLint("NotifyDataSetChanged")
     fun addItemsToAdapter(items: List<YourReview>) {
         reviewList = items as ArrayList<YourReview>
@@ -105,7 +112,7 @@ class YourReviewsAdapter(private val onClickListener: OnClickListener) : ListAda
     }
 
     /**
-     * Basically, we provide a higher-order function into the class.  onClick will perform this
+     * Basically, we provide a function into the class.  onClick will perform this
      * function, which takes a YourReview data class, performs a job and returns Unit (nothing).
      */
     class OnClickListener(val clickListener: (review: YourReview) -> Unit, val otherClickListener: (review: YourReview) -> Unit) {

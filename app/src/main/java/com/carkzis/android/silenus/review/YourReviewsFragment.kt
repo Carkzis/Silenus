@@ -2,12 +2,10 @@ package com.carkzis.android.silenus.review
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import com.carkzis.android.silenus.R
 import com.carkzis.android.silenus.data.MapReason
@@ -31,6 +29,11 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        /*
+         Set up data binding between the fragment and the layout. The lifecycleOwner observes
+         the changes in LiveData in this databinding.
+         */
         viewDataBinding = FragmentYourReviewsBinding.inflate(inflater, container, false).apply {
             yourReviewsViewModel = viewModel
             lifecycleOwner = viewLifecycleOwner
@@ -46,6 +49,9 @@ class YourReviewsFragment : Fragment(), SearchView.OnQueryTextListener {
         return viewDataBinding.root
     }
 
+    /*
+     * Used here to set up various observers/listeners.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpDataObserver()
