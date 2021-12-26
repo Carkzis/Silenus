@@ -34,8 +34,12 @@ class LoginFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
+        /*
+         Set up data binding between the fragment and the layout. The lifecycleOwner observes
+         the changes in LiveData in this databinding.
+         */
         viewDataBinding = FragmentLoginBinding.inflate(inflater, container, false).apply {
             loginViewModel = viewModel
             lifecycleOwner = viewLifecycleOwner
@@ -58,6 +62,9 @@ class LoginFragment : Fragment() {
         viewModel.authoriseUser()
     }
 
+    /**
+     * Navigates the user to the WelcomeFragment if the observed Event holds a true value.
+     */
     private fun setUpNavigationToWelcomeFragment() {
         viewModel.navToWelcome.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let {
@@ -68,6 +75,10 @@ class LoginFragment : Fragment() {
         })
     }
 
+    /**
+     * Sets up the layout and intent builders activated on clicking the login button.
+     * This will direct the user to the FirebaseAuth login screens.
+     */
     private fun setUpLoginButton() {
         viewDataBinding.loginButton.setOnClickListener {
             val customLayout = AuthMethodPickerLayout
@@ -89,6 +100,10 @@ class LoginFragment : Fragment() {
         }
     }
 
+    /**
+     * Sets up the ability to show a toast once by observing the LiveData in either the
+     * LoginViewModel or the SharedViewModel.
+     */
     private fun setUpToast() {
         viewModel.toastText.observe(viewLifecycleOwner, {
             it.getContextIfNotHandled()?.let { message ->

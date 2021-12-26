@@ -21,6 +21,9 @@ import java.lang.Exception
 import javax.inject.Inject
 import kotlin.IllegalArgumentException
 
+/**
+ * ViewModel for the AddReviewFragment.
+ */
 @HiltViewModel
 class AddReviewViewModel @Inject constructor(
     private val repository: MainRepository,
@@ -44,7 +47,7 @@ class AddReviewViewModel @Inject constructor(
     var submitDate = MutableLiveData<Timestamp>()
 
     /*
-     Navigation LiveData, for taking the user back to the SingleReviewFragment.
+     Navigation LiveData, for taking the user back to the YourReviewsFragment.
      */
     private var _navToYourReviews = MutableLiveData<Event<Boolean>>()
     val navToYourReviews: LiveData<Event<Boolean>>

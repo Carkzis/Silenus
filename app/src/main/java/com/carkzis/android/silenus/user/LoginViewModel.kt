@@ -11,6 +11,9 @@ import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+/**
+ * ViewModel for the LoginFragment.
+ */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val repository: UserRepository
@@ -20,6 +23,9 @@ class LoginViewModel @Inject constructor(
     val toastText: LiveData<Event<Int>>
         get() = _toastText
 
+    /*
+     Navigation LiveData, for taking the user to the WelcomeFragment.
+     */
     private var _navToWelcome = MutableLiveData<Event<Boolean>>()
     val navToWelcome: LiveData<Event<Boolean>>
         get() = _navToWelcome
@@ -40,6 +46,9 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Post a string value in an Event wrapper to the associated LiveData.
+     */
     private fun showToastMessage(message: Int) {
         _toastText.value = Event(message)
     }

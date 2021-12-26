@@ -17,6 +17,9 @@ import timber.log.Timber
 import java.lang.Exception
 import javax.inject.Inject
 
+/**
+ * ViewModel for the EditReviewFragment.
+ */
 @HiltViewModel
 class EditReviewViewModel @Inject constructor(
     private val repository: MainRepository,

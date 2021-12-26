@@ -14,6 +14,9 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * ViewModel for the YourReviewsFragment.
+ */
 @HiltViewModel
 class YourReviewsViewModel @Inject constructor(
     val repository: MainRepository

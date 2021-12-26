@@ -15,6 +15,9 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * ViewModel for the SingleReviewFragment.
+ */
 @HiltViewModel
 class SingleReviewViewModel @Inject constructor(
     private val repository: MainRepository
